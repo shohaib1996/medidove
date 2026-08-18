@@ -75,6 +75,18 @@ create table public.doctors (
   created_at timestamptz not null default now()
 );
 
+create table public.doctor_availability (
+  id uuid primary key default gen_random_uuid(),
+  doctor_id uuid not null references public.doctors(id) on delete cascade,
+  weekday integer not null check (weekday between 0 and 6),
+  start_time time not null,
+  end_time time not null,
+  slot_minutes integer not null default 30,
+  location text,
+  is_active boolean not null default true,
+  created_at timestamptz not null default now()
+);
+
 create table public.services (
   id uuid primary key default gen_random_uuid(),
   department_id uuid references public.departments(id) on delete set null,
@@ -273,6 +285,7 @@ create table public.audit_logs (
 alter table public.profiles enable row level security;
 alter table public.departments enable row level security;
 alter table public.doctors enable row level security;
+alter table public.doctor_availability enable row level security;
 alter table public.services enable row level security;
 alter table public.appointments enable row level security;
 alter table public.clinical_notes enable row level security;
@@ -297,6 +310,10 @@ create policy "Public can read active doctors"
   on public.doctors for select
   using (is_active = true);
 
+create policy "Public can read active doctor availability"
+  on public.doctor_availability for select
+  using (is_active = true);
+
 create policy "Public can read active services"
   on public.services for select
   using (is_active = true);
@@ -308,6 +325,11 @@ create policy "Admins can manage departments"
 
 create policy "Admins can manage doctors"
   on public.doctors for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+create policy "Admins can manage doctor availability"
+  on public.doctor_availability for all
   using (public.is_admin())
   with check (public.is_admin());
 
@@ -445,6 +467,8 @@ create policy "Admins can create audit logs"
 create index departments_slug_idx on public.departments(slug);
 create index doctors_slug_idx on public.doctors(slug);
 create index doctors_department_id_idx on public.doctors(department_id);
+create index doctor_availability_doctor_id_idx on public.doctor_availability(doctor_id);
+create index doctor_availability_weekday_idx on public.doctor_availability(weekday);
 create index services_slug_idx on public.services(slug);
 create index services_department_id_idx on public.services(department_id);
 create index appointments_status_idx on public.appointments(status);

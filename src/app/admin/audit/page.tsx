@@ -22,6 +22,9 @@ type AuditFilter =
   | "status_updated"
   | "clinical_note_created"
   | "clinical_note_status_updated"
+  | "doctor_availability_created"
+  | "doctor_availability_toggled"
+  | "appointment_doctor_assigned"
   | "automation_runner_executed"
   | "outbox_dispatch_executed"
   | "outbox_dispatch_blocked";
@@ -43,6 +46,9 @@ const filters: AuditFilter[] = [
   "status_updated",
   "clinical_note_created",
   "clinical_note_status_updated",
+  "doctor_availability_created",
+  "doctor_availability_toggled",
+  "appointment_doctor_assigned",
   "automation_runner_executed",
   "outbox_dispatch_executed",
   "outbox_dispatch_blocked",

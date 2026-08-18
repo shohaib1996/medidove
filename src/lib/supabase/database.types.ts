@@ -117,6 +117,48 @@ export type Database = {
           },
         ];
       };
+      doctor_availability: {
+        Row: {
+          id: string;
+          doctor_id: string;
+          weekday: number;
+          start_time: string;
+          end_time: string;
+          slot_minutes: number;
+          location: string | null;
+          is_active: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          doctor_id: string;
+          weekday: number;
+          start_time: string;
+          end_time: string;
+          slot_minutes?: number;
+          location?: string | null;
+          is_active?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          doctor_id?: string;
+          weekday?: number;
+          start_time?: string;
+          end_time?: string;
+          slot_minutes?: number;
+          location?: string | null;
+          is_active?: boolean;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "doctor_availability_doctor_id_fkey";
+            columns: ["doctor_id"];
+            isOneToOne: false;
+            referencedRelation: "doctors";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       services: {
         Row: {
           id: string;
