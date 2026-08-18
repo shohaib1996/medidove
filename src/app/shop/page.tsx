@@ -1,19 +1,16 @@
-
-import Shop from '@/components/shop/shop';
-import Wrapper from '@/layout/Wrapper';
-import React from 'react';
+import ShopCatalogPage from "@/components/shop/ShopCatalogPage";
+import { getPublicProducts } from "@/lib/products/content";
 
 export const metadata = {
-  title: "Shop MediDove React Next js Tempalte",
+  title: "Wellness Shop | MediDove AI Clinic",
+  description:
+    "Browse non-prescription wellness products and staff-reviewed product inquiry workflows for the MediDove AI Clinic demo.",
 };
 
+const index = async () => {
+  const products = await getPublicProducts();
 
-const index = () => {
-  return (
-    <Wrapper>
-      <Shop />
-    </Wrapper>
-  );
+  return <ShopCatalogPage products={products} />;
 };
 
 export default index;

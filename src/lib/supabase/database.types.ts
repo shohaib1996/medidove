@@ -260,6 +260,52 @@ export type Database = {
         };
         Relationships: [];
       };
+      products: {
+        Row: {
+          id: string;
+          name: string;
+          slug: string;
+          category: string;
+          description: string;
+          price: number;
+          image_url: string | null;
+          stock_status: string;
+          requires_prescription: boolean;
+          is_featured: boolean;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          slug: string;
+          category?: string;
+          description: string;
+          price?: number;
+          image_url?: string | null;
+          stock_status?: string;
+          requires_prescription?: boolean;
+          is_featured?: boolean;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          name?: string;
+          slug?: string;
+          category?: string;
+          description?: string;
+          price?: number;
+          image_url?: string | null;
+          stock_status?: string;
+          requires_prescription?: boolean;
+          is_featured?: boolean;
+          is_active?: boolean;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       testimonials: {
         Row: {
           id: string;

@@ -39,6 +39,7 @@ For real healthcare clients, production compliance work may be required, includi
 - Supabase-backed doctors, departments, services, and AI knowledge content
 - Supabase-backed blog CMS for healthcare SEO content
 - Supabase-backed health packages for wellness, dental, and screening offers
+- Supabase-backed wellness product catalog with staff-reviewed inquiries
 - Supabase-backed testimonials and proof points for buyer trust
 - Real appointment request form
 - Smart appointment intake API with emergency-safe routing language
@@ -71,6 +72,7 @@ For real healthcare clients, production compliance work may be required, includi
 - `/` public AI clinic home
 - `/appointment` appointment booking
 - `/packages` health package offers
+- `/shop` wellness product catalog
 - `/testimonials` testimonials and clinic proof
 - `/blog` public healthcare SEO blog
 - `/blog/[slug]` CMS-backed article details
@@ -94,6 +96,7 @@ For real healthcare clients, production compliance work may be required, includi
 - `/admin/clinical-notes`
 - `/admin/content`
 - `/admin/blog`
+- `/admin/products`
 - `/admin/testimonials`
 - `/admin/analytics`
 - `/admin/audit`

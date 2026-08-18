@@ -1,5 +1,6 @@
 import { fallbackDoctors, fallbackServices } from "@/lib/clinic/static-content";
 import { fallbackHealthPackages } from "@/lib/packages/content";
+import { fallbackProducts } from "@/lib/products/content";
 import { fallbackTestimonials } from "@/lib/testimonials/content";
 import { createClient } from "@/lib/supabase/server";
 
@@ -8,6 +9,7 @@ export type SearchResultType =
   | "doctor"
   | "department"
   | "package"
+  | "product"
   | "knowledge";
 
 export type SiteSearchResult = {
@@ -100,6 +102,7 @@ const groupResults = (results: SiteSearchResult[]) => ({
   doctor: results.filter((result) => result.type === "doctor"),
   department: results.filter((result) => result.type === "department"),
   package: results.filter((result) => result.type === "package"),
+  product: results.filter((result) => result.type === "product"),
   knowledge: results.filter((result) => result.type === "knowledge"),
 });
 
@@ -176,7 +179,29 @@ const fallbackSearch = (query: string, terms: string[]): SiteSearchResult[] => {
     }),
   }));
 
-  return sortAndLimit([...services, ...doctors, ...packages, ...testimonials]);
+  const products = fallbackProducts.map((item) => ({
+    id: `fallback-product-${item.slug}`,
+    type: "product" as const,
+    title: item.name,
+    description: item.description,
+    href: "/shop",
+    meta: item.category,
+    score: scoreResult({
+      query,
+      terms,
+      title: item.name,
+      description: item.description,
+      meta: item.category,
+    }),
+  }));
+
+  return sortAndLimit([
+    ...services,
+    ...doctors,
+    ...packages,
+    ...products,
+    ...testimonials,
+  ]);
 };
 
 export const searchSite = async (rawQuery: string): Promise<SiteSearchResponse> => {
@@ -203,6 +228,7 @@ export const searchSite = async (rawQuery: string): Promise<SiteSearchResponse> 
     { data: documentsData },
     { data: blogPostsData },
     { data: packagesData },
+    { data: productsData },
     { data: testimonialsData },
   ] = await Promise.all([
     supabase
@@ -232,6 +258,11 @@ export const searchSite = async (rawQuery: string): Promise<SiteSearchResponse> 
     supabase
       .from("health_packages")
       .select("id, name, description, slug, audience, features, badge")
+      .eq("is_active", true)
+      .limit(50),
+    supabase
+      .from("products")
+      .select("id, name, slug, category, description")
       .eq("is_active", true)
       .limit(50),
     supabase
@@ -361,11 +392,28 @@ export const searchSite = async (rawQuery: string): Promise<SiteSearchResponse> 
     }),
   }));
 
+  const products = (productsData || []).map((item) => ({
+    id: item.id,
+    type: "product" as const,
+    title: item.name,
+    description: item.description,
+    href: `/shop?product=${item.slug}`,
+    meta: item.category,
+    score: scoreResult({
+      query,
+      terms,
+      title: item.name,
+      description: item.description,
+      meta: item.category,
+    }),
+  }));
+
   const results = sortAndLimit([
     ...services,
     ...doctors,
     ...departments,
     ...packages,
+    ...products,
     ...documents,
     ...blogPosts,
     ...testimonials,

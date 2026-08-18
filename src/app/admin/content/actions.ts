@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { triageLead } from "@/lib/ai/lead-triage";
 import { fallbackBlogPosts } from "@/lib/blog/content";
 import { fallbackHealthPackages } from "@/lib/packages/content";
+import { fallbackProducts } from "@/lib/products/content";
 import { fallbackTestimonials } from "@/lib/testimonials/content";
 import { createClient } from "@/lib/supabase/server";
 import type { Database } from "@/lib/supabase/database.types";
@@ -62,6 +63,8 @@ const refreshContent = () => {
   revalidatePath("/blog");
   revalidatePath("/admin/packages");
   revalidatePath("/packages");
+  revalidatePath("/admin/products");
+  revalidatePath("/shop");
   revalidatePath("/admin/testimonials");
   revalidatePath("/testimonials");
 };
@@ -595,6 +598,26 @@ const seedHealthPackages = async (
   );
 };
 
+const seedProducts = async (
+  supabase: Awaited<ReturnType<typeof assertAdmin>>,
+) => {
+  await supabase.from("products").upsert(
+    fallbackProducts.map((item) => ({
+      name: item.name,
+      slug: item.slug,
+      category: item.category,
+      description: item.description,
+      price: item.price,
+      image_url: item.imageUrl,
+      stock_status: item.stockStatus,
+      requires_prescription: item.requiresPrescription,
+      is_featured: item.isFeatured,
+      is_active: true,
+    })),
+    { onConflict: "slug" },
+  );
+};
+
 const seedTestimonials = async (
   supabase: Awaited<ReturnType<typeof assertAdmin>>,
 ) => {
@@ -625,6 +648,7 @@ export const seedDemoWorkspace = async () => {
   await seedClinicSettings(supabase);
   await seedBlogPosts(supabase);
   await seedHealthPackages(supabase);
+  await seedProducts(supabase);
   await seedTestimonials(supabase);
 
   await supabase.from("departments").upsert(

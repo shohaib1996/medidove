@@ -117,6 +117,22 @@ create table public.health_packages (
   updated_at timestamptz not null default now()
 );
 
+create table public.products (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  slug text not null unique,
+  category text not null default 'wellness',
+  description text not null,
+  price numeric(10,2) not null default 0,
+  image_url text,
+  stock_status text not null default 'available',
+  requires_prescription boolean not null default false,
+  is_featured boolean not null default false,
+  is_active boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 create table public.testimonials (
   id uuid primary key default gen_random_uuid(),
   author_name text not null,
@@ -429,6 +445,7 @@ alter table public.doctors enable row level security;
 alter table public.doctor_availability enable row level security;
 alter table public.services enable row level security;
 alter table public.health_packages enable row level security;
+alter table public.products enable row level security;
 alter table public.testimonials enable row level security;
 alter table public.blog_posts enable row level security;
 alter table public.clinic_settings enable row level security;
@@ -487,6 +504,10 @@ create policy "Public can read active health packages"
   on public.health_packages for select
   using (is_active = true);
 
+create policy "Public can read active products"
+  on public.products for select
+  using (is_active = true);
+
 create policy "Public can read published testimonials"
   on public.testimonials for select
   using (is_published = true);
@@ -521,6 +542,11 @@ create policy "Admins can manage services"
 
 create policy "Admins can manage health packages"
   on public.health_packages for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+create policy "Admins can manage products"
+  on public.products for all
   using (public.is_admin())
   with check (public.is_admin());
 
@@ -734,6 +760,9 @@ create index services_slug_idx on public.services(slug);
 create index services_department_id_idx on public.services(department_id);
 create index health_packages_slug_idx on public.health_packages(slug);
 create index health_packages_active_idx on public.health_packages(is_active, is_featured);
+create index products_slug_idx on public.products(slug);
+create index products_active_idx on public.products(is_active, is_featured);
+create index products_category_idx on public.products(category);
 create index testimonials_published_idx on public.testimonials(is_published, is_featured);
 create index blog_posts_slug_idx on public.blog_posts(slug);
 create index blog_posts_published_idx on public.blog_posts(is_published, published_at desc);
