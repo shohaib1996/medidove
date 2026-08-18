@@ -161,3 +161,41 @@ export const assignAppointmentDoctor = async (formData: FormData) => {
 
   refreshSchedule();
 };
+
+export const linkDoctorProfile = async (formData: FormData) => {
+  const doctorId = text(formData.get("doctor_id"));
+  const profileId = text(formData.get("profile_id"));
+
+  if (!doctorId) {
+    throw new Error("Choose a doctor record.");
+  }
+
+  const { supabase, userId } = await assertAdmin();
+  const { error } = await supabase
+    .from("doctors")
+    .update({
+      profile_id: profileId || null,
+    })
+    .eq("id", doctorId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  await writeAuditLog(supabase, {
+    actorId: userId,
+    actorType: "admin",
+    eventType: "doctor_profile_linked",
+    entityType: "doctors",
+    entityId: doctorId,
+    summary: profileId
+      ? "Linked doctor record to a user profile."
+      : "Removed doctor profile link.",
+    metadata: {
+      doctor_id: doctorId,
+      profile_id: profileId || null,
+    },
+  });
+
+  refreshSchedule();
+};

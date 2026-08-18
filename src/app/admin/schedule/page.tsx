@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import {
   CalendarClock,
   Clock,
+  LinkIcon,
   MapPin,
   Power,
   Stethoscope,
@@ -23,6 +24,7 @@ import { createClient } from "@/lib/supabase/server";
 import {
   assignAppointmentDoctor,
   createDoctorAvailability,
+  linkDoctorProfile,
   toggleDoctorAvailability,
 } from "./actions";
 
@@ -32,9 +34,16 @@ export const metadata = {
 
 type Doctor = {
   id: string;
+  profile_id: string | null;
   full_name: string;
   specialty: string;
   is_active: boolean;
+};
+
+type DoctorUser = {
+  id: string;
+  full_name: string | null;
+  phone: string | null;
 };
 
 type Availability = {
@@ -103,13 +112,19 @@ export default async function AdminSchedulePage() {
 
   const [
     { data: doctorsData },
+    { data: doctorUsersData },
     { data: availabilityData },
     { data: appointmentsData },
   ] = await Promise.all([
     supabase
       .from("doctors")
-      .select("id, full_name, specialty, is_active")
+      .select("id, profile_id, full_name, specialty, is_active")
       .order("full_name", { ascending: true }),
+    supabase
+      .from("profiles")
+      .select("id, full_name, phone")
+      .eq("role", "doctor")
+      .order("created_at", { ascending: false }),
     supabase
       .from("doctor_availability")
       .select(
@@ -127,6 +142,7 @@ export default async function AdminSchedulePage() {
   ]);
 
   const doctors = (doctorsData || []) as Doctor[];
+  const doctorUsers = (doctorUsersData || []) as DoctorUser[];
   const availability = (availabilityData || []) as Availability[];
   const appointments = (appointmentsData || []) as Appointment[];
   const activeDoctors = doctors.filter((doctor) => doctor.is_active).length;
@@ -280,6 +296,56 @@ export default async function AdminSchedulePage() {
 
                   <Button type="submit" className="w-full">
                     Add availability
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Link doctor login</CardTitle>
+                <CardDescription>
+                  Connect a doctor content profile to a signed-in doctor account.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form action={linkDoctorProfile} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="link_doctor_id">Doctor record</Label>
+                    <select
+                      id="link_doctor_id"
+                      name="doctor_id"
+                      className="h-11 w-full rounded-md border border-slate-200 bg-white px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                      required
+                    >
+                      <option value="">Choose doctor</option>
+                      {doctors.map((doctor) => (
+                        <option key={doctor.id} value={doctor.id}>
+                          {doctor.full_name} - {doctor.profile_id ? "linked" : "not linked"}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="profile_id">Doctor user profile</Label>
+                    <select
+                      id="profile_id"
+                      name="profile_id"
+                      className="h-11 w-full rounded-md border border-slate-200 bg-white px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                    >
+                      <option value="">Remove profile link</option>
+                      {doctorUsers.map((doctorUser) => (
+                        <option key={doctorUser.id} value={doctorUser.id}>
+                          {doctorUser.full_name || doctorUser.phone || doctorUser.id}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <Button type="submit" className="w-full">
+                    <LinkIcon className="h-4 w-4" />
+                    Save doctor login link
                   </Button>
                 </form>
               </CardContent>
