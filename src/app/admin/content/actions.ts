@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { triageLead } from "@/lib/ai/lead-triage";
+import { fallbackBlogPosts } from "@/lib/blog/content";
 import { createClient } from "@/lib/supabase/server";
 import type { Database } from "@/lib/supabase/database.types";
 
@@ -55,6 +56,8 @@ const refreshContent = () => {
   revalidatePath("/admin/schedule");
   revalidatePath("/admin/settings");
   revalidatePath("/contact");
+  revalidatePath("/admin/blog");
+  revalidatePath("/blog");
 };
 
 export const createDepartment = async (formData: FormData) => {
@@ -546,9 +549,29 @@ const seedClinicSettings = async (
   });
 };
 
+const seedBlogPosts = async (
+  supabase: Awaited<ReturnType<typeof assertAdmin>>,
+) => {
+  await supabase.from("blog_posts").upsert(
+    fallbackBlogPosts.map((post) => ({
+      title: post.title,
+      slug: post.slug,
+      excerpt: post.excerpt,
+      content: post.content,
+      category: post.category,
+      image_url: post.imageUrl,
+      author_name: post.authorName,
+      is_published: true,
+      published_at: post.publishedAt,
+    })),
+    { onConflict: "slug" },
+  );
+};
+
 export const seedDemoWorkspace = async () => {
   const supabase = await assertAdmin();
   await seedClinicSettings(supabase);
+  await seedBlogPosts(supabase);
 
   await supabase.from("departments").upsert(
     demoDepartments.map((department) => ({

@@ -100,6 +100,22 @@ create table public.services (
   created_at timestamptz not null default now()
 );
 
+create table public.blog_posts (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  slug text not null unique,
+  excerpt text not null,
+  content text not null,
+  category text not null default 'Clinic AI',
+  image_url text,
+  author_name text not null default 'MediDove Team',
+  is_published boolean not null default false,
+  published_at timestamptz,
+  created_by uuid references public.profiles(id) on delete set null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 create table public.clinic_settings (
   id text primary key default 'default',
   clinic_name text not null,
@@ -381,6 +397,7 @@ alter table public.departments enable row level security;
 alter table public.doctors enable row level security;
 alter table public.doctor_availability enable row level security;
 alter table public.services enable row level security;
+alter table public.blog_posts enable row level security;
 alter table public.clinic_settings enable row level security;
 alter table public.appointments enable row level security;
 alter table public.clinical_notes enable row level security;
@@ -433,6 +450,10 @@ create policy "Public can read active services"
   on public.services for select
   using (is_active = true);
 
+create policy "Public can read published blog posts"
+  on public.blog_posts for select
+  using (is_published = true);
+
 create policy "Public can read clinic settings"
   on public.clinic_settings for select
   using (id = 'default');
@@ -454,6 +475,11 @@ create policy "Admins can manage doctor availability"
 
 create policy "Admins can manage services"
   on public.services for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+create policy "Admins can manage blog posts"
+  on public.blog_posts for all
   using (public.is_admin())
   with check (public.is_admin());
 
@@ -655,6 +681,8 @@ create index doctor_availability_doctor_id_idx on public.doctor_availability(doc
 create index doctor_availability_weekday_idx on public.doctor_availability(weekday);
 create index services_slug_idx on public.services(slug);
 create index services_department_id_idx on public.services(department_id);
+create index blog_posts_slug_idx on public.blog_posts(slug);
+create index blog_posts_published_idx on public.blog_posts(is_published, published_at desc);
 create index appointments_status_idx on public.appointments(status);
 create index appointments_requested_at_idx on public.appointments(requested_at);
 create index clinical_notes_patient_id_idx on public.clinical_notes(patient_id);

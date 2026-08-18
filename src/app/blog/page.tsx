@@ -1,18 +1,17 @@
 
-import React from 'react';
-import Wrapper from '@/layout/Wrapper'; 
-import Blog from '@/components/blogs/blog';
+import BlogPage from "@/components/blogs/BlogPage";
+import { getPublicBlogPosts } from "@/lib/blog/content";
 
 export const metadata = {
-  title: "Blog MediDove React Next js Tempalte",
+  title: "Blog | MediDove AI Clinic",
+  description:
+    "AI healthcare automation articles about clinic reception, appointment intake, patient engagement, and safe medical workflow support.",
 };
 
-const index = () => {
-  return (
-    <Wrapper>
-      <Blog />
-    </Wrapper>
-  );
+const index = async () => {
+  const posts = await getPublicBlogPosts();
+
+  return <BlogPage posts={posts} />;
 };
 
 export default index;  

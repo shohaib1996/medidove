@@ -161,6 +161,7 @@ export const searchSite = async (rawQuery: string): Promise<SiteSearchResponse> 
     { data: doctorsData },
     { data: departmentsData },
     { data: documentsData },
+    { data: blogPostsData },
   ] = await Promise.all([
     supabase
       .from("services")
@@ -180,6 +181,11 @@ export const searchSite = async (rawQuery: string): Promise<SiteSearchResponse> 
     supabase
       .from("ai_documents")
       .select("id, title, content, source_type")
+      .limit(50),
+    supabase
+      .from("blog_posts")
+      .select("id, title, slug, excerpt, content, category")
+      .eq("is_published", true)
       .limit(50),
   ]);
 
@@ -255,11 +261,28 @@ export const searchSite = async (rawQuery: string): Promise<SiteSearchResponse> 
     }),
   }));
 
+  const blogPosts = (blogPostsData || []).map((post) => ({
+    id: post.id,
+    type: "knowledge" as const,
+    title: post.title,
+    description: post.excerpt,
+    href: `/blog-details?post=${post.slug}`,
+    meta: post.category,
+    score: scoreResult({
+      query,
+      terms,
+      title: post.title,
+      description: `${post.excerpt} ${post.content}`,
+      meta: post.category,
+    }),
+  }));
+
   const results = sortAndLimit([
     ...services,
     ...doctors,
     ...departments,
     ...documents,
+    ...blogPosts,
   ]);
   const safeResults = results.length > 0 ? results : fallbackSearch(query, terms);
 

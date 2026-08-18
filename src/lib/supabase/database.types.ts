@@ -211,6 +211,60 @@ export type Database = {
           },
         ];
       };
+      blog_posts: {
+        Row: {
+          id: string;
+          title: string;
+          slug: string;
+          excerpt: string;
+          content: string;
+          category: string;
+          image_url: string | null;
+          author_name: string;
+          is_published: boolean;
+          published_at: string | null;
+          created_by: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          title: string;
+          slug: string;
+          excerpt: string;
+          content: string;
+          category?: string;
+          image_url?: string | null;
+          author_name?: string;
+          is_published?: boolean;
+          published_at?: string | null;
+          created_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          title?: string;
+          slug?: string;
+          excerpt?: string;
+          content?: string;
+          category?: string;
+          image_url?: string | null;
+          author_name?: string;
+          is_published?: boolean;
+          published_at?: string | null;
+          created_by?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "blog_posts_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       clinic_settings: {
         Row: {
           id: string;

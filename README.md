@@ -37,6 +37,7 @@ For real healthcare clients, production compliance work may be required, includi
 
 - Public AI clinic landing page
 - Supabase-backed doctors, departments, services, and AI knowledge content
+- Supabase-backed blog CMS for healthcare SEO content
 - Real appointment request form
 - Smart appointment intake API with emergency-safe routing language
 - Floating AI clinic assistant widget
@@ -86,6 +87,7 @@ For real healthcare clients, production compliance work may be required, includi
 - `/admin/tasks`
 - `/admin/clinical-notes`
 - `/admin/content`
+- `/admin/blog`
 - `/admin/analytics`
 - `/admin/audit`
 - `/admin/integrations`
