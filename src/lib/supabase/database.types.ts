@@ -1,0 +1,271 @@
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[];
+
+export type UserRole = "patient" | "doctor" | "receptionist" | "admin";
+export type AppointmentStatus =
+  | "pending"
+  | "confirmed"
+  | "cancelled"
+  | "completed"
+  | "rescheduled";
+export type LeadStatus = "new" | "contacted" | "converted" | "closed" | "spam";
+export type Channel = "email" | "sms" | "whatsapp" | "voice";
+
+export type Database = {
+  public: {
+    Tables: {
+      profiles: {
+        Row: {
+          id: string;
+          full_name: string | null;
+          phone: string | null;
+          role: UserRole;
+          avatar_url: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id: string;
+          full_name?: string | null;
+          phone?: string | null;
+          role?: UserRole;
+          avatar_url?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          full_name?: string | null;
+          phone?: string | null;
+          role?: UserRole;
+          avatar_url?: string | null;
+          updated_at?: string;
+        };
+      };
+      departments: {
+        Row: {
+          id: string;
+          name: string;
+          slug: string;
+          description: string | null;
+          is_active: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          slug: string;
+          description?: string | null;
+          is_active?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          name?: string;
+          slug?: string;
+          description?: string | null;
+          is_active?: boolean;
+        };
+      };
+      doctors: {
+        Row: {
+          id: string;
+          department_id: string | null;
+          full_name: string;
+          slug: string;
+          specialty: string;
+          bio: string | null;
+          consultation_fee: number | null;
+          image_url: string | null;
+          is_active: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          department_id?: string | null;
+          full_name: string;
+          slug: string;
+          specialty: string;
+          bio?: string | null;
+          consultation_fee?: number | null;
+          image_url?: string | null;
+          is_active?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          department_id?: string | null;
+          full_name?: string;
+          slug?: string;
+          specialty?: string;
+          bio?: string | null;
+          consultation_fee?: number | null;
+          image_url?: string | null;
+          is_active?: boolean;
+        };
+      };
+      services: {
+        Row: {
+          id: string;
+          department_id: string | null;
+          title: string;
+          slug: string;
+          summary: string;
+          description: string | null;
+          image_url: string | null;
+          is_active: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          department_id?: string | null;
+          title: string;
+          slug: string;
+          summary: string;
+          description?: string | null;
+          image_url?: string | null;
+          is_active?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          department_id?: string | null;
+          title?: string;
+          slug?: string;
+          summary?: string;
+          description?: string | null;
+          image_url?: string | null;
+          is_active?: boolean;
+        };
+      };
+      appointments: {
+        Row: {
+          id: string;
+          patient_id: string | null;
+          doctor_id: string | null;
+          department_id: string | null;
+          patient_name: string;
+          patient_email: string | null;
+          patient_phone: string;
+          requested_at: string | null;
+          reason: string | null;
+          ai_summary: string | null;
+          urgency: string | null;
+          status: AppointmentStatus;
+          source_channel: Channel | "website";
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          patient_id?: string | null;
+          doctor_id?: string | null;
+          department_id?: string | null;
+          patient_name: string;
+          patient_email?: string | null;
+          patient_phone: string;
+          requested_at?: string | null;
+          reason?: string | null;
+          ai_summary?: string | null;
+          urgency?: string | null;
+          status?: AppointmentStatus;
+          source_channel?: Channel | "website";
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          doctor_id?: string | null;
+          department_id?: string | null;
+          patient_email?: string | null;
+          patient_phone?: string;
+          requested_at?: string | null;
+          reason?: string | null;
+          ai_summary?: string | null;
+          urgency?: string | null;
+          status?: AppointmentStatus;
+          updated_at?: string;
+        };
+      };
+      contact_leads: {
+        Row: {
+          id: string;
+          name: string;
+          email: string;
+          phone: string | null;
+          subject: string | null;
+          message: string;
+          ai_category: string | null;
+          ai_summary: string | null;
+          status: LeadStatus;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          email: string;
+          phone?: string | null;
+          subject?: string | null;
+          message: string;
+          ai_category?: string | null;
+          ai_summary?: string | null;
+          status?: LeadStatus;
+          created_at?: string;
+        };
+        Update: {
+          ai_category?: string | null;
+          ai_summary?: string | null;
+          status?: LeadStatus;
+        };
+      };
+      ai_chat_sessions: {
+        Row: {
+          id: string;
+          user_id: string | null;
+          visitor_id: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id?: string | null;
+          visitor_id?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          user_id?: string | null;
+          visitor_id?: string | null;
+        };
+      };
+      ai_chat_messages: {
+        Row: {
+          id: string;
+          session_id: string;
+          role: "user" | "assistant" | "system";
+          content: string;
+          metadata: Json | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          session_id: string;
+          role: "user" | "assistant" | "system";
+          content: string;
+          metadata?: Json | null;
+          created_at?: string;
+        };
+        Update: {
+          content?: string;
+          metadata?: Json | null;
+        };
+      };
+    };
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
+    Enums: {
+      user_role: UserRole;
+      appointment_status: AppointmentStatus;
+      lead_status: LeadStatus;
+      communication_channel: Channel;
+    };
+  };
+};
