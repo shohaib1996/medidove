@@ -326,6 +326,57 @@ export type Database = {
           },
         ];
       };
+      call_logs: {
+        Row: {
+          id: string;
+          appointment_id: string | null;
+          phone_number: string;
+          direction: "inbound" | "outbound";
+          provider: string;
+          provider_call_id: string | null;
+          transcript: string | null;
+          ai_summary: string | null;
+          status: string | null;
+          started_at: string | null;
+          ended_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          appointment_id?: string | null;
+          phone_number: string;
+          direction: "inbound" | "outbound";
+          provider?: string;
+          provider_call_id?: string | null;
+          transcript?: string | null;
+          ai_summary?: string | null;
+          status?: string | null;
+          started_at?: string | null;
+          ended_at?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          appointment_id?: string | null;
+          phone_number?: string;
+          direction?: "inbound" | "outbound";
+          provider?: string;
+          provider_call_id?: string | null;
+          transcript?: string | null;
+          ai_summary?: string | null;
+          status?: string | null;
+          started_at?: string | null;
+          ended_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "call_logs_appointment_id_fkey";
+            columns: ["appointment_id"];
+            isOneToOne: false;
+            referencedRelation: "appointments";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: Record<string, never>;
     Functions: {

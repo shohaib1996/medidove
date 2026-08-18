@@ -119,9 +119,9 @@ const HomePage = () => {
                   size="lg"
                   className="border-white/30 bg-white/10 text-white hover:bg-white hover:text-slate-950"
                 >
-                  <Link href="/admin">
-                    <ShieldCheck />
-                    View admin demo
+                  <Link href="/receptionist">
+                    <Headphones />
+                    Try receptionist
                   </Link>
                 </Button>
               </div>
@@ -302,9 +302,9 @@ const HomePage = () => {
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
               <Button asChild variant="outline">
-                <Link href="/contact">
+                <Link href="/receptionist">
                   <PhoneCall />
-                  Contact clinic
+                  Try receptionist
                 </Link>
               </Button>
               <Button asChild>

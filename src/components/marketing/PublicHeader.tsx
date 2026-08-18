@@ -7,6 +7,7 @@ import ClinicAssistantWidget from "@/components/ai/ClinicAssistantWidget";
 const navItems = [
   { href: "/service", label: "Services" },
   { href: "/doctor", label: "Doctors" },
+  { href: "/receptionist", label: "AI Receptionist" },
   { href: "/appoinment", label: "Appointment" },
   { href: "/contact", label: "Contact" },
 ];
