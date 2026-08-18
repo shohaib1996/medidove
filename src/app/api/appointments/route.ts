@@ -10,6 +10,8 @@ type AppointmentRequest = {
   requestedDate?: string;
   requestedTime?: string;
   reason?: string;
+  aiSummary?: string;
+  urgency?: string;
   consentAccepted?: boolean;
 };
 
@@ -50,6 +52,8 @@ export async function POST(request: Request) {
   const requestedDate = cleanText(body.requestedDate);
   const requestedTime = cleanText(body.requestedTime);
   const reason = cleanText(body.reason);
+  const aiSummary = cleanText(body.aiSummary);
+  const urgency = cleanText(body.urgency);
 
   if (!patientName || !patientPhone || !reason) {
     return NextResponse.json(
@@ -85,6 +89,8 @@ export async function POST(request: Request) {
       requested_doctor: requestedDoctor || null,
       requested_at: requestedAt,
       reason,
+      ai_summary: aiSummary || null,
+      urgency: urgency || null,
       status: "pending",
       source_channel: "website",
     })

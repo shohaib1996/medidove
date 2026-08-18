@@ -12,6 +12,7 @@ import {
   MessageCircle,
   Phone,
   ShieldCheck,
+  Sparkles,
   Stethoscope,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -39,6 +40,16 @@ type AppointmentForm = {
   requestedTime: string;
   reason: string;
   consentAccepted: boolean;
+};
+
+type IntakeResult = {
+  suggestedDepartment: string;
+  suggestedDoctor: string;
+  urgency: "low" | "medium" | "high" | "urgent";
+  summary: string;
+  adminNote: string;
+  safetyMessage: string | null;
+  matchedSignals: string[];
 };
 
 const initialForm: AppointmentForm = {
@@ -89,7 +100,9 @@ const supportCards = [
 
 const AppointmentBookingPage = () => {
   const [form, setForm] = useState<AppointmentForm>(initialForm);
+  const [intakeResult, setIntakeResult] = useState<IntakeResult | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const updateField = <Key extends keyof AppointmentForm>(
     key: Key,
@@ -119,7 +132,11 @@ const AppointmentBookingPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          aiSummary: intakeResult?.summary,
+          urgency: intakeResult?.urgency,
+        }),
       });
       const result = await response.json();
 
@@ -129,12 +146,53 @@ const AppointmentBookingPage = () => {
 
       toast.success("Appointment request submitted successfully.");
       setForm(initialForm);
+      setIntakeResult(null);
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Unable to submit appointment.";
       toast.error(message);
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleSmartIntake = async () => {
+    if (form.reason.trim().length < 10) {
+      toast.error("Describe the appointment reason first.");
+      return;
+    }
+
+    setIsAnalyzing(true);
+
+    try {
+      const response = await fetch("/api/ai/intake", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ reason: form.reason }),
+      });
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Unable to analyze request.");
+      }
+
+      const intake = result as IntakeResult;
+      setIntakeResult(intake);
+
+      if (intake.urgency !== "urgent") {
+        updateField("requestedDepartment", intake.suggestedDepartment);
+        updateField("requestedDoctor", intake.suggestedDoctor);
+      }
+
+      toast.success("Smart intake suggestion is ready.");
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Unable to analyze request.";
+      toast.error(message);
+    } finally {
+      setIsAnalyzing(false);
     }
   };
 
@@ -290,6 +348,80 @@ const AppointmentBookingPage = () => {
                       rows={6}
                     />
                   </div>
+
+                  <Card className="border-teal-100 bg-teal-50/60 shadow-none">
+                    <CardHeader>
+                      <CardDescription>Smart Intake</CardDescription>
+                      <CardTitle className="flex items-center gap-2 text-xl">
+                        <Sparkles className="size-5 text-primary" />
+                        AI-style routing suggestion
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <p className="text-sm leading-6 text-slate-600">
+                        Analyze the reason for visit to suggest department,
+                        doctor type, urgency, and admin notes. This is routing
+                        support only, not diagnosis.
+                      </p>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={handleSmartIntake}
+                        disabled={isAnalyzing}
+                      >
+                        <Bot />
+                        {isAnalyzing ? "Analyzing..." : "Analyze request"}
+                      </Button>
+
+                      {intakeResult && (
+                        <div className="grid gap-3 rounded-lg border border-teal-200 bg-white p-4">
+                          {intakeResult.safetyMessage && (
+                            <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm font-medium text-red-700">
+                              {intakeResult.safetyMessage}
+                            </div>
+                          )}
+                          <div className="grid gap-3 sm:grid-cols-3">
+                            <div>
+                              <p className="text-xs font-semibold uppercase text-slate-400">
+                                Department
+                              </p>
+                              <p className="mt-1 text-sm font-medium text-slate-800">
+                                {intakeResult.suggestedDepartment}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-xs font-semibold uppercase text-slate-400">
+                                Doctor
+                              </p>
+                              <p className="mt-1 text-sm font-medium text-slate-800">
+                                {intakeResult.suggestedDoctor}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-xs font-semibold uppercase text-slate-400">
+                                Urgency
+                              </p>
+                              <Badge className="mt-1 capitalize">
+                                {intakeResult.urgency}
+                              </Badge>
+                            </div>
+                          </div>
+                          <p className="text-sm leading-6 text-slate-600">
+                            {intakeResult.adminNote}
+                          </p>
+                          {intakeResult.matchedSignals.length > 0 && (
+                            <div className="flex flex-wrap gap-2">
+                              {intakeResult.matchedSignals.map((signal) => (
+                                <Badge key={signal} variant="secondary">
+                                  {signal}
+                                </Badge>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
 
                   <label className="flex items-start gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
                     <input
