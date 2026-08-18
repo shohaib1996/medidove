@@ -181,6 +181,8 @@ ElevenLabs:
 
 Twilio:
 
+- `/api/twilio/voice/inbound` logs inbound phone calls and returns TwiML.
+- `/api/twilio/whatsapp/inbound` logs inbound WhatsApp messages and returns TwiML.
 - SMS dispatch uses `TWILIO_FROM_PHONE`.
 - WhatsApp dispatch uses `TWILIO_WHATSAPP_FROM`.
 - Consent is checked before dispatching SMS, WhatsApp, voice, or email records.
