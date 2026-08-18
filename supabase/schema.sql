@@ -245,6 +245,14 @@ create policy "Admins can manage AI document chunks"
   using (public.is_admin())
   with check (public.is_admin());
 
+create policy "Admins can read AI chat sessions"
+  on public.ai_chat_sessions for select
+  using (public.is_admin());
+
+create policy "Admins can read AI chat messages"
+  on public.ai_chat_messages for select
+  using (public.is_admin());
+
 create policy "Patients can read own profile"
   on public.profiles for select
   using (auth.uid() = id);
@@ -320,6 +328,7 @@ create index contact_leads_ai_urgency_idx on public.contact_leads(ai_urgency);
 create index call_logs_status_idx on public.call_logs(status);
 create index whatsapp_messages_status_idx on public.whatsapp_messages(status);
 create index consent_logs_channel_idx on public.consent_logs(channel);
+create index ai_chat_messages_session_id_idx on public.ai_chat_messages(session_id);
 create index ai_document_chunks_embedding_idx
   on public.ai_document_chunks
   using ivfflat (embedding vector_cosine_ops)
