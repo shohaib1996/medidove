@@ -1,9 +1,5 @@
 'use client'
-import React from 'react';
-
-import emailjs from '@emailjs/browser';
-
-
+import React, { useState } from 'react';
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -14,7 +10,7 @@ interface FormData {
   email: string;
   phone: string;
   subject: string;
-  massage: string;
+  message: string;
 }
 
 const schema = yup.object({
@@ -22,42 +18,44 @@ const schema = yup.object({
   email: yup.string().required().email().label("Email"),
   phone: yup.string().required().label("Phone"),
   subject: yup.string().required().label("Subject"),
-  massage: yup.string().required().label("Massage"),
+  message: yup.string().required().label("Message"),
 }).required();
 
 
 
 const ContactForm = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
 
- 
+  const onSubmit = async (data: FormData) => {
+    setIsSubmitting(true);
 
-  const onSubmit = (data: FormData) => {
-    const notify = () => toast("Submit Successful");
-    const templateParams = {
-       name: data.name,
-       email: data.email,
-       phone: data.phone,
-       subject: data.subject,
-       massage: data.massage
-    }
-
-
-    emailjs.send('service_mf102cn', 'template_fyo1t6h', templateParams, 'V4515tt6lexXjODfC')
-      .then((response) => {
-        console.log('SUCCESS!', response.status, response.text);
-      }, (err) => {
-        console.log('FAILED...', err);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
       });
+      const result = await response.json();
 
+      if (!response.ok) {
+        throw new Error(result.error || "Unable to submit your message.");
+      }
 
-
-    notify()
-    reset();
-    console.log(data);
+      toast.success("Message submitted successfully.");
+      reset();
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Unable to submit your message.";
+      toast.error(message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -72,7 +70,7 @@ const ContactForm = () => {
           </div>
           <div className="col-lg-6">
             <div className="form-box email-icon mb-30">
-              <input type="text" placeholder="Your Email" {...register("email")} />
+              <input type="email" placeholder="Your Email" {...register("email")} />
               <p className="form_error">{errors.email?.message}</p>
             </div>
           </div>
@@ -90,11 +88,13 @@ const ContactForm = () => {
           </div>
           <div className="col-lg-12">
             <div className="form-box message-icon mb-30">
-              <textarea {...register("massage")} id="message" cols={30} rows={10} placeholder="Your Message"></textarea>
-              <p className="form_error">{errors.massage?.message}</p>
+              <textarea {...register("message")} id="message" cols={30} rows={10} placeholder="Your Message"></textarea>
+              <p className="form_error">{errors.message?.message}</p>
             </div>
             <div className="contact-btn text-center">
-              <button className="btn btn-icon ml-0" type="submit"><span>+</span> get action</button>
+              <button className="btn btn-icon ml-0" type="submit" disabled={isSubmitting}>
+                <span>+</span> {isSubmitting ? "submitting..." : "get action"}
+              </button>
             </div>
           </div>
         </div>
