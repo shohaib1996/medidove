@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { triageLead } from "@/lib/ai/lead-triage";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 type ContactRequest = {
@@ -13,28 +14,6 @@ const cleanText = (value: unknown) =>
   typeof value === "string" ? value.trim() : "";
 
 const isEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-
-const getLeadCategory = (subject: string, message: string) => {
-  const content = `${subject} ${message}`.toLowerCase();
-
-  if (content.includes("appointment") || content.includes("book")) {
-    return "appointment";
-  }
-
-  if (content.includes("price") || content.includes("cost") || content.includes("billing")) {
-    return "billing";
-  }
-
-  if (content.includes("product") || content.includes("shop") || content.includes("medicine")) {
-    return "shop";
-  }
-
-  if (content.includes("partner") || content.includes("business")) {
-    return "partnership";
-  }
-
-  return "general";
-};
 
 export async function POST(request: Request) {
   let body: ContactRequest;
@@ -68,6 +47,7 @@ export async function POST(request: Request) {
     );
   }
 
+  const triage = triageLead({ name, subject, message });
   const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("contact_leads")
@@ -77,7 +57,10 @@ export async function POST(request: Request) {
       phone: phone || null,
       subject: subject || null,
       message,
-      ai_category: getLeadCategory(subject, message),
+      ai_category: triage.category,
+      ai_summary: triage.summary,
+      ai_urgency: triage.urgency,
+      ai_suggested_reply: triage.suggestedReply,
       status: "new",
     })
     .select("id")

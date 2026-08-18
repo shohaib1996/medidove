@@ -116,6 +116,8 @@ create table public.contact_leads (
   message text not null,
   ai_category text,
   ai_summary text,
+  ai_urgency text,
+  ai_suggested_reply text,
   status public.lead_status not null default 'new',
   created_at timestamptz not null default now()
 );
@@ -289,6 +291,7 @@ create index services_slug_idx on public.services(slug);
 create index services_department_id_idx on public.services(department_id);
 create index appointments_status_idx on public.appointments(status);
 create index appointments_requested_at_idx on public.appointments(requested_at);
+create index contact_leads_ai_urgency_idx on public.contact_leads(ai_urgency);
 create index call_logs_status_idx on public.call_logs(status);
 create index whatsapp_messages_status_idx on public.whatsapp_messages(status);
 create index consent_logs_channel_idx on public.consent_logs(channel);

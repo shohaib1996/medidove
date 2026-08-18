@@ -246,6 +246,8 @@ export type Database = {
           message: string;
           ai_category: string | null;
           ai_summary: string | null;
+          ai_urgency: string | null;
+          ai_suggested_reply: string | null;
           status: LeadStatus;
           created_at: string;
         };
@@ -258,12 +260,16 @@ export type Database = {
           message: string;
           ai_category?: string | null;
           ai_summary?: string | null;
+          ai_urgency?: string | null;
+          ai_suggested_reply?: string | null;
           status?: LeadStatus;
           created_at?: string;
         };
         Update: {
           ai_category?: string | null;
           ai_summary?: string | null;
+          ai_urgency?: string | null;
+          ai_suggested_reply?: string | null;
           status?: LeadStatus;
         };
         Relationships: [];

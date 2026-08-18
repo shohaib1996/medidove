@@ -46,6 +46,9 @@ type LeadRow = {
   subject: string | null;
   message: string;
   ai_category: string | null;
+  ai_summary: string | null;
+  ai_urgency: string | null;
+  ai_suggested_reply: string | null;
   status: string;
   created_at: string;
 };
@@ -159,7 +162,7 @@ const AdminPage = async () => {
     supabase
       .from("contact_leads")
       .select(
-        "id, name, email, phone, subject, message, ai_category, status, created_at",
+        "id, name, email, phone, subject, message, ai_category, ai_summary, ai_urgency, ai_suggested_reply, status, created_at",
       )
       .order("created_at", { ascending: false })
       .limit(8),
@@ -185,6 +188,7 @@ const AdminPage = async () => {
     (appointment) => appointment.status === "pending",
   ).length;
   const newLeads = leads.filter((lead) => lead.status === "new").length;
+  const urgentLeads = leads.filter((lead) => lead.ai_urgency === "high").length;
   const requestedCallbacks = callLogs.filter(
     (callLog) => callLog.status === "requested",
   ).length;
@@ -253,7 +257,7 @@ const AdminPage = async () => {
               <Inbox className="size-8 text-teal-600" />
             </CardHeader>
             <CardContent className="text-sm text-slate-500">
-              {newLeads} new leads
+              {newLeads} new leads, {urgentLeads} high urgency
             </CardContent>
           </Card>
 
@@ -452,12 +456,28 @@ const AdminPage = async () => {
                           {lead.name}
                         </h2>
                         <p className="mt-2 line-clamp-2 text-sm text-slate-600">
-                          {lead.message}
+                          {lead.ai_summary || lead.message}
                         </p>
                       </div>
-                      <Badge variant="secondary" className="capitalize">
-                        {lead.ai_category || lead.status}
-                      </Badge>
+                      <div className="flex shrink-0 flex-col items-end gap-2">
+                        <Badge variant="secondary" className="capitalize">
+                          {lead.ai_category || lead.status}
+                        </Badge>
+                        {lead.ai_urgency ? (
+                          <Badge
+                            className={
+                              lead.ai_urgency === "high"
+                                ? "bg-red-600 text-white"
+                                : "capitalize"
+                            }
+                            variant={
+                              lead.ai_urgency === "high" ? "default" : "outline"
+                            }
+                          >
+                            {lead.ai_urgency}
+                          </Badge>
+                        ) : null}
+                      </div>
                     </div>
                     <dl className="mt-4 grid gap-3 sm:grid-cols-2">
                       <DetailItem label="Email" value={lead.email} />
@@ -468,6 +488,16 @@ const AdminPage = async () => {
                       />
                       <DetailItem label="Created" value={formatDate(lead.created_at)} />
                     </dl>
+                    {lead.ai_suggested_reply ? (
+                      <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
+                        <p className="text-xs font-semibold uppercase text-slate-400">
+                          AI suggested reply
+                        </p>
+                        <p className="mt-2 text-sm leading-6 text-slate-700">
+                          {lead.ai_suggested_reply}
+                        </p>
+                      </div>
+                    ) : null}
                   </article>
                 ))
               ) : (
