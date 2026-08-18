@@ -3,9 +3,11 @@ import { redirect } from "next/navigation";
 import {
   Activity,
   CalendarClock,
+  CheckCircle2,
   Headphones,
   Inbox,
   MessageCircle,
+  Send,
   Stethoscope,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -17,6 +19,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { updateAdminRecordStatus } from "./actions";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata = {
@@ -106,6 +109,27 @@ const DetailItem = ({
       {value || "Not provided"}
     </dd>
   </div>
+);
+
+const StatusAction = ({
+  table,
+  id,
+  status,
+  label,
+}: {
+  table: "appointments" | "contact_leads" | "call_logs" | "whatsapp_messages";
+  id: string;
+  status: string;
+  label: string;
+}) => (
+  <form action={updateAdminRecordStatus}>
+    <input type="hidden" name="table" value={table} />
+    <input type="hidden" name="id" value={id} />
+    <input type="hidden" name="status" value={status} />
+    <Button type="submit" variant="outline" size="sm">
+      {label}
+    </Button>
+  </form>
 );
 
 const AdminPage = async () => {
@@ -336,6 +360,26 @@ const AdminPage = async () => {
                         value={formatDate(appointment.requested_at)}
                       />
                     </dl>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      <StatusAction
+                        table="appointments"
+                        id={appointment.id}
+                        status="confirmed"
+                        label="Confirm"
+                      />
+                      <StatusAction
+                        table="appointments"
+                        id={appointment.id}
+                        status="completed"
+                        label="Complete"
+                      />
+                      <StatusAction
+                        table="appointments"
+                        id={appointment.id}
+                        status="cancelled"
+                        label="Cancel"
+                      />
+                    </div>
                   </article>
                 ))
               ) : (
@@ -383,6 +427,26 @@ const AdminPage = async () => {
                       />
                       <DetailItem label="Created" value={formatDate(callLog.created_at)} />
                     </dl>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      <StatusAction
+                        table="call_logs"
+                        id={callLog.id}
+                        status="contacted"
+                        label="Contacted"
+                      />
+                      <StatusAction
+                        table="call_logs"
+                        id={callLog.id}
+                        status="completed"
+                        label="Complete"
+                      />
+                      <StatusAction
+                        table="call_logs"
+                        id={callLog.id}
+                        status="failed"
+                        label="Failed"
+                      />
+                    </div>
                   </article>
                 ))
               ) : (
@@ -427,6 +491,26 @@ const AdminPage = async () => {
                         value={formatDate(message.created_at)}
                       />
                     </dl>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      <StatusAction
+                        table="whatsapp_messages"
+                        id={message.id}
+                        status="queued"
+                        label="Queue"
+                      />
+                      <StatusAction
+                        table="whatsapp_messages"
+                        id={message.id}
+                        status="sent"
+                        label="Mark sent"
+                      />
+                      <StatusAction
+                        table="whatsapp_messages"
+                        id={message.id}
+                        status="failed"
+                        label="Failed"
+                      />
+                    </div>
                   </article>
                 ))
               ) : (
@@ -498,6 +582,26 @@ const AdminPage = async () => {
                         </p>
                       </div>
                     ) : null}
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      <StatusAction
+                        table="contact_leads"
+                        id={lead.id}
+                        status="contacted"
+                        label="Contacted"
+                      />
+                      <StatusAction
+                        table="contact_leads"
+                        id={lead.id}
+                        status="converted"
+                        label="Convert"
+                      />
+                      <StatusAction
+                        table="contact_leads"
+                        id={lead.id}
+                        status="closed"
+                        label="Close"
+                      />
+                    </div>
                   </article>
                 ))
               ) : (
