@@ -59,7 +59,46 @@ const knowledge = [
   },
 ];
 
-const getAssistantResponse = (message: string) => {
+const getStoredKnowledgeMatch = async (message: string) => {
+  try {
+    const supabase = createAdminClient();
+    const terms = message
+      .toLowerCase()
+      .split(/[^a-z0-9]+/)
+      .filter((term) => term.length > 3)
+      .slice(0, 6);
+
+    const { data } = await supabase
+      .from("ai_documents")
+      .select("title, content, source_type")
+      .limit(20);
+
+    if (!data?.length || !terms.length) {
+      return null;
+    }
+
+    const match = data.find((document) => {
+      const searchable = `${document.title} ${document.content}`.toLowerCase();
+
+      return terms.some((term) => searchable.includes(term));
+    });
+
+    if (!match) {
+      return null;
+    }
+
+    return {
+      answer: `${match.title}: ${match.content}`,
+      cta: "/contact",
+      intent: `knowledge_${match.source_type}`,
+    };
+  } catch (error) {
+    console.error("AI knowledge lookup failed:", error);
+    return null;
+  }
+};
+
+const getAssistantResponse = async (message: string) => {
   const normalized = message.toLowerCase();
   const emergencyMatch = emergencySignals.find((signal) =>
     normalized.includes(signal),
@@ -72,6 +111,12 @@ const getAssistantResponse = (message: string) => {
       cta: null,
       intent: "urgent_safety",
     };
+  }
+
+  const storedKnowledgeMatch = await getStoredKnowledgeMatch(message);
+
+  if (storedKnowledgeMatch) {
+    return storedKnowledgeMatch;
   }
 
   const match = knowledge.find((item) =>
@@ -172,7 +217,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const response = getAssistantResponse(message);
+  const response = await getAssistantResponse(message);
   const activeSessionId = await logConversation({
     sessionId,
     visitorId,

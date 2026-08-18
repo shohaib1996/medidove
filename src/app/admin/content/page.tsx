@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Building2, Plus, Stethoscope, UserRound } from "lucide-react";
+import { Bot, Building2, Plus, Stethoscope, UserRound } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,7 +14,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { createClient } from "@/lib/supabase/server";
-import { createDepartment, createDoctor, createService } from "./actions";
+import {
+  createDepartment,
+  createDoctor,
+  createKnowledgeDocument,
+  createService,
+} from "./actions";
 
 export const metadata = {
   title: "Clinic Content | MediDove Admin",
@@ -36,6 +41,13 @@ type Doctor = {
   id: string;
   full_name: string;
   specialty: string;
+};
+
+type KnowledgeDocument = {
+  id: string;
+  title: string;
+  source_type: string;
+  content: string;
 };
 
 const DepartmentSelect = ({ departments }: { departments: Department[] }) => (
@@ -72,8 +84,12 @@ export default async function AdminContentPage() {
     redirect("/admin");
   }
 
-  const [{ data: departmentsData }, { data: servicesData }, { data: doctorsData }] =
-    await Promise.all([
+  const [
+    { data: departmentsData },
+    { data: servicesData },
+    { data: doctorsData },
+    { data: knowledgeData },
+  ] = await Promise.all([
       supabase
         .from("departments")
         .select("id, name, description")
@@ -89,11 +105,17 @@ export default async function AdminContentPage() {
         .select("id, full_name, specialty")
         .order("created_at", { ascending: false })
         .limit(12),
+      supabase
+        .from("ai_documents")
+        .select("id, title, source_type, content")
+        .order("created_at", { ascending: false })
+        .limit(12),
     ]);
 
   const departments = (departmentsData || []) as Department[];
   const services = (servicesData || []) as Service[];
   const doctors = (doctorsData || []) as Doctor[];
+  const knowledgeDocuments = (knowledgeData || []) as KnowledgeDocument[];
 
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-10 text-slate-900 md:px-8">
@@ -116,7 +138,7 @@ export default async function AdminContentPage() {
           </Button>
         </section>
 
-        <section className="grid gap-4 md:grid-cols-3">
+        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between gap-4">
               <div>
@@ -146,9 +168,20 @@ export default async function AdminContentPage() {
               <UserRound className="size-8 text-indigo-600" />
             </CardHeader>
           </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between gap-4">
+              <div>
+                <CardDescription>AI knowledge</CardDescription>
+                <CardTitle className="mt-2 text-3xl">
+                  {knowledgeDocuments.length}
+                </CardTitle>
+              </div>
+              <Bot className="size-8 text-sky-600" />
+            </CardHeader>
+          </Card>
         </section>
 
-        <section className="grid gap-6 xl:grid-cols-3">
+        <section className="grid gap-6 xl:grid-cols-4">
           <Card>
             <CardHeader>
               <CardDescription>Department</CardDescription>
@@ -265,9 +298,54 @@ export default async function AdminContentPage() {
               </form>
             </CardContent>
           </Card>
+
+          <Card>
+            <CardHeader>
+              <CardDescription>AI knowledge</CardDescription>
+              <CardTitle>Add FAQ or policy</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form action={createKnowledgeDocument} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="knowledge-source">Source type</Label>
+                  <select
+                    id="knowledge-source"
+                    name="source_type"
+                    className="h-11 w-full rounded-md border border-slate-200 bg-white px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  >
+                    <option value="faq">FAQ</option>
+                    <option value="policy">Clinic policy</option>
+                    <option value="service_note">Service note</option>
+                    <option value="reception_script">Reception script</option>
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="knowledge-title">Title</Label>
+                  <Input
+                    id="knowledge-title"
+                    name="title"
+                    placeholder="Insurance and payment FAQ"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="knowledge-content">Content</Label>
+                  <Textarea
+                    id="knowledge-content"
+                    name="content"
+                    rows={7}
+                    placeholder="Add the answer or policy text the AI assistant should use."
+                  />
+                </div>
+                <Button type="submit">
+                  <Plus />
+                  Add knowledge
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
         </section>
 
-        <section className="grid gap-6 xl:grid-cols-3">
+        <section className="grid gap-6 xl:grid-cols-4">
           <Card>
             <CardHeader>
               <CardTitle>Latest departments</CardTitle>
@@ -312,6 +390,27 @@ export default async function AdminContentPage() {
                 </div>
               ))}
               {!doctors.length ? <Badge variant="outline">No doctors</Badge> : null}
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Latest AI knowledge</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {knowledgeDocuments.map((document) => (
+                <div key={document.id} className="rounded-lg border p-4">
+                  <Badge variant="secondary" className="mb-2 capitalize">
+                    {document.source_type.replaceAll("_", " ")}
+                  </Badge>
+                  <p className="font-semibold">{document.title}</p>
+                  <p className="mt-1 line-clamp-3 text-sm text-slate-600">
+                    {document.content}
+                  </p>
+                </div>
+              ))}
+              {!knowledgeDocuments.length ? (
+                <Badge variant="outline">No AI knowledge</Badge>
+              ) : null}
             </CardContent>
           </Card>
         </section>

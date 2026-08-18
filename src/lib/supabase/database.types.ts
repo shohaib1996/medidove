@@ -301,6 +301,67 @@ export type Database = {
           },
         ];
       };
+      ai_documents: {
+        Row: {
+          id: string;
+          source_type: string;
+          source_id: string | null;
+          title: string;
+          content: string;
+          metadata: Json;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          source_type: string;
+          source_id?: string | null;
+          title: string;
+          content: string;
+          metadata?: Json;
+          created_at?: string;
+        };
+        Update: {
+          source_type?: string;
+          source_id?: string | null;
+          title?: string;
+          content?: string;
+          metadata?: Json;
+        };
+        Relationships: [];
+      };
+      ai_document_chunks: {
+        Row: {
+          id: string;
+          document_id: string;
+          content: string;
+          embedding: string | null;
+          metadata: Json;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          document_id: string;
+          content: string;
+          embedding?: string | null;
+          metadata?: Json;
+          created_at?: string;
+        };
+        Update: {
+          document_id?: string;
+          content?: string;
+          embedding?: string | null;
+          metadata?: Json;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "ai_document_chunks_document_id_fkey";
+            columns: ["document_id"];
+            isOneToOne: false;
+            referencedRelation: "ai_documents";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       ai_chat_messages: {
         Row: {
           id: string;

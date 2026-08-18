@@ -235,6 +235,16 @@ create policy "Admins can manage services"
   using (public.is_admin())
   with check (public.is_admin());
 
+create policy "Admins can manage AI documents"
+  on public.ai_documents for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+create policy "Admins can manage AI document chunks"
+  on public.ai_document_chunks for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
 create policy "Patients can read own profile"
   on public.profiles for select
   using (auth.uid() = id);

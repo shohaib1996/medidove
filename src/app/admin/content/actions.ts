@@ -117,3 +117,30 @@ export const createDoctor = async (formData: FormData) => {
 
   refreshContent();
 };
+
+export const createKnowledgeDocument = async (formData: FormData) => {
+  const title = text(formData.get("title"));
+  const content = text(formData.get("content"));
+  const sourceType = text(formData.get("source_type")) || "faq";
+
+  if (!title || !content) {
+    throw new Error("Knowledge title and content are required.");
+  }
+
+  const supabase = await assertAdmin();
+  const { error } = await supabase.from("ai_documents").insert({
+    source_type: sourceType,
+    title,
+    content,
+    metadata: {
+      managed_by: "admin_content_page",
+      searchable_without_embeddings: true,
+    },
+  });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  revalidatePath("/admin/content");
+};
