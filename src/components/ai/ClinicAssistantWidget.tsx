@@ -28,7 +28,7 @@ const starterMessages: ChatMessage[] = [
     role: "assistant",
     content:
       "Hi, I am the MediDove assistant. I can help with appointments, doctor matching, services, WhatsApp reminders, and the AI receptionist workflow.",
-    cta: "/appoinment",
+    cta: "/appointment",
   },
 ];
 

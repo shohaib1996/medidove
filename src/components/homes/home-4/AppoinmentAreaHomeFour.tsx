@@ -1,15 +1,15 @@
 
-import AppoinmentSubmitHomeFour from '@/components/forms/AppoinmentSubmitHomeFour';  
+import AppointmentSubmitHomeFour from '@/components/forms/AppoinmentSubmitHomeFour';  
 
-const AppoinmentAreaHomeFour = () => {
+const AppointmentAreaHomeFour = () => {
   return (
     <>
-      <section className="appoinment pos-rel">
+      <section className="appointment pos-rel">
         <div
-          className="h4appoinment-thumb" style={{ backgroundImage: `url(/assets/img/home4/appoinment/appoinment__thumb.jpg)` }}></div>
+          className="h4appointment-thumb" style={{ backgroundImage: `url(/assets/img/home4/appoinment/appoinment__thumb.jpg)` }}></div>
         <div className="container-fluid p-0 fix">
           <div className="col-xl-6 offset-xl-6">
-            <div className="h4appoinment-wrapper">
+            <div className="h4appointment-wrapper">
               <div className="about-title mb-50">
                 <h5 className="pink-color">Make An Appointment</h5>
                 <h1>
@@ -17,7 +17,7 @@ const AppoinmentAreaHomeFour = () => {
                   For Get Release
                 </h1>
               </div>
-              <AppoinmentSubmitHomeFour /> 
+              <AppointmentSubmitHomeFour /> 
             </div>
           </div>
         </div>
@@ -26,4 +26,4 @@ const AppoinmentAreaHomeFour = () => {
   );
 };
 
-export default AppoinmentAreaHomeFour;
+export default AppointmentAreaHomeFour;

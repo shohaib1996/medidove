@@ -158,7 +158,7 @@ const ReceptionistPage = () => {
                   variant="outline"
                   className="border-white/30 bg-white/10 text-white hover:bg-white hover:text-slate-950"
                 >
-                  <Link href="/appoinment">
+                  <Link href="/appointment">
                     <CalendarClock />
                     Book manually
                   </Link>

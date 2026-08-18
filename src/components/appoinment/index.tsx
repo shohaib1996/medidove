@@ -3,18 +3,18 @@ import HeaderOne from '@/layout/headers/HeaderOne';
 import React from 'react';
 import Breadcrumb from '../common/breadcrumb/Breadcrumb';
 import AppointmentAboutArea from './AppointmentAboutArea';
-import AppoinmentCalculateArea from './AppoinmentCalculateArea';
+import AppointmentCalculateArea from './AppoinmentCalculateArea';
 import LatestNewsAreaHomeOne from "./../homes/home/LatestNewsAreaHomeOne";
 import FooterThree from "@/layout/footers/FooterThree";
 
-const Appoinment = () => {
+const Appointment = () => {
   return (
     <>
       <HeaderOne />
       <main>
-        <Breadcrumb sub_title='We are here for your care.' title='Appoinment' page='Appoinment' />
+        <Breadcrumb sub_title='We are here for your care.' title='Appointment' page='Appointment' />
         <AppointmentAboutArea />
-        <AppoinmentCalculateArea />
+        <AppointmentCalculateArea />
         <LatestNewsAreaHomeOne style={true} />
       </main>
       <FooterThree />
@@ -22,4 +22,4 @@ const Appoinment = () => {
   );
 };
 
-export default Appoinment;
+export default Appointment;

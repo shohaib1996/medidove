@@ -27,7 +27,7 @@ const CtaAreaHomeOne = () => {
                   </div>
                 </div>
                 <div className="section-button section-button-left">
-                  <Link data-animation="fadeInLeft" data-delay=".6s" href="/appoinment" className="btn btn-icon btn-icon-green ml-0">
+                  <Link data-animation="fadeInLeft" data-delay=".6s" href="/appointment" className="btn btn-icon btn-icon-green ml-0">
                     <span>+</span>get a consultant
                   </Link>
                 </div>

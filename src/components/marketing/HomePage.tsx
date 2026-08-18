@@ -109,7 +109,7 @@ const HomePage = () => {
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Button asChild size="lg">
-                  <Link href="/appoinment">
+                  <Link href="/appointment">
                     <CalendarCheck />
                     Book appointment
                   </Link>
@@ -309,7 +309,7 @@ const HomePage = () => {
                 </Link>
               </Button>
               <Button asChild>
-                <Link href="/appoinment">
+                <Link href="/appointment">
                   <Users />
                   Start intake
                 </Link>

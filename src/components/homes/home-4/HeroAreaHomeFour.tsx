@@ -103,10 +103,10 @@ const HeroAreaHomeFour = ({ style }: any) => {
                         </div>
                         <div className="hero-slider-btn h4hero-btn">
                           <Link data-animation="fadeInLeft" data-delay=".9s"
-                            href="/appoinment" className="btn btn-icon ml-0"><span>+</span>learn more
+                            href="/appointment" className="btn btn-icon ml-0"><span>+</span>learn more
                           </Link>
                           <Link data-animation="fadeInLeft" data-delay="1s"
-                            href="/appoinment" className="btn btn-icon btn-icon-green ml-0"><span>+</span>Our services
+                            href="/appointment" className="btn btn-icon btn-icon-green ml-0"><span>+</span>Our services
                           </Link>
                         </div>
                       </div>

@@ -30,7 +30,7 @@ const AppointmentAreaHomeThree = () => {
             </div>
             <div className="col-xl-3 col-lg-4">
               <div className="section-button section-button-left mb-30">
-                <Link data-animation="fadeInLeft" data-delay=".6s" href="/appoinment" className="btn btn-icon btn-icon-dark ml-0">
+                <Link data-animation="fadeInLeft" data-delay=".6s" href="/appointment" className="btn btn-icon btn-icon-dark ml-0">
                   <span>+</span>{btn_text}
                 </Link>
               </div>

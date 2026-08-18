@@ -180,7 +180,7 @@ const AdminAppointmentsPage = async ({
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
             <Button asChild variant="outline">
-              <Link href="/appoinment">Public booking</Link>
+              <Link href="/appointment">Public booking</Link>
             </Button>
             <Button asChild>
               <Link href="/admin">Back to dashboard</Link>

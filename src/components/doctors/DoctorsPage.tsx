@@ -65,7 +65,7 @@ const DoctorsPage = ({ doctors }: { doctors: PublicDoctor[] }) => {
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Button asChild size="lg">
-                <Link href="/appoinment">
+                <Link href="/appointment">
                   <CalendarCheck />
                   Book a doctor
                 </Link>
@@ -102,7 +102,7 @@ const DoctorsPage = ({ doctors }: { doctors: PublicDoctor[] }) => {
                 </p>
               </div>
               <Button asChild variant="outline">
-                <Link href="/appoinment">
+                <Link href="/appointment">
                   Start appointment
                   <CalendarCheck />
                 </Link>
@@ -140,7 +140,7 @@ const DoctorsPage = ({ doctors }: { doctors: PublicDoctor[] }) => {
                       </div>
                     </div>
                     <Button asChild className="w-full">
-                      <Link href="/appoinment">Request appointment</Link>
+                      <Link href="/appointment">Request appointment</Link>
                     </Button>
                   </CardContent>
                 </Card>

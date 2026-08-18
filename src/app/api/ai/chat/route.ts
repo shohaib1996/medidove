@@ -25,7 +25,7 @@ const knowledge = [
     signals: ["appointment", "book", "schedule", "visit"],
     answer:
       "You can book an appointment from the appointment page. Share your name, phone, preferred department, date, time, and reason for visit. The clinic team can then review it in the admin dashboard.",
-    cta: "/appoinment",
+    cta: "/appointment",
   },
   {
     signals: ["doctor", "dentist", "neurologist", "pediatrician", "specialist"],
@@ -134,7 +134,7 @@ const getAssistantResponse = async (message: string) => {
   return {
     answer:
       "I can help with appointments, doctor matching, medical services, AI receptionist workflows, WhatsApp reminders, and admin lead handling. Tell me what you want to do next.",
-    cta: "/appoinment",
+    cta: "/appointment",
     intent: "general_help",
   };
 };

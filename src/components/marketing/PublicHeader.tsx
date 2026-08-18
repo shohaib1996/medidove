@@ -10,7 +10,7 @@ const navItems = [
   { href: "/doctor", label: "Doctors" },
   { href: "/receptionist", label: "AI Receptionist" },
   { href: "/engagement", label: "Engagement" },
-  { href: "/appoinment", label: "Appointment" },
+  { href: "/appointment", label: "Appointment" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -62,7 +62,7 @@ const PublicHeader = () => {
               </Link>
             </Button>
             <Button asChild size="sm">
-              <Link href="/appoinment">
+              <Link href="/appointment">
                 <CalendarDays />
                 Book
               </Link>

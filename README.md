@@ -64,7 +64,7 @@ For real healthcare clients, production compliance work may be required, includi
 ## Important Routes
 
 - `/` public AI clinic home
-- `/appoinment` appointment booking
+- `/appointment` appointment booking
 - `/receptionist` ElevenLabs receptionist demo page
 - `/engagement` WhatsApp and patient engagement page
 - `/login` and `/register`
@@ -194,7 +194,7 @@ Automation:
 ## Demo Workflow
 
 1. Seed demo data from `/admin/content`.
-2. Create an appointment from `/appoinment`.
+2. Create an appointment from `/appointment`.
 3. Try the floating AI assistant on the public website.
 4. Search for terms like `tooth pain`, `child fever`, or `heart doctor`.
 5. Review new records in `/admin`.

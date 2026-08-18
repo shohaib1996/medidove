@@ -1,6 +1,4 @@
-
-import AppointmentBookingPage from "@/components/appointments/AppointmentBookingPage";
-import { getBookingOptions } from "@/lib/clinic/content";
+import { redirect } from "next/navigation";
 
 export const metadata = {
   title: "Book Appointment | MediDove AI Clinic",
@@ -8,10 +6,8 @@ export const metadata = {
     "Submit a Supabase-backed appointment request for the MediDove AI clinic platform.",
 };
 
-const index = async () => {
-  const bookingOptions = await getBookingOptions();
-
-  return <AppointmentBookingPage bookingOptions={bookingOptions} />;
+const LegacyAppointmentPage = () => {
+  redirect("/appointment");
 };
 
-export default index;
+export default LegacyAppointmentPage;

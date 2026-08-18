@@ -91,7 +91,7 @@ export default function PrivacyPage() {
 
             <div className="flex flex-col gap-3 pt-4 sm:flex-row">
               <Button asChild>
-                <Link href="/appoinment">Book appointment</Link>
+                <Link href="/appointment">Book appointment</Link>
               </Button>
               <Button asChild variant="outline">
                 <Link href="/terms">View terms</Link>

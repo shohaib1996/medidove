@@ -89,7 +89,7 @@ const HeaderFour = () => {
                     </ul>
                   </div>
                   <div className="header-button pl-50">
-                    <Link data-animation="fadeInLeft" data-delay=".6s" href="/appoinment" className="btn btn-icon ml-0" 
+                    <Link data-animation="fadeInLeft" data-delay=".6s" href="/appointment" className="btn btn-icon ml-0" 
                     style={{animationDelay: "0.6s"}} tab-index={0}><span>+</span>Make Appointment</Link>
                   </div>
                 </div>

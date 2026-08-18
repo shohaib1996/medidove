@@ -38,7 +38,7 @@ const FactAreaHomeOne = () => {
                 </div>
               </div>
               <div className="section-button section-button-left mb-30">
-                <Link data-animation="fadeInLeft" data-delay=".6s" href="/appoinment" className="btn btn-icon ml-0">
+                <Link data-animation="fadeInLeft" data-delay=".6s" href="/appointment" className="btn btn-icon ml-0">
                   <span>+</span>Make Appointment
                 </Link>
               </div>

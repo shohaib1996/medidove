@@ -71,7 +71,7 @@ const ServicesPage = ({ services }: { services: PublicService[] }) => {
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Button asChild size="lg">
-                <Link href="/appoinment">
+                <Link href="/appointment">
                   <CalendarCheck />
                   Book appointment
                 </Link>
@@ -215,7 +215,7 @@ const ServicesPage = ({ services }: { services: PublicService[] }) => {
               </p>
             </div>
             <Button asChild>
-              <Link href="/appoinment">
+              <Link href="/appointment">
                 Start booking
                 <ArrowRight />
               </Link>

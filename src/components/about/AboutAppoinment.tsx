@@ -20,15 +20,15 @@ const about_appoin_content: DataType = {
 }
 const { sub_title, title, sm_des, features } = about_appoin_content
 
-const AboutAppoinment = () => {
+const AboutAppointment = () => {
   return (
     <>
-      <section className="appoinment-section pt-120 pb-120" style={{ backgroundImage: `url(/assets/img/bg/appointment.jpg)` }}>
+      <section className="appointment-section pt-120 pb-120" style={{ backgroundImage: `url(/assets/img/bg/appointment.jpg)` }}>
         <div className="container">
           <div className="row">
             <div className="col-lg-8">
-              <div className="appoinment-box white">
-                <div className="appoinment-content">
+              <div className="appointment-box white">
+                <div className="appointment-content">
                   <span className="small-text">{sub_title}</span>
                   <h2>{title}</h2>
                   <p>{sm_des}</p>
@@ -51,4 +51,4 @@ const AboutAppoinment = () => {
   );
 };
 
-export default AboutAppoinment;
+export default AboutAppointment;

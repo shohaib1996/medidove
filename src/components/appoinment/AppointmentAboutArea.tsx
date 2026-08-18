@@ -11,7 +11,7 @@ import destination_2 from "@/assets/img/about/destination-icon-2.png";
 
 
 
-const appoinment_content = {
+const appointment_content = {
   sub_title: "About Us",
   title: "Short Story About MediDove Clinic.",
   sm_des: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute  irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.",
@@ -30,7 +30,7 @@ const appoinment_content = {
     },
   ]
 }
-const { sub_title, title, sm_des, features } = appoinment_content
+const { sub_title, title, sm_des, features } = appointment_content
 
 const AppointmentAboutArea = () => {
   const [isVideoOpen, setIsVideoOpen] = useState(false);

@@ -94,7 +94,7 @@ const EngagementPage = () => {
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Button asChild size="lg">
-                  <Link href="/appoinment">
+                  <Link href="/appointment">
                     <CalendarDays />
                     Book appointment
                   </Link>

@@ -246,7 +246,7 @@ export default async function PatientPortalPage() {
                   </Link>
                 </Button>
                 <Button asChild>
-                  <Link href="/appoinment">
+                  <Link href="/appointment">
                     <CalendarClock />
                     New appointment
                   </Link>
@@ -302,7 +302,7 @@ export default async function PatientPortalPage() {
                   <Stethoscope className="mx-auto mb-3 size-9" />
                   <p>No linked appointment requests yet.</p>
                   <Button asChild className="mt-5">
-                    <Link href="/appoinment">Book your first appointment</Link>
+                    <Link href="/appointment">Book your first appointment</Link>
                   </Button>
                 </CardContent>
               </Card>

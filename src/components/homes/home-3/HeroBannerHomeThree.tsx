@@ -35,7 +35,7 @@ const HeroBannerHomeThree = () => {
                         <p data-animation="fadeInUp" data-delay=".6s">{sm_info}</p>
                       </div>
                       <div className="hero-slider-btn">
-                        <Link data-animation="fadeInLeft" data-delay=".6s" href="/appoinment"
+                        <Link data-animation="fadeInLeft" data-delay=".6s" href="/appointment"
                           className="btn btn-icon ml-0"><span>+</span>{btn_text}</Link>
                         <a data-animation="fadeInRight" data-delay="1.0s"
                           onClick={() => setIsVideoOpen(true)}

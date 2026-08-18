@@ -18,7 +18,7 @@ const schema = yup.object({
   services: yup.string().required().label("Services"), 
 }).required();
 
-const AppoinmentSubmitHomeFour = () => {
+const AppointmentSubmitHomeFour = () => {
 
   
   const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
@@ -32,17 +32,17 @@ const AppoinmentSubmitHomeFour = () => {
 
   return (
     <>
-      <form className="h4appoinment-form mb-15" onSubmit={handleSubmit(onSubmit)}>
+      <form className="h4appointment-form mb-15" onSubmit={handleSubmit(onSubmit)}>
         <div className="row">
           <div className="col-lg-6 mb-20">
-            <div className="h4appoinment-input pos-rel">
+            <div className="h4appointment-input pos-rel">
               <input type="text" placeholder="Enter Your Name" {...register("name")}  />
               <i className="h4input-icon"><i className="fal fa-user"></i></i>
             </div>
               <p className="form_error">{errors.name?.message}</p>
           </div>
           <div className="col-lg-6 mb-20">
-            <div className="h4appoinment-input pos-rel">
+            <div className="h4appointment-input pos-rel">
               <input type="text" placeholder="Enter Your Email" {...register("email")} />
               <i className="h4input-icon">
                 <i className="far fa-envelope-open"></i>
@@ -51,14 +51,14 @@ const AppoinmentSubmitHomeFour = () => {
             <p className="form_error">{errors.email?.message}</p>
           </div>
           <div className="col-lg-6 mb-20">
-            <div className="h4appoinment-input pos-rel">
+            <div className="h4appointment-input pos-rel">
               <input type="text" placeholder="Enter Your Phone" {...register("phone")} />
               <i className="h4input-icon"><i className="fal fa-phone"></i></i>
             </div>
             <p className="form_error">{errors.phone?.message}</p>
           </div>
           <div className="col-lg-6 mb-20">
-            <div className="h4appoinment-input pos-rel">
+            <div className="h4appointment-input pos-rel">
               <input type="text" placeholder="Choose A Services" {...register("services")} />
               <i className="h4input-icon">
                 <i className="fal fa-file-medical-alt"></i>
@@ -67,7 +67,7 @@ const AppoinmentSubmitHomeFour = () => {
             <p className="form_error">{errors.services?.message}</p>
           </div>
         </div>
-        <div className="h4appoinment-button mt-45">
+        <div className="h4appointment-button mt-45">
           <button
             type='submit'
             data-animation="fadeInLeft"
@@ -81,4 +81,4 @@ const AppoinmentSubmitHomeFour = () => {
   );
 };
 
-export default AppoinmentSubmitHomeFour;
+export default AppointmentSubmitHomeFour;

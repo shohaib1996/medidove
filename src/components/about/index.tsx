@@ -4,7 +4,7 @@ import React from 'react';
 import Breadcrumb from '../common/breadcrumb/Breadcrumb';
 import AboutVideoArea from './AboutVideoArea';
 import AboutCounterArea from './AboutCounterArea';
-import AboutAppoinment from './AboutAppoinment';
+import AboutAppointment from './AboutAppoinment';
 import TeamAreaHomeOne from '../homes/home/TeamAreaHomeOne';
 import FactAreaHomeOne from '../homes/home/FactAreaHomeOne';
 import AboutTestimonialsArea from './AboutTestimonialsArea';
@@ -19,7 +19,7 @@ const About = () => {
         <Breadcrumb sub_title='We are here for your care.' title='About Us' page='About Us' />
         <AboutVideoArea />
         <AboutCounterArea />
-        <AboutAppoinment />
+        <AboutAppointment />
         <TeamAreaHomeOne />
         <FactAreaHomeOne />
         <AboutTestimonialsArea />

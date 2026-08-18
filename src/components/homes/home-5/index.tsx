@@ -7,7 +7,7 @@ import ServicesAreaHomeFour from '../home-4/ServicesAreaHomeFour';
 import TeamAreaHomeFour from '../home-4/TeamAreaHomeFour';
 import RoutineAreaHomeFive from './RoutineAreaHomeFive';
 import PhotoGalleryHomeFive from './PhotoGalleryHomeFive';
-import AppoinmentAreaHomeFour from '../home-4/AppoinmentAreaHomeFour';
+import AppointmentAreaHomeFour from '../home-4/AppoinmentAreaHomeFour';
 import FactAreaHomeFour from '../home-4/FactAreaHomeFour';
 import MedicalTabHomeFive from './MedicalTabHomeFive';
 import HowItWorksHomeFour from '../home-4/HowItWorksHomeFour';
@@ -28,7 +28,7 @@ const HomeFive = () => {
         <TeamAreaHomeFour />
         <RoutineAreaHomeFive />
         <PhotoGalleryHomeFive />
-        <AppoinmentAreaHomeFour />
+        <AppointmentAreaHomeFour />
         <FactAreaHomeFour />
         <MedicalTabHomeFive />
         <HowItWorksHomeFour />

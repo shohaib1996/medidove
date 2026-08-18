@@ -101,7 +101,7 @@ const HeroSliderHomeOne = () => {
 													</div>
 													<div className="hero-slider-btn">
 														<Link data-animation="fadeInLeft"
-															data-delay=".6s" href="/appoinment" className="btn btn-icon ml-0"><span>+</span>Make Appointment</Link>
+															data-delay=".6s" href="/appointment" className="btn btn-icon ml-0"><span>+</span>Make Appointment</Link>
 														<a data-animation="fadeInRight"
 															data-delay="1.0s"
 															onClick={() => setIsVideoOpen(true)}

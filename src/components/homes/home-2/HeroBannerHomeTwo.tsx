@@ -42,7 +42,7 @@ const HeroBannerHomeTwo = () => {
                         </div>
                         <div className="row">
                           <div className="col-xl-12">
-                            <div className="appoinment-form-box appoinment-form-box-option d-flex mb-40">
+                            <div className="appointment-form-box appointment-form-box-option d-flex mb-40">
                               <div className="appoint-ment-icon">
                                 <Image src={option_icon2} alt="theme-pure" />
                               </div>
@@ -64,7 +64,7 @@ const HeroBannerHomeTwo = () => {
                             </div>
                           </div>
                           <div className="col-xl-12">
-                            <div className="appoinment-form-box appoinment-form-box-option d-flex mb-40">
+                            <div className="appointment-form-box appointment-form-box-option d-flex mb-40">
                               <div className="appoint-ment-icon">
                               <Image src={option_icon2} alt="theme-pure" /> 
                               </div>
@@ -87,7 +87,7 @@ const HeroBannerHomeTwo = () => {
                           </div>
                           <div className="col-xl-12 mb-35">
                             <div className="inner caregive-btn text-center">
-                              <Link href="/appoinment" className="btn gray-btn-border">Make Appointment</Link>
+                              <Link href="/appointment" className="btn gray-btn-border">Make Appointment</Link>
                             </div>
                           </div>
                         </div>

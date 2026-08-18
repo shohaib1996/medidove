@@ -213,7 +213,7 @@ const ContactPage = () => {
                       {isSubmitting ? "Submitting..." : "Submit message"}
                     </Button>
                     <Button asChild type="button" variant="outline" size="lg">
-                      <Link href="/appoinment">
+                      <Link href="/appointment">
                         <CalendarDays />
                         Book instead
                       </Link>

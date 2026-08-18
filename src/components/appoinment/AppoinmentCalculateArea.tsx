@@ -49,7 +49,7 @@ const doctorOptions: SelectOption[] = [
   { value: "Surgery consultant", text: "Surgery consultant" },
 ];
 
-const AppoinmentCalculateArea = () => {
+const AppointmentCalculateArea = () => {
   const [form, setForm] = useState<AppointmentForm>(initialForm);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -280,4 +280,4 @@ const AppoinmentCalculateArea = () => {
   );
 };
 
-export default AppoinmentCalculateArea;
+export default AppointmentCalculateArea;

@@ -33,7 +33,7 @@ const HeaderOne = () => {
 							</div>
 							<div className="col-xl-5 col-lg-5 col-md-4">
 								<div className="header-top-right-btn f-right">
-									<Link href="/appoinment" className="btn primary_btn">{btn_text}</Link>
+									<Link href="/appointment" className="btn primary_btn">{btn_text}</Link>
 								</div>
 							</div>
 						</div>

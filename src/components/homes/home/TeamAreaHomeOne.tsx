@@ -41,7 +41,7 @@ const TeamAreaHomeOne = () => {
             </div>
             <div className="col-xl-6 col-lg-5">
               <div className="section-button text-end d-none d-lg-block pt-80">
-                <Link data-animation="fadeInLeft" data-delay=".6s" href="/appoinment" className="btn btn-icon ml-0">
+                <Link data-animation="fadeInLeft" data-delay=".6s" href="/appointment" className="btn btn-icon ml-0">
                   <span>+</span>{btn_text}
                 </Link>
               </div>

@@ -3,7 +3,7 @@ import HeroBannerHomeTwo from "./HeroBannerHomeTwo";
 import AboutAreaHomeTwo from "./AboutAreaHomeTwo";
 import MissionVisionAreaHomeTwo from "./MissionVisionAreaHomeTwo";
 import CounterSectionHomeTwo from "./CounterSectionHomeTwo";
-import AppoinmentAreaHomeTwo from "./AppoinmentAreaHomeTwo";
+import AppointmentAreaHomeTwo from "./AppoinmentAreaHomeTwo";
 import ServicesAreaHomeTwo from "./ServicesAreaHomeTwo";
 import TestimonialsAreaHomeTwo from "./TestimonialsAreaHomeTwo";
 import NewsLetterHomeTwo from "./NewsLetterHomeTwo";
@@ -20,7 +20,7 @@ const HomeTwo = () => {
         <AboutAreaHomeTwo />
         <MissionVisionAreaHomeTwo />
         <CounterSectionHomeTwo />
-        <AppoinmentAreaHomeTwo />
+        <AppointmentAreaHomeTwo />
         <ServicesAreaHomeTwo />
         <TestimonialsAreaHomeTwo />
         <NewsLetterHomeTwo />
