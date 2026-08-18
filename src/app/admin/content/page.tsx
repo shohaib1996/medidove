@@ -19,6 +19,7 @@ import {
   createDoctor,
   createKnowledgeDocument,
   createService,
+  seedDemoWorkspace,
 } from "./actions";
 
 export const metadata = {
@@ -137,6 +138,26 @@ export default async function AdminContentPage() {
             <Link href="/admin">Back to dashboard</Link>
           </Button>
         </section>
+
+        <Card className="border-primary/20 bg-primary/5">
+          <CardHeader className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+            <div>
+              <CardDescription>Demo setup</CardDescription>
+              <CardTitle>Populate buyer-ready sample data</CardTitle>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
+                Adds sample departments, services, doctors, AI knowledge, one
+                appointment, one lead, one callback request, and one WhatsApp
+                opt-in so the dashboard and analytics pages are ready to demo.
+              </p>
+            </div>
+            <form action={seedDemoWorkspace}>
+              <Button type="submit">
+                <Plus />
+                Seed demo workspace
+              </Button>
+            </form>
+          </CardHeader>
+        </Card>
 
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <Card>
