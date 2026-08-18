@@ -1,22 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  Activity,
   ArrowRight,
-  Baby,
   Bot,
-  Brain,
   CalendarCheck,
   HeartPulse,
   MessageCircle,
   PhoneCall,
   ShieldCheck,
-  Smile,
   Sparkles,
-  Stethoscope,
-  Syringe,
 } from "lucide-react";
 import PublicHeader from "@/components/marketing/PublicHeader";
+import type { PublicService } from "@/lib/clinic/content";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,51 +21,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
-const services = [
-  {
-    icon: Stethoscope,
-    title: "General Medicine",
-    description:
-      "Primary care, regular checkups, common illness support, and patient intake routing.",
-    aiUse: "AI routes general symptoms to the correct care path.",
-  },
-  {
-    icon: Smile,
-    title: "Dental Care",
-    description:
-      "Dental consultation, cleaning, fillings, tooth pain intake, and follow-up reminders.",
-    aiUse: "AI detects dental intent from patient messages and calls.",
-  },
-  {
-    icon: Baby,
-    title: "Pediatrics",
-    description:
-      "Child health appointments, vaccination reminders, parent questions, and care coordination.",
-    aiUse: "WhatsApp reminders can notify parents about visits.",
-  },
-  {
-    icon: Brain,
-    title: "Neurology",
-    description:
-      "Specialist booking requests, referral capture, and structured pre-visit notes.",
-    aiUse: "AI flags urgent neurological language for staff review.",
-  },
-  {
-    icon: Syringe,
-    title: "Surgery",
-    description:
-      "Surgery consultation requests, preparation questions, and post-visit follow-up workflows.",
-    aiUse: "Receptionist agent captures surgery-related callback tasks.",
-  },
-  {
-    icon: Activity,
-    title: "Radiology",
-    description:
-      "Imaging appointment requests, availability routing, and result pickup notifications.",
-    aiUse: "AI assistant answers service preparation FAQs.",
-  },
-];
 
 const aiWorkflows = [
   {
@@ -90,7 +40,7 @@ const aiWorkflows = [
   },
 ];
 
-const ServicesPage = () => {
+const ServicesPage = ({ services }: { services: PublicService[] }) => {
   return (
     <div className="min-h-screen bg-white text-slate-900">
       <PublicHeader />

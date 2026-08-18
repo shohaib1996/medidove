@@ -1,0 +1,321 @@
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { Building2, Plus, Stethoscope, UserRound } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { createClient } from "@/lib/supabase/server";
+import { createDepartment, createDoctor, createService } from "./actions";
+
+export const metadata = {
+  title: "Clinic Content | MediDove Admin",
+};
+
+type Department = {
+  id: string;
+  name: string;
+  description: string | null;
+};
+
+type Service = {
+  id: string;
+  title: string;
+  summary: string;
+};
+
+type Doctor = {
+  id: string;
+  full_name: string;
+  specialty: string;
+};
+
+const DepartmentSelect = ({ departments }: { departments: Department[] }) => (
+  <select
+    name="department_id"
+    className="h-11 w-full rounded-md border border-slate-200 bg-white px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+  >
+    <option value="">No department</option>
+    {departments.map((department) => (
+      <option key={department.id} value={department.id}>
+        {department.name}
+      </option>
+    ))}
+  </select>
+);
+
+export default async function AdminContentPage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+
+  if (profile?.role !== "admin") {
+    redirect("/admin");
+  }
+
+  const [{ data: departmentsData }, { data: servicesData }, { data: doctorsData }] =
+    await Promise.all([
+      supabase
+        .from("departments")
+        .select("id, name, description")
+        .order("created_at", { ascending: false })
+        .limit(12),
+      supabase
+        .from("services")
+        .select("id, title, summary")
+        .order("created_at", { ascending: false })
+        .limit(12),
+      supabase
+        .from("doctors")
+        .select("id, full_name, specialty")
+        .order("created_at", { ascending: false })
+        .limit(12),
+    ]);
+
+  const departments = (departmentsData || []) as Department[];
+  const services = (servicesData || []) as Service[];
+  const doctors = (doctorsData || []) as Doctor[];
+
+  return (
+    <main className="min-h-screen bg-slate-50 px-4 py-10 text-slate-900 md:px-8">
+      <div className="mx-auto max-w-7xl space-y-8">
+        <section className="flex flex-col justify-between gap-5 md:flex-row md:items-center">
+          <div>
+            <p className="text-xs font-bold uppercase text-primary">
+              Clinic content
+            </p>
+            <h1 className="mt-2 text-3xl font-bold tracking-normal md:text-4xl">
+              Manage departments, services, and doctors
+            </h1>
+            <p className="mt-3 max-w-2xl text-slate-600">
+              Add live Supabase content that feeds the public service and doctor
+              pages, appointment routing, and future AI knowledge search.
+            </p>
+          </div>
+          <Button asChild variant="secondary">
+            <Link href="/admin">Back to dashboard</Link>
+          </Button>
+        </section>
+
+        <section className="grid gap-4 md:grid-cols-3">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between gap-4">
+              <div>
+                <CardDescription>Departments</CardDescription>
+                <CardTitle className="mt-2 text-3xl">
+                  {departments.length}
+                </CardTitle>
+              </div>
+              <Building2 className="size-8 text-primary" />
+            </CardHeader>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between gap-4">
+              <div>
+                <CardDescription>Services</CardDescription>
+                <CardTitle className="mt-2 text-3xl">{services.length}</CardTitle>
+              </div>
+              <Stethoscope className="size-8 text-teal-600" />
+            </CardHeader>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between gap-4">
+              <div>
+                <CardDescription>Doctors</CardDescription>
+                <CardTitle className="mt-2 text-3xl">{doctors.length}</CardTitle>
+              </div>
+              <UserRound className="size-8 text-indigo-600" />
+            </CardHeader>
+          </Card>
+        </section>
+
+        <section className="grid gap-6 xl:grid-cols-3">
+          <Card>
+            <CardHeader>
+              <CardDescription>Department</CardDescription>
+              <CardTitle>Add department</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form action={createDepartment} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="department-name">Name</Label>
+                  <Input id="department-name" name="name" placeholder="Cardiology" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="department-description">Description</Label>
+                  <Textarea
+                    id="department-description"
+                    name="description"
+                    rows={4}
+                    placeholder="Short public description."
+                  />
+                </div>
+                <Button type="submit">
+                  <Plus />
+                  Add department
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardDescription>Service</CardDescription>
+              <CardTitle>Add service</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form action={createService} className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Department</Label>
+                  <DepartmentSelect departments={departments} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="service-title">Title</Label>
+                  <Input id="service-title" name="title" placeholder="Heart checkup" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="service-summary">Summary</Label>
+                  <Textarea
+                    id="service-summary"
+                    name="summary"
+                    rows={3}
+                    placeholder="Patient-facing summary."
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="service-description">AI note</Label>
+                  <Textarea
+                    id="service-description"
+                    name="description"
+                    rows={3}
+                    placeholder="Routing, preparation, or FAQ note."
+                  />
+                </div>
+                <Button type="submit">
+                  <Plus />
+                  Add service
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardDescription>Doctor</CardDescription>
+              <CardTitle>Add doctor</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form action={createDoctor} className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Department</Label>
+                  <DepartmentSelect departments={departments} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="doctor-name">Full name</Label>
+                  <Input id="doctor-name" name="full_name" placeholder="Dr. Amina Rahman" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="doctor-specialty">Specialty</Label>
+                  <Input
+                    id="doctor-specialty"
+                    name="specialty"
+                    placeholder="Cardiology"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="doctor-image">Image URL</Label>
+                  <Input
+                    id="doctor-image"
+                    name="image_url"
+                    placeholder="/assets/img/team/member1.png"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="doctor-bio">Bio</Label>
+                  <Textarea
+                    id="doctor-bio"
+                    name="bio"
+                    rows={3}
+                    placeholder="Short doctor profile."
+                  />
+                </div>
+                <Button type="submit">
+                  <Plus />
+                  Add doctor
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        </section>
+
+        <section className="grid gap-6 xl:grid-cols-3">
+          <Card>
+            <CardHeader>
+              <CardTitle>Latest departments</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {departments.map((department) => (
+                <div key={department.id} className="rounded-lg border p-4">
+                  <p className="font-semibold">{department.name}</p>
+                  <p className="mt-1 line-clamp-2 text-sm text-slate-600">
+                    {department.description || "No description yet."}
+                  </p>
+                </div>
+              ))}
+              {!departments.length ? <Badge variant="outline">No departments</Badge> : null}
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Latest services</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {services.map((service) => (
+                <div key={service.id} className="rounded-lg border p-4">
+                  <p className="font-semibold">{service.title}</p>
+                  <p className="mt-1 line-clamp-2 text-sm text-slate-600">
+                    {service.summary}
+                  </p>
+                </div>
+              ))}
+              {!services.length ? <Badge variant="outline">No services</Badge> : null}
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Latest doctors</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {doctors.map((doctor) => (
+                <div key={doctor.id} className="rounded-lg border p-4">
+                  <p className="font-semibold">{doctor.full_name}</p>
+                  <p className="mt-1 text-sm text-slate-600">{doctor.specialty}</p>
+                </div>
+              ))}
+              {!doctors.length ? <Badge variant="outline">No doctors</Badge> : null}
+            </CardContent>
+          </Card>
+        </section>
+      </div>
+    </main>
+  );
+}

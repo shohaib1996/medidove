@@ -236,9 +236,14 @@ const AdminPage = async () => {
               receptionist callback requests captured from the public website.
             </p>
           </div>
-          <Button asChild variant="secondary">
-            <Link href="/">View website</Link>
-          </Button>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <Button asChild variant="outline">
+              <Link href="/admin/content">Manage content</Link>
+            </Button>
+            <Button asChild variant="secondary">
+              <Link href="/">View website</Link>
+            </Button>
+          </div>
         </section>
 
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">

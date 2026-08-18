@@ -220,6 +220,21 @@ create policy "Public can read active services"
   on public.services for select
   using (is_active = true);
 
+create policy "Admins can manage departments"
+  on public.departments for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+create policy "Admins can manage doctors"
+  on public.doctors for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+create policy "Admins can manage services"
+  on public.services for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
 create policy "Patients can read own profile"
   on public.profiles for select
   using (auth.uid() = id);

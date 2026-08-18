@@ -14,6 +14,7 @@ import {
   Stethoscope,
 } from "lucide-react";
 import PublicHeader from "@/components/marketing/PublicHeader";
+import type { PublicDoctor } from "@/lib/clinic/content";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,57 +25,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-const doctors = [
-  {
-    name: "Rosalina D. Williamson",
-    specialty: "General Medicine",
-    department: "Primary Care",
-    image: "/assets/img/team/member1.png",
-    availability: "Today, 3:30 PM",
-    languages: "English, Spanish",
-  },
-  {
-    name: "Diconda Piran Will",
-    specialty: "Dental Care",
-    department: "Dentistry",
-    image: "/assets/img/team/member2.png",
-    availability: "Tomorrow, 10:00 AM",
-    languages: "English",
-  },
-  {
-    name: "Hulk M. Kenbon",
-    specialty: "Neurology",
-    department: "Specialist Care",
-    image: "/assets/img/team/member3.png",
-    availability: "Friday, 1:00 PM",
-    languages: "English, French",
-  },
-  {
-    name: "Haliam Z. Dicolaz",
-    specialty: "Surgery Consultant",
-    department: "Surgery",
-    image: "/assets/img/team/member4.png",
-    availability: "Monday, 9:30 AM",
-    languages: "English",
-  },
-  {
-    name: "Nicolas D. Case",
-    specialty: "Pediatrics",
-    department: "Child Care",
-    image: "/assets/img/team/member5.png",
-    availability: "Wednesday, 11:00 AM",
-    languages: "English, Bengali",
-  },
-  {
-    name: "Phumdon H. Norman",
-    specialty: "Radiology",
-    department: "Diagnostics",
-    image: "/assets/img/team/member6.png",
-    availability: "Thursday, 2:00 PM",
-    languages: "English",
-  },
-];
-
 const matchingSignals = [
   "Reason for visit",
   "Department fit",
@@ -84,7 +34,7 @@ const matchingSignals = [
   "Communication consent",
 ];
 
-const DoctorsPage = () => {
+const DoctorsPage = ({ doctors }: { doctors: PublicDoctor[] }) => {
   return (
     <div className="min-h-screen bg-white text-slate-900">
       <PublicHeader />
