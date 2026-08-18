@@ -8,6 +8,7 @@ type AppointmentRequest = {
   patientPhone?: string;
   requestedDepartment?: string;
   requestedDoctor?: string;
+  doctorId?: string;
   requestedDate?: string;
   requestedTime?: string;
   reason?: string;
@@ -50,6 +51,7 @@ export async function POST(request: Request) {
   const patientPhone = cleanText(body.patientPhone);
   const requestedDepartment = cleanText(body.requestedDepartment);
   const requestedDoctor = cleanText(body.requestedDoctor);
+  const doctorId = cleanText(body.doctorId);
   const requestedDate = cleanText(body.requestedDate);
   const requestedTime = cleanText(body.requestedTime);
   const reason = cleanText(body.reason);
@@ -91,6 +93,7 @@ export async function POST(request: Request) {
       patient_name: patientName,
       patient_email: patientEmail || user?.email || null,
       patient_phone: patientPhone,
+      doctor_id: doctorId || null,
       requested_department: requestedDepartment || null,
       requested_doctor: requestedDoctor || null,
       requested_at: requestedAt,

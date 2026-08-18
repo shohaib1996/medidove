@@ -6,6 +6,17 @@ export type PublicDoctor = (typeof fallbackDoctors)[number];
 export type BookingOption = {
   label: string;
   value: string;
+  id?: string;
+};
+export type AvailabilityOption = {
+  id: string;
+  doctorId: string;
+  doctorName: string;
+  weekday: number;
+  startTime: string;
+  endTime: string;
+  slotMinutes: number;
+  location: string | null;
 };
 
 export const getPublicServices = async (): Promise<PublicService[]> => {
@@ -57,9 +68,14 @@ export const getPublicDoctors = async (): Promise<PublicDoctor[]> => {
 export const getBookingOptions = async (): Promise<{
   departments: BookingOption[];
   doctors: BookingOption[];
+  availability: AvailabilityOption[];
 }> => {
   const supabase = await createClient();
-  const [{ data: departmentsData }, { data: doctorsData }] = await Promise.all([
+  const [
+    { data: departmentsData },
+    { data: doctorsData },
+    { data: availabilityData },
+  ] = await Promise.all([
     supabase
       .from("departments")
       .select("name")
@@ -67,9 +83,14 @@ export const getBookingOptions = async (): Promise<{
       .order("name", { ascending: true }),
     supabase
       .from("doctors")
-      .select("full_name, specialty")
+      .select("id, full_name, specialty")
       .eq("is_active", true)
       .order("full_name", { ascending: true }),
+    supabase
+      .from("doctor_availability")
+      .select("id, doctor_id, weekday, start_time, end_time, slot_minutes, location, doctors(full_name)")
+      .eq("is_active", true)
+      .order("weekday", { ascending: true }),
   ]);
 
   const departments = departmentsData?.length
@@ -88,6 +109,7 @@ export const getBookingOptions = async (): Promise<{
         ...doctorsData.map((doctor) => ({
           label: `${doctor.full_name} - ${doctor.specialty}`,
           value: doctor.full_name,
+          id: doctor.id,
         })),
       ]
     : [
@@ -98,5 +120,18 @@ export const getBookingOptions = async (): Promise<{
         })),
       ];
 
-  return { departments, doctors };
+  const availability = availabilityData?.length
+    ? availabilityData.map((block) => ({
+        id: block.id,
+        doctorId: block.doctor_id,
+        doctorName: block.doctors?.full_name || "Clinic doctor",
+        weekday: block.weekday,
+        startTime: block.start_time,
+        endTime: block.end_time,
+        slotMinutes: block.slot_minutes,
+        location: block.location,
+      }))
+    : [];
+
+  return { departments, doctors, availability };
 };

@@ -2,11 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import {
   Bot,
   CalendarCheck,
+  CalendarDays,
   Clock3,
   Headphones,
   MessageCircle,
@@ -29,7 +30,7 @@ import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import PublicHeader from "@/components/marketing/PublicHeader";
-import type { BookingOption } from "@/lib/clinic/content";
+import type { AvailabilityOption, BookingOption } from "@/lib/clinic/content";
 
 type AppointmentForm = {
   patientName: string;
@@ -37,6 +38,7 @@ type AppointmentForm = {
   patientPhone: string;
   requestedDepartment: string;
   requestedDoctor: string;
+  doctorId: string;
   requestedDate: string;
   requestedTime: string;
   reason: string;
@@ -59,6 +61,7 @@ const initialForm: AppointmentForm = {
   patientPhone: "",
   requestedDepartment: "General Medicine",
   requestedDoctor: "First available doctor",
+  doctorId: "",
   requestedDate: "",
   requestedTime: "",
   reason: "",
@@ -86,9 +89,10 @@ const supportCards = [
 const AppointmentBookingPage = ({
   bookingOptions,
 }: {
-  bookingOptions: {
+    bookingOptions: {
     departments: BookingOption[];
     doctors: BookingOption[];
+    availability: AvailabilityOption[];
   };
 }) => {
   const resolvedInitialForm = {
@@ -96,6 +100,7 @@ const AppointmentBookingPage = ({
     requestedDepartment:
       bookingOptions.departments[0]?.value || initialForm.requestedDepartment,
     requestedDoctor: bookingOptions.doctors[0]?.value || initialForm.requestedDoctor,
+    doctorId: bookingOptions.doctors[0]?.id || "",
   };
   const [form, setForm] = useState<AppointmentForm>(resolvedInitialForm);
   const [intakeResult, setIntakeResult] = useState<IntakeResult | null>(null);
@@ -153,6 +158,53 @@ const AppointmentBookingPage = ({
       setIsSubmitting(false);
     }
   };
+
+  const selectedDateWeekday = useMemo(() => {
+    if (!form.requestedDate) {
+      return null;
+    }
+
+    const date = new Date(`${form.requestedDate}T00:00:00`);
+
+    return Number.isNaN(date.getTime()) ? null : date.getDay();
+  }, [form.requestedDate]);
+
+  const matchingAvailability = useMemo(
+    () =>
+      bookingOptions.availability.filter((block) => {
+        const matchesDoctor = !form.doctorId || block.doctorId === form.doctorId;
+        const matchesDate =
+          selectedDateWeekday === null || block.weekday === selectedDateWeekday;
+
+        return matchesDoctor && matchesDate;
+      }),
+    [bookingOptions.availability, form.doctorId, selectedDateWeekday],
+  );
+
+  const slotTimes = useMemo(() => {
+    const slots: { label: string; value: string; location: string | null }[] = [];
+
+    matchingAvailability.forEach((block) => {
+      const [startHour, startMinute] = block.startTime.split(":").map(Number);
+      const [endHour, endMinute] = block.endTime.split(":").map(Number);
+      const start = startHour * 60 + startMinute;
+      const end = endHour * 60 + endMinute;
+
+      for (let minute = start; minute < end; minute += block.slotMinutes) {
+        const hour = Math.floor(minute / 60).toString().padStart(2, "0");
+        const minutes = (minute % 60).toString().padStart(2, "0");
+        const value = `${hour}:${minutes}`;
+
+        slots.push({
+          label: `${block.doctorName} - ${value}`,
+          value,
+          location: block.location,
+        });
+      }
+    });
+
+    return slots.slice(0, 8);
+  }, [matchingAvailability]);
 
   const handleSmartIntake = async () => {
     if (form.reason.trim().length < 10) {
@@ -295,9 +347,17 @@ const AppointmentBookingPage = ({
                       <Select
                         id="requestedDoctor"
                         value={form.requestedDoctor}
-                        onChange={(event) =>
-                          updateField("requestedDoctor", event.target.value)
-                        }
+                        onChange={(event) => {
+                          const selected = bookingOptions.doctors.find(
+                            (doctor) => doctor.value === event.target.value,
+                          );
+
+                          setForm((current) => ({
+                            ...current,
+                            requestedDoctor: event.target.value,
+                            doctorId: selected?.id || "",
+                          }));
+                        }}
                       >
                         {bookingOptions.doctors.map((doctor) => (
                           <option key={doctor.value} value={doctor.value}>
@@ -333,6 +393,57 @@ const AppointmentBookingPage = ({
                       </div>
                     </div>
                   </div>
+
+                  <Card className="border-slate-200 bg-white shadow-none">
+                    <CardHeader>
+                      <CardDescription>Doctor availability</CardDescription>
+                      <CardTitle className="flex items-center gap-2 text-xl">
+                        <CalendarDays className="size-5 text-primary" />
+                        Matching open slots
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {form.requestedDate ? (
+                        slotTimes.length > 0 ? (
+                          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+                            {slotTimes.map((slot) => (
+                              <Button
+                                key={`${slot.label}-${slot.value}`}
+                                type="button"
+                                variant={
+                                  form.requestedTime === slot.value
+                                    ? "default"
+                                    : "outline"
+                                }
+                                onClick={() => updateField("requestedTime", slot.value)}
+                                className="h-auto justify-start py-3 text-left"
+                              >
+                                <Clock3 className="size-4" />
+                                <span className="min-w-0">
+                                  <span className="block font-semibold">
+                                    {slot.value}
+                                  </span>
+                                  <span className="block truncate text-xs opacity-80">
+                                    {slot.location || "Clinic"}
+                                  </span>
+                                </span>
+                              </Button>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+                            No configured slots match this date and doctor yet.
+                            You can still request a preferred time.
+                          </p>
+                        )
+                      ) : (
+                        <p className="text-sm leading-6 text-slate-600">
+                          Select a date to see matching doctor availability from
+                          the admin schedule.
+                        </p>
+                      )}
+                    </CardContent>
+                  </Card>
 
                   <div className="space-y-2">
                     <Label htmlFor="reason">Reason for visit</Label>
