@@ -1,18 +1,13 @@
-import Register from '@/components/auth/register';
-import Wrapper from '@/layout/Wrapper';
-import React from 'react';
-
+import RegisterPage from "@/components/auth/RegisterPage";
 
 export const metadata = {
-  title: "Register MediDove React Next js Tempalte",
+  title: "Register | MediDove AI Clinic",
+  description:
+    "Create a MediDove AI Clinic account backed by Supabase authentication.",
 };
 
-const index = () => {
-  return (
-    <Wrapper>
-      <Register />
-    </Wrapper>
-  );
+const RegisterRoute = () => {
+  return <RegisterPage />;
 };
 
-export default index;
+export default RegisterRoute;

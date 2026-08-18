@@ -1,20 +1,13 @@
-
-import Login from '@/components/auth/login';
-import Wrapper from '@/layout/Wrapper';
-import React from 'react';
-
+import LoginPage from "@/components/auth/LoginPage";
 
 export const metadata = {
-  title: "Login MediDove React Next js Tempalte",
+  title: "Login | MediDove AI Clinic",
+  description:
+    "Login to the MediDove AI Clinic platform with Supabase authentication.",
 };
 
-
-const index = () => {
-  return (
-    <Wrapper>
-      <Login />
-    </Wrapper>
-  );
+const LoginRoute = () => {
+  return <LoginPage />;
 };
 
-export default index;
+export default LoginRoute;
