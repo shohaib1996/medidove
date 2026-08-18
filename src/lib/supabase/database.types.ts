@@ -75,6 +75,7 @@ export type Database = {
       doctors: {
         Row: {
           id: string;
+          profile_id: string | null;
           department_id: string | null;
           full_name: string;
           slug: string;
@@ -87,6 +88,7 @@ export type Database = {
         };
         Insert: {
           id?: string;
+          profile_id?: string | null;
           department_id?: string | null;
           full_name: string;
           slug: string;
@@ -98,6 +100,7 @@ export type Database = {
           created_at?: string;
         };
         Update: {
+          profile_id?: string | null;
           department_id?: string | null;
           full_name?: string;
           slug?: string;
@@ -108,6 +111,13 @@ export type Database = {
           is_active?: boolean;
         };
         Relationships: [
+          {
+            foreignKeyName: "doctors_profile_id_fkey";
+            columns: ["profile_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
           {
             foreignKeyName: "doctors_department_id_fkey";
             columns: ["department_id"];

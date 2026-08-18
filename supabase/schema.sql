@@ -64,6 +64,7 @@ create table public.departments (
 
 create table public.doctors (
   id uuid primary key default gen_random_uuid(),
+  profile_id uuid references public.profiles(id) on delete set null,
   department_id uuid references public.departments(id) on delete set null,
   full_name text not null,
   slug text not null unique,
@@ -310,9 +311,24 @@ create policy "Public can read active doctors"
   on public.doctors for select
   using (is_active = true);
 
+create policy "Doctors can read linked doctor profile"
+  on public.doctors for select
+  using (profile_id = auth.uid());
+
 create policy "Public can read active doctor availability"
   on public.doctor_availability for select
   using (is_active = true);
+
+create policy "Doctors can read own availability"
+  on public.doctor_availability for select
+  using (
+    exists (
+      select 1
+      from public.doctors
+      where doctors.id = doctor_availability.doctor_id
+        and doctors.profile_id = auth.uid()
+    )
+  );
 
 create policy "Public can read active services"
   on public.services for select
@@ -388,6 +404,17 @@ create policy "Patients can read own appointments"
   on public.appointments for select
   using (auth.uid() = patient_id);
 
+create policy "Doctors can read assigned appointments"
+  on public.appointments for select
+  using (
+    exists (
+      select 1
+      from public.doctors
+      where doctors.id = appointments.doctor_id
+        and doctors.profile_id = auth.uid()
+    )
+  );
+
 create policy "Patients can read own consent logs"
   on public.consent_logs for select
   using (auth.uid() = patient_id);
@@ -395,6 +422,18 @@ create policy "Patients can read own consent logs"
 create policy "Patients can read own reviewed clinical notes"
   on public.clinical_notes for select
   using (auth.uid() = patient_id and status = 'reviewed');
+
+create policy "Doctors can read assigned clinical notes"
+  on public.clinical_notes for select
+  using (
+    exists (
+      select 1
+      from public.appointments
+      join public.doctors on doctors.id = appointments.doctor_id
+      where appointments.id = clinical_notes.appointment_id
+        and doctors.profile_id = auth.uid()
+    )
+  );
 
 create policy "Patients can read own communication outbox"
   on public.communication_outbox for select
@@ -466,6 +505,7 @@ create policy "Admins can create audit logs"
 
 create index departments_slug_idx on public.departments(slug);
 create index doctors_slug_idx on public.doctors(slug);
+create index doctors_profile_id_idx on public.doctors(profile_id);
 create index doctors_department_id_idx on public.doctors(department_id);
 create index doctor_availability_doctor_id_idx on public.doctor_availability(doctor_id);
 create index doctor_availability_weekday_idx on public.doctor_availability(weekday);
