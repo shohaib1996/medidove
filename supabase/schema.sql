@@ -291,6 +291,10 @@ create policy "Patients can read own profile"
   on public.profiles for select
   using (auth.uid() = id);
 
+create policy "Admins can read profiles"
+  on public.profiles for select
+  using (public.is_admin());
+
 create policy "Patients can update own profile"
   on public.profiles for update
   using (auth.uid() = id);
