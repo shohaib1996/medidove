@@ -8,6 +8,7 @@ const navItems = [
   { href: "/service", label: "Services" },
   { href: "/doctor", label: "Doctors" },
   { href: "/receptionist", label: "AI Receptionist" },
+  { href: "/engagement", label: "Engagement" },
   { href: "/appoinment", label: "Appointment" },
   { href: "/contact", label: "Contact" },
 ];

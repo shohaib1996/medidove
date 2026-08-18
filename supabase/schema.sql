@@ -234,6 +234,14 @@ create policy "Anyone can create appointment requests"
   on public.appointments for insert
   with check (true);
 
+create policy "Anyone can create WhatsApp message requests"
+  on public.whatsapp_messages for insert
+  with check (true);
+
+create policy "Anyone can create consent logs"
+  on public.consent_logs for insert
+  with check (true);
+
 create policy "Patients can read own appointments"
   on public.appointments for select
   using (auth.uid() = patient_id);
@@ -262,6 +270,18 @@ create policy "Admins can update call logs"
   on public.call_logs for update
   using (public.is_admin());
 
+create policy "Admins can read WhatsApp messages"
+  on public.whatsapp_messages for select
+  using (public.is_admin());
+
+create policy "Admins can update WhatsApp messages"
+  on public.whatsapp_messages for update
+  using (public.is_admin());
+
+create policy "Admins can read consent logs"
+  on public.consent_logs for select
+  using (public.is_admin());
+
 create index departments_slug_idx on public.departments(slug);
 create index doctors_slug_idx on public.doctors(slug);
 create index doctors_department_id_idx on public.doctors(department_id);
@@ -269,6 +289,9 @@ create index services_slug_idx on public.services(slug);
 create index services_department_id_idx on public.services(department_id);
 create index appointments_status_idx on public.appointments(status);
 create index appointments_requested_at_idx on public.appointments(requested_at);
+create index call_logs_status_idx on public.call_logs(status);
+create index whatsapp_messages_status_idx on public.whatsapp_messages(status);
+create index consent_logs_channel_idx on public.consent_logs(channel);
 create index ai_document_chunks_embedding_idx
   on public.ai_document_chunks
   using ivfflat (embedding vector_cosine_ops)

@@ -5,6 +5,7 @@ import {
   CalendarClock,
   Headphones,
   Inbox,
+  MessageCircle,
   Stethoscope,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -59,6 +60,15 @@ type CallLogRow = {
   status: string | null;
   started_at: string | null;
   ended_at: string | null;
+  created_at: string;
+};
+
+type WhatsAppMessageRow = {
+  id: string;
+  phone_number: string;
+  direction: "inbound" | "outbound";
+  message: string;
+  status: string | null;
   created_at: string;
 };
 
@@ -133,8 +143,12 @@ const AdminPage = async () => {
     );
   }
 
-  const [{ data: appointmentsData }, { data: leadsData }, { data: callLogsData }] =
-    await Promise.all([
+  const [
+    { data: appointmentsData },
+    { data: leadsData },
+    { data: callLogsData },
+    { data: whatsAppData },
+  ] = await Promise.all([
     supabase
       .from("appointments")
       .select(
@@ -156,17 +170,26 @@ const AdminPage = async () => {
       )
       .order("created_at", { ascending: false })
       .limit(8),
+    supabase
+      .from("whatsapp_messages")
+      .select("id, phone_number, direction, message, status, created_at")
+      .order("created_at", { ascending: false })
+      .limit(8),
   ]);
 
   const appointments = (appointmentsData || []) as AppointmentRow[];
   const leads = (leadsData || []) as LeadRow[];
   const callLogs = (callLogsData || []) as CallLogRow[];
+  const whatsAppMessages = (whatsAppData || []) as WhatsAppMessageRow[];
   const pendingAppointments = appointments.filter(
     (appointment) => appointment.status === "pending",
   ).length;
   const newLeads = leads.filter((lead) => lead.status === "new").length;
   const requestedCallbacks = callLogs.filter(
     (callLog) => callLog.status === "requested",
+  ).length;
+  const requestedWhatsApp = whatsAppMessages.filter(
+    (message) => message.status === "requested",
   ).length;
 
   return (
@@ -190,7 +213,7 @@ const AdminPage = async () => {
           </Button>
         </section>
 
-        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between gap-4">
               <div>
@@ -203,6 +226,21 @@ const AdminPage = async () => {
             </CardHeader>
             <CardContent className="text-sm text-slate-500">
               {pendingAppointments} pending appointments
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between gap-4">
+              <div>
+                <CardDescription>WhatsApp</CardDescription>
+                <CardTitle className="mt-2 text-3xl">
+                  {whatsAppMessages.length}
+                </CardTitle>
+              </div>
+              <MessageCircle className="size-8 text-emerald-600" />
+            </CardHeader>
+            <CardContent className="text-sm text-slate-500">
+              {requestedWhatsApp} opt-ins waiting
             </CardContent>
           </Card>
 
@@ -239,7 +277,12 @@ const AdminPage = async () => {
               <div>
                 <CardDescription>Today</CardDescription>
                 <CardTitle className="mt-2 text-3xl">
-                  {getTodayCount([...appointments, ...leads, ...callLogs])}
+                  {getTodayCount([
+                    ...appointments,
+                    ...leads,
+                    ...callLogs,
+                    ...whatsAppMessages,
+                  ])}
                 </CardTitle>
               </div>
               <Activity className="size-8 text-sky-600" />
@@ -250,7 +293,7 @@ const AdminPage = async () => {
           </Card>
         </section>
 
-        <section className="grid gap-6 xl:grid-cols-3">
+        <section className="grid gap-6 xl:grid-cols-2">
           <Card>
             <CardHeader>
               <CardDescription>Appointments</CardDescription>
@@ -342,6 +385,50 @@ const AdminPage = async () => {
                 <div className="rounded-lg border border-dashed border-slate-300 p-8 text-center text-slate-500">
                   <Headphones className="mx-auto mb-3 size-8" />
                   No AI callback requests yet.
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardDescription>WhatsApp</CardDescription>
+              <CardTitle>Patient engagement opt-ins</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {whatsAppMessages.length > 0 ? (
+                whatsAppMessages.map((message) => (
+                  <article
+                    key={message.id}
+                    className="rounded-lg border border-slate-200 p-4"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <h2 className="font-semibold text-slate-900">
+                          {message.phone_number}
+                        </h2>
+                        <p className="mt-2 line-clamp-3 text-sm text-slate-600">
+                          {message.message}
+                        </p>
+                      </div>
+                      <Badge variant="secondary" className="capitalize">
+                        {message.status || message.direction}
+                      </Badge>
+                    </div>
+                    <dl className="mt-4 grid gap-3 sm:grid-cols-2">
+                      <DetailItem label="Direction" value={message.direction} />
+                      <DetailItem label="Status" value={message.status} />
+                      <DetailItem
+                        label="Created"
+                        value={formatDate(message.created_at)}
+                      />
+                    </dl>
+                  </article>
+                ))
+              ) : (
+                <div className="rounded-lg border border-dashed border-slate-300 p-8 text-center text-slate-500">
+                  <MessageCircle className="mx-auto mb-3 size-8" />
+                  No WhatsApp opt-ins yet.
                 </div>
               )}
             </CardContent>

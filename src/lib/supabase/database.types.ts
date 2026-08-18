@@ -377,6 +377,84 @@ export type Database = {
           },
         ];
       };
+      whatsapp_messages: {
+        Row: {
+          id: string;
+          appointment_id: string | null;
+          phone_number: string;
+          direction: "inbound" | "outbound";
+          message: string;
+          provider_message_id: string | null;
+          status: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          appointment_id?: string | null;
+          phone_number: string;
+          direction: "inbound" | "outbound";
+          message: string;
+          provider_message_id?: string | null;
+          status?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          appointment_id?: string | null;
+          phone_number?: string;
+          direction?: "inbound" | "outbound";
+          message?: string;
+          provider_message_id?: string | null;
+          status?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "whatsapp_messages_appointment_id_fkey";
+            columns: ["appointment_id"];
+            isOneToOne: false;
+            referencedRelation: "appointments";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      consent_logs: {
+        Row: {
+          id: string;
+          patient_id: string | null;
+          phone: string | null;
+          email: string | null;
+          channel: Channel;
+          consented: boolean;
+          reason: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          patient_id?: string | null;
+          phone?: string | null;
+          email?: string | null;
+          channel: Channel;
+          consented: boolean;
+          reason?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          patient_id?: string | null;
+          phone?: string | null;
+          email?: string | null;
+          channel?: Channel;
+          consented?: boolean;
+          reason?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "consent_logs_patient_id_fkey";
+            columns: ["patient_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: Record<string, never>;
     Functions: {

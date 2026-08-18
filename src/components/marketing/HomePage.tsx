@@ -49,6 +49,7 @@ const features = [
     title: "WhatsApp Engagement",
     description:
       "Send opt-in reminders, confirmations, follow-ups, and patient support messages through WhatsApp.",
+    href: "/engagement",
   },
   {
     icon: Search,
