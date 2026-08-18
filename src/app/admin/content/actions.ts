@@ -58,6 +58,7 @@ const refreshContent = () => {
   revalidatePath("/admin/clinical-notes");
   revalidatePath("/admin/schedule");
   revalidatePath("/admin/settings");
+  revalidatePath("/admin/staff");
   revalidatePath("/contact");
   revalidatePath("/admin/blog");
   revalidatePath("/blog");
@@ -289,6 +290,36 @@ const demoAvailability = [
     end_time: "16:00",
     slot_minutes: 30,
     location: "Dental suite",
+  },
+];
+
+const demoStaffMembers = [
+  {
+    full_name: "Alex Morgan",
+    email: "alex.reception@medidove.ai",
+    phone: "+1 555 0201",
+    role: "receptionist" as const,
+    status: "active" as const,
+    notes:
+      "Primary owner for AI receptionist callbacks, WhatsApp replies, and appointment handoffs.",
+  },
+  {
+    full_name: "Dr. Amina Rahman",
+    email: "amina.rahman@medidove.ai",
+    phone: "+1 555 0202",
+    role: "doctor" as const,
+    status: "active" as const,
+    notes:
+      "Reviews primary care appointment requests and AI-prepared intake summaries.",
+  },
+  {
+    full_name: "Mira Patel",
+    email: "mira.admin@medidove.ai",
+    phone: "+1 555 0203",
+    role: "admin" as const,
+    status: "invited" as const,
+    notes:
+      "Demo admin user for operations, content, reporting, and campaign review.",
   },
 ];
 
@@ -558,6 +589,14 @@ const seedClinicSettings = async (
   });
 };
 
+const seedStaffMembers = async (
+  supabase: Awaited<ReturnType<typeof assertAdmin>>,
+) => {
+  await supabase.from("staff_members").upsert(demoStaffMembers, {
+    onConflict: "email",
+  });
+};
+
 const seedBlogPosts = async (
   supabase: Awaited<ReturnType<typeof assertAdmin>>,
 ) => {
@@ -646,6 +685,7 @@ const seedTestimonials = async (
 export const seedDemoWorkspace = async () => {
   const supabase = await assertAdmin();
   await seedClinicSettings(supabase);
+  await seedStaffMembers(supabase);
   await seedBlogPosts(supabase);
   await seedHealthPackages(supabase);
   await seedProducts(supabase);

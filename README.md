@@ -49,6 +49,7 @@ For real healthcare clients, production compliance work may be required, includi
 - Supabase authentication for patient, doctor, and admin roles
 - Patient portal with profile, consent, and timeline views
 - Doctor portal for assigned appointments and clinical context
+- Admin staff directory for doctors, receptionists, and operators
 - Admin dashboard with appointments, leads, calls, WhatsApp, analytics, and audit logs
 - Admin content seeding for demo data
 - Admin appointment operations
@@ -96,6 +97,7 @@ For real healthcare clients, production compliance work may be required, includi
 - `/admin/automations`
 - `/admin/tasks`
 - `/admin/clinical-notes`
+- `/admin/staff`
 - `/admin/content`
 - `/admin/blog`
 - `/admin/products`

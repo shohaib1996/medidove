@@ -16,6 +16,19 @@ create table public.profiles (
   updated_at timestamptz not null default now()
 );
 
+create table public.staff_members (
+  id uuid primary key default gen_random_uuid(),
+  profile_id uuid references public.profiles(id) on delete set null,
+  full_name text not null,
+  email text not null unique,
+  phone text,
+  role public.user_role not null default 'receptionist',
+  status text not null default 'active' check (status in ('active', 'inactive', 'invited')),
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
@@ -440,6 +453,7 @@ create table public.audit_logs (
 );
 
 alter table public.profiles enable row level security;
+alter table public.staff_members enable row level security;
 alter table public.departments enable row level security;
 alter table public.doctors enable row level security;
 alter table public.doctor_availability enable row level security;
@@ -592,6 +606,10 @@ create policy "Patients can read own profile"
   on public.profiles for select
   using (auth.uid() = id);
 
+create policy "Staff can read own staff record"
+  on public.staff_members for select
+  using (profile_id = auth.uid());
+
 create policy "Admins can read profiles"
   on public.profiles for select
   using (public.is_admin());
@@ -599,6 +617,11 @@ create policy "Admins can read profiles"
 create policy "Patients can update own profile"
   on public.profiles for update
   using (auth.uid() = id);
+
+create policy "Admins can manage staff members"
+  on public.staff_members for all
+  using (public.is_admin())
+  with check (public.is_admin());
 
 create policy "Anyone can create contact leads"
   on public.contact_leads for insert
@@ -751,6 +774,8 @@ create policy "Admins can create audit logs"
   with check (public.is_admin() or actor_type = 'system');
 
 create index departments_slug_idx on public.departments(slug);
+create index staff_members_profile_id_idx on public.staff_members(profile_id);
+create index staff_members_role_status_idx on public.staff_members(role, status);
 create index doctors_slug_idx on public.doctors(slug);
 create index doctors_profile_id_idx on public.doctors(profile_id);
 create index doctors_department_id_idx on public.doctors(department_id);

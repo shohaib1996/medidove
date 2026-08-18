@@ -47,6 +47,51 @@ export type Database = {
         };
         Relationships: [];
       };
+      staff_members: {
+        Row: {
+          id: string;
+          profile_id: string | null;
+          full_name: string;
+          email: string;
+          phone: string | null;
+          role: UserRole;
+          status: "active" | "inactive" | "invited";
+          notes: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          profile_id?: string | null;
+          full_name: string;
+          email: string;
+          phone?: string | null;
+          role?: UserRole;
+          status?: "active" | "inactive" | "invited";
+          notes?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          profile_id?: string | null;
+          full_name?: string;
+          email?: string;
+          phone?: string | null;
+          role?: UserRole;
+          status?: "active" | "inactive" | "invited";
+          notes?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "staff_members_profile_id_fkey";
+            columns: ["profile_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       departments: {
         Row: {
           id: string;

@@ -147,8 +147,8 @@ export default async function AdminContentPage() {
               <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
                 Adds sample departments, services, doctors, AI knowledge, one
                 appointment, one lead, one callback request, one WhatsApp
-                opt-in, schedules, feedback, task, clinical note, and campaign
-                draft, public clinic settings, AI blog posts, plus one AI chat
+                opt-in, schedules, staff records, feedback, task, clinical note,
+                and campaign draft, public clinic settings, AI blog posts, plus one AI chat
                 lead so the dashboard and analytics pages are ready to demo.
                 It also seeds public health packages, products, and
                 testimonials for buyer-ready proof pages.
