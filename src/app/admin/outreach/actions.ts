@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { dispatchQueuedOutbox } from "@/lib/communications/dispatch";
 import { createClient } from "@/lib/supabase/server";
 
 const channels = ["email", "sms", "whatsapp", "voice"] as const;
@@ -108,5 +109,14 @@ export const queueOutreachMessage = async (formData: FormData) => {
 
   revalidatePath("/admin/outreach");
   revalidatePath("/admin");
+  revalidatePath("/admin/analytics");
+};
+
+export const dispatchOutboxNow = async () => {
+  await assertAdmin();
+  await dispatchQueuedOutbox(10);
+
+  revalidatePath("/admin/outreach");
+  revalidatePath("/admin/communications");
   revalidatePath("/admin/analytics");
 };

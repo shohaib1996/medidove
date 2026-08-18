@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { createClient } from "@/lib/supabase/server";
-import { queueOutreachMessage } from "./actions";
+import { dispatchOutboxNow, queueOutreachMessage } from "./actions";
 
 export const metadata = {
   title: "Outreach Composer | MediDove Admin",
@@ -36,6 +36,10 @@ type OutboxRecord = {
   subject: string | null;
   message: string;
   status: string;
+  provider: string | null;
+  provider_message_id: string | null;
+  scheduled_for: string | null;
+  sent_at: string | null;
   created_at: string;
 };
 
@@ -75,7 +79,7 @@ export default async function AdminOutreachPage() {
     supabase
       .from("communication_outbox")
       .select(
-        "id, channel, recipient_name, recipient_phone, recipient_email, subject, message, status, created_at",
+        "id, channel, recipient_name, recipient_phone, recipient_email, subject, message, status, provider, provider_message_id, scheduled_for, sent_at, created_at",
       )
       .order("created_at", { ascending: false })
       .limit(20),
@@ -97,11 +101,17 @@ export default async function AdminOutreachPage() {
             </h1>
             <p className="mt-3 max-w-2xl text-slate-600">
               Prepare WhatsApp, SMS, email, or AI voice follow-up messages for
-              provider delivery. This queues records only; no real messages are
-              sent in this phase.
+              provider delivery. Dispatch sends queued records to configured
+              Twilio and webhook providers.
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
+            <form action={dispatchOutboxNow}>
+              <Button type="submit" variant="outline" className="w-full">
+                <Send />
+                Dispatch queued
+              </Button>
+            </form>
             <Button asChild variant="outline">
               <Link href="/admin/templates">Templates</Link>
             </Button>
@@ -239,6 +249,11 @@ export default async function AdminOutreachPage() {
                         <Badge variant="secondary" className="capitalize">
                           {item.status}
                         </Badge>
+                        {item.provider ? (
+                          <Badge variant="outline" className="capitalize">
+                            {item.provider}
+                          </Badge>
+                        ) : null}
                       </div>
                     </div>
                   </CardHeader>
@@ -257,6 +272,21 @@ export default async function AdminOutreachPage() {
                       ) : null}
                       {item.recipient_email ? (
                         <Badge variant="outline">{item.recipient_email}</Badge>
+                      ) : null}
+                      {item.scheduled_for ? (
+                        <Badge variant="outline">
+                          Scheduled {formatDate(item.scheduled_for)}
+                        </Badge>
+                      ) : null}
+                      {item.sent_at ? (
+                        <Badge variant="outline">
+                          Sent {formatDate(item.sent_at)}
+                        </Badge>
+                      ) : null}
+                      {item.provider_message_id ? (
+                        <Badge variant="outline">
+                          Provider ID {item.provider_message_id}
+                        </Badge>
                       ) : null}
                     </div>
                   </CardContent>
