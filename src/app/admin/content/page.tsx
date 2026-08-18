@@ -148,7 +148,8 @@ export default async function AdminContentPage() {
                 Adds sample departments, services, doctors, AI knowledge, one
                 appointment, one lead, one callback request, one WhatsApp
                 opt-in, schedules, feedback, task, clinical note, and campaign
-                draft so the dashboard and analytics pages are ready to demo.
+                draft, plus one AI chat lead so the dashboard and analytics
+                pages are ready to demo.
               </p>
             </div>
             <form action={seedDemoWorkspace}>

@@ -654,6 +654,57 @@ export type Database = {
           },
         ];
       };
+      ai_leads: {
+        Row: {
+          id: string;
+          session_id: string | null;
+          visitor_id: string | null;
+          name: string | null;
+          email: string | null;
+          phone: string | null;
+          interest: string;
+          summary: string;
+          urgency: string;
+          status: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          session_id?: string | null;
+          visitor_id?: string | null;
+          name?: string | null;
+          email?: string | null;
+          phone?: string | null;
+          interest: string;
+          summary: string;
+          urgency?: string;
+          status?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          session_id?: string | null;
+          visitor_id?: string | null;
+          name?: string | null;
+          email?: string | null;
+          phone?: string | null;
+          interest?: string;
+          summary?: string;
+          urgency?: string;
+          status?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "ai_leads_session_id_fkey";
+            columns: ["session_id"];
+            isOneToOne: false;
+            referencedRelation: "ai_chat_sessions";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       call_logs: {
         Row: {
           id: string;

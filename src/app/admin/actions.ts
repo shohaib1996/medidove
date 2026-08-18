@@ -7,19 +7,21 @@ import { createClient } from "@/lib/supabase/server";
 type AdminTable =
   | "appointments"
   | "contact_leads"
+  | "ai_leads"
   | "call_logs"
   | "whatsapp_messages";
 
 const allowedStatuses: Record<AdminTable, string[]> = {
   appointments: ["pending", "confirmed", "completed", "cancelled", "rescheduled"],
   contact_leads: ["new", "contacted", "converted", "closed", "spam"],
+  ai_leads: ["new", "contacted", "converted", "closed", "spam"],
   call_logs: ["requested", "contacted", "completed", "failed"],
   whatsapp_messages: ["requested", "queued", "sent", "failed"],
 };
 
 const isAdminTable = (value: FormDataEntryValue | null): value is AdminTable =>
   typeof value === "string" &&
-  ["appointments", "contact_leads", "call_logs", "whatsapp_messages"].includes(
+  ["appointments", "contact_leads", "ai_leads", "call_logs", "whatsapp_messages"].includes(
     value,
   );
 
@@ -83,6 +85,17 @@ export const updateAdminRecordStatus = async (formData: FormData) => {
     }
   }
 
+  if (table === "ai_leads") {
+    const { error } = await supabase
+      .from("ai_leads")
+      .update({ status })
+      .eq("id", id);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+  }
+
   if (table === "call_logs") {
     const { error } = await supabase
       .from("call_logs")
@@ -121,6 +134,7 @@ export const updateAdminRecordStatus = async (formData: FormData) => {
   revalidatePath("/admin");
   revalidatePath("/admin/appointments");
   revalidatePath("/admin/leads");
+  revalidatePath("/admin/ai-leads");
   revalidatePath("/admin/communications");
   revalidatePath("/admin/audit");
 };

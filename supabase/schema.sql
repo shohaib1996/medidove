@@ -222,6 +222,21 @@ create table public.ai_chat_messages (
   created_at timestamptz not null default now()
 );
 
+create table public.ai_leads (
+  id uuid primary key default gen_random_uuid(),
+  session_id uuid references public.ai_chat_sessions(id) on delete set null,
+  visitor_id text,
+  name text,
+  email text,
+  phone text,
+  interest text not null,
+  summary text not null,
+  urgency text not null default 'low',
+  status text not null default 'new',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 create table public.call_logs (
   id uuid primary key default gen_random_uuid(),
   appointment_id uuid references public.appointments(id) on delete set null,
@@ -361,6 +376,7 @@ alter table public.ai_documents enable row level security;
 alter table public.ai_document_chunks enable row level security;
 alter table public.ai_chat_sessions enable row level security;
 alter table public.ai_chat_messages enable row level security;
+alter table public.ai_leads enable row level security;
 alter table public.call_logs enable row level security;
 alter table public.whatsapp_messages enable row level security;
 alter table public.consent_logs enable row level security;
@@ -439,6 +455,11 @@ create policy "Admins can read AI chat sessions"
 create policy "Admins can read AI chat messages"
   on public.ai_chat_messages for select
   using (public.is_admin());
+
+create policy "Admins can manage AI leads"
+  on public.ai_leads for all
+  using (public.is_admin())
+  with check (public.is_admin());
 
 create policy "Patients can read own profile"
   on public.profiles for select
@@ -642,6 +663,9 @@ create index campaign_recipients_status_idx on public.campaign_recipients(status
 create index audit_logs_event_type_idx on public.audit_logs(event_type);
 create index audit_logs_created_at_idx on public.audit_logs(created_at desc);
 create index ai_chat_messages_session_id_idx on public.ai_chat_messages(session_id);
+create index ai_leads_status_idx on public.ai_leads(status);
+create index ai_leads_session_id_idx on public.ai_leads(session_id);
+create index ai_leads_created_at_idx on public.ai_leads(created_at desc);
 create index ai_document_chunks_embedding_idx
   on public.ai_document_chunks
   using ivfflat (embedding vector_cosine_ops)

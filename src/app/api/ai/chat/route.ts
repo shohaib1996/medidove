@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { captureLeadFromMessage } from "@/lib/ai/lead-capture";
 
 type ChatRequest = {
   message?: string;
@@ -186,6 +187,29 @@ const logConversation = async ({
         metadata: { intent },
       },
     ]);
+
+    const capturedLead = captureLeadFromMessage({
+      message,
+      visitorId,
+      sessionId: activeSessionId,
+      intent,
+    });
+
+    if (capturedLead) {
+      const { data: existingLead } = await supabase
+        .from("ai_leads")
+        .select("id")
+        .eq("session_id", activeSessionId)
+        .maybeSingle();
+
+      if (!existingLead) {
+        await supabase.from("ai_leads").insert({
+          session_id: activeSessionId,
+          visitor_id: visitorId,
+          ...capturedLead,
+        });
+      }
+    }
 
     return activeSessionId;
   } catch (error) {

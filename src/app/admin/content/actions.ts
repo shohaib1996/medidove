@@ -48,6 +48,7 @@ const refreshContent = () => {
   revalidatePath("/service");
   revalidatePath("/doctor");
   revalidatePath("/admin/campaigns");
+  revalidatePath("/admin/ai-leads");
   revalidatePath("/admin/tasks");
   revalidatePath("/admin/feedback");
   revalidatePath("/admin/clinical-notes");
@@ -497,6 +498,33 @@ const seedCampaignIfMissing = async (
   });
 };
 
+const seedAiLeadIfMissing = async (
+  supabase: Awaited<ReturnType<typeof assertAdmin>>,
+) => {
+  const visitorId = "demo-ai-lead-visitor";
+  const { data: existing } = await supabase
+    .from("ai_leads")
+    .select("id")
+    .eq("visitor_id", visitorId)
+    .maybeSingle();
+
+  if (existing) {
+    return;
+  }
+
+  await supabase.from("ai_leads").insert({
+    visitor_id: visitorId,
+    name: "Demo Chat Lead",
+    email: "chat.lead.demo@medidove.ai",
+    phone: "+1 555 0105",
+    interest: "appointment",
+    summary:
+      "Demo chat lead asked the AI assistant for dental appointment help and shared contact details for staff follow-up.",
+    urgency: "medium",
+    status: "new",
+  });
+};
+
 export const seedDemoWorkspace = async () => {
   const supabase = await assertAdmin();
 
@@ -645,6 +673,7 @@ export const seedDemoWorkspace = async () => {
   await seedCareTaskIfMissing(supabase);
   await seedClinicalNoteIfMissing(supabase);
   await seedCampaignIfMissing(supabase);
+  await seedAiLeadIfMissing(supabase);
 
   const { data: existingCall } = await supabase
     .from("call_logs")

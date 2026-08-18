@@ -49,6 +49,7 @@ For real healthcare clients, production compliance work may be required, includi
 - Admin appointment operations
 - Admin patient CRM
 - Admin lead pipeline
+- Admin AI lead capture from chat
 - Admin communication inbox
 - Admin message templates
 - Admin outreach composer
@@ -76,6 +77,7 @@ For real healthcare clients, production compliance work may be required, includi
 - `/admin/appointments`
 - `/admin/patients`
 - `/admin/leads`
+- `/admin/ai-leads`
 - `/admin/communications`
 - `/admin/campaigns`
 - `/admin/outreach`
