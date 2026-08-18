@@ -5,10 +5,15 @@ import {
   BarChart3,
   Bot,
   CalendarClock,
+  ClipboardPlus,
   Headphones,
   Inbox,
   MessageCircle,
+  ShieldCheck,
+  Star,
+  Stethoscope,
   TrendingUp,
+  Workflow,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -41,6 +46,27 @@ type LeadRecord = StatusRecord & {
 type ChatMessageRecord = CreatedRecord & {
   role: string;
   metadata: { intent?: string } | null;
+};
+
+type FeedbackRecord = StatusRecord & {
+  rating: number;
+  ai_sentiment: string;
+  ai_urgency: string;
+  category: string;
+};
+
+type ClinicalNoteRecord = StatusRecord & {
+  risk_flags: string[];
+};
+
+type AutomationRuleRecord = CreatedRecord & {
+  trigger_event: string;
+  channel: string;
+  is_active: boolean;
+};
+
+type OutboxRecord = StatusRecord & {
+  channel: string;
 };
 
 const formatDate = (value: string) =>
@@ -154,6 +180,12 @@ export default async function AdminAnalyticsPage() {
     { data: callLogsData },
     { data: whatsAppData },
     { data: chatMessagesData },
+    { data: feedbackData },
+    { data: clinicalNotesData },
+    { data: automationRulesData },
+    { data: outboxData },
+    { data: doctorsData },
+    { data: availabilityData },
   ] = await Promise.all([
     supabase
       .from("appointments")
@@ -180,6 +212,36 @@ export default async function AdminAnalyticsPage() {
       .select("role, metadata, created_at")
       .order("created_at", { ascending: false })
       .limit(200),
+    supabase
+      .from("patient_feedback")
+      .select("status, rating, ai_sentiment, ai_urgency, category, created_at")
+      .order("created_at", { ascending: false })
+      .limit(200),
+    supabase
+      .from("clinical_notes")
+      .select("status, risk_flags, created_at")
+      .order("created_at", { ascending: false })
+      .limit(200),
+    supabase
+      .from("automation_rules")
+      .select("trigger_event, channel, is_active, created_at")
+      .order("created_at", { ascending: false })
+      .limit(200),
+    supabase
+      .from("communication_outbox")
+      .select("status, channel, created_at")
+      .order("created_at", { ascending: false })
+      .limit(200),
+    supabase
+      .from("doctors")
+      .select("is_active, created_at")
+      .order("created_at", { ascending: false })
+      .limit(200),
+    supabase
+      .from("doctor_availability")
+      .select("is_active, created_at")
+      .order("created_at", { ascending: false })
+      .limit(200),
   ]);
 
   const appointments = (appointmentsData || []) as (StatusRecord & {
@@ -190,21 +252,51 @@ export default async function AdminAnalyticsPage() {
   const callLogs = (callLogsData || []) as StatusRecord[];
   const whatsAppMessages = (whatsAppData || []) as StatusRecord[];
   const chatMessages = (chatMessagesData || []) as ChatMessageRecord[];
+  const feedback = (feedbackData || []) as FeedbackRecord[];
+  const clinicalNotes = (clinicalNotesData || []) as ClinicalNoteRecord[];
+  const automationRules = (automationRulesData || []) as AutomationRuleRecord[];
+  const outbox = (outboxData || []) as OutboxRecord[];
+  const doctors = (doctorsData || []) as (CreatedRecord & { is_active: boolean })[];
+  const availability = (availabilityData || []) as (CreatedRecord & {
+    is_active: boolean;
+  })[];
   const assistantMessages = chatMessages.filter(
     (message) => message.role === "assistant",
   );
 
   const totalRecords =
-    appointments.length + leads.length + callLogs.length + whatsAppMessages.length;
+    appointments.length +
+    leads.length +
+    callLogs.length +
+    whatsAppMessages.length +
+    feedback.length +
+    clinicalNotes.length +
+    outbox.length;
   const todayRecords = [
     ...appointments,
     ...leads,
     ...callLogs,
     ...whatsAppMessages,
+    ...feedback,
+    ...clinicalNotes,
+    ...outbox,
   ].filter((record) => isToday(record.created_at)).length;
   const highUrgency =
     appointments.filter((appointment) => appointment.urgency === "high").length +
-    leads.filter((lead) => lead.ai_urgency === "high").length;
+    leads.filter((lead) => lead.ai_urgency === "high").length +
+    feedback.filter((item) => item.ai_urgency === "high").length;
+  const averageRating =
+    feedback.length > 0
+      ? feedback.reduce((total, item) => total + item.rating, 0) / feedback.length
+      : 0;
+  const activeAutomations = automationRules.filter((rule) => rule.is_active).length;
+  const activeDoctors = doctors.filter((doctor) => doctor.is_active).length;
+  const activeAvailability = availability.filter((block) => block.is_active).length;
+  const blockedOutbox = outbox.filter((item) => item.status === "blocked").length;
+  const reviewedNotes = clinicalNotes.filter((note) => note.status === "reviewed").length;
+  const flaggedNotes = clinicalNotes.filter(
+    (note) => note.risk_flags.length > 0,
+  ).length;
 
   const latestActivity = [
     ...appointments.map((record) => ({
@@ -224,6 +316,21 @@ export default async function AdminAnalyticsPage() {
     })),
     ...whatsAppMessages.map((record) => ({
       label: "WhatsApp opt-in",
+      created_at: record.created_at,
+      status: record.status,
+    })),
+    ...feedback.map((record) => ({
+      label: "Patient feedback",
+      created_at: record.created_at,
+      status: record.ai_sentiment,
+    })),
+    ...clinicalNotes.map((record) => ({
+      label: "Clinical note",
+      created_at: record.created_at,
+      status: record.status,
+    })),
+    ...outbox.map((record) => ({
+      label: "Outbox message",
       created_at: record.created_at,
       status: record.status,
     })),
@@ -264,7 +371,7 @@ export default async function AdminAnalyticsPage() {
           <MetricCard
             title="Total records"
             value={totalRecords}
-            detail="appointments, leads, calls, and WhatsApp"
+            detail="patient workflow records across modules"
             icon={BarChart3}
           />
           <MetricCard
@@ -276,7 +383,7 @@ export default async function AdminAnalyticsPage() {
           <MetricCard
             title="High urgency"
             value={highUrgency}
-            detail="AI-flagged appointment or lead records"
+            detail="AI-flagged appointments, leads, or feedback"
             icon={Activity}
           />
           <MetricCard
@@ -287,9 +394,42 @@ export default async function AdminAnalyticsPage() {
           />
           <MetricCard
             title="Engagement"
-            value={callLogs.length + whatsAppMessages.length}
-            detail="voice and WhatsApp workflow records"
+            value={callLogs.length + whatsAppMessages.length + outbox.length}
+            detail="voice, WhatsApp, and outbox records"
             icon={MessageCircle}
+          />
+        </section>
+
+        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+          <MetricCard
+            title="Feedback rating"
+            value={Number(averageRating.toFixed(1))}
+            detail="average patient score"
+            icon={Star}
+          />
+          <MetricCard
+            title="Reviewed notes"
+            value={reviewedNotes}
+            detail={`${flaggedNotes} notes contain risk flags`}
+            icon={ClipboardPlus}
+          />
+          <MetricCard
+            title="Automations"
+            value={activeAutomations}
+            detail={`${automationRules.length} configured rules`}
+            icon={Workflow}
+          />
+          <MetricCard
+            title="Doctor coverage"
+            value={activeDoctors}
+            detail={`${activeAvailability} active schedule blocks`}
+            icon={Stethoscope}
+          />
+          <MetricCard
+            title="Consent blocks"
+            value={blockedOutbox}
+            detail="outbox messages blocked before dispatch"
+            icon={ShieldCheck}
           />
         </section>
 
@@ -311,6 +451,24 @@ export default async function AdminAnalyticsPage() {
               assistantMessages,
               (message) => message.metadata?.intent,
             )}
+          />
+        </section>
+
+        <section className="grid gap-6 xl:grid-cols-3">
+          <Breakdown
+            title="Feedback Sentiment"
+            description="AI experience triage"
+            data={countBy(feedback, (item) => item.ai_sentiment)}
+          />
+          <Breakdown
+            title="Outbox Status"
+            description="Delivery and consent control"
+            data={countBy(outbox, (item) => item.status)}
+          />
+          <Breakdown
+            title="Automation Channels"
+            description="Configured care automation"
+            data={countBy(automationRules, (rule) => rule.channel)}
           />
         </section>
 
