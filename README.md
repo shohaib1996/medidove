@@ -107,6 +107,7 @@ Required for core Supabase features:
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
+NEXT_PUBLIC_SITE_URL=
 ```
 
 Optional integration variables:
@@ -241,4 +242,4 @@ Recommended deployment:
 - ElevenLabs for conversational voice receptionist
 - A transactional email provider connected through `EMAIL_DELIVERY_WEBHOOK_URL`
 
-Before production launch, configure real domains, provider webhooks, privacy terms, staff access rules, logging retention, and compliance review.
+Before production launch, configure `NEXT_PUBLIC_SITE_URL`, real domains, provider webhooks, privacy terms, staff access rules, logging retention, and compliance review.
