@@ -322,7 +322,15 @@ const HomePage = () => {
       <footer className="border-t border-slate-200 px-4 py-8 md:px-8">
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 text-sm text-slate-500 md:flex-row">
           <p>MediDove AI Clinic Platform</p>
-          <p>Next.js 16, Supabase, shadcn/ui, ElevenLabs-ready</p>
+          <div className="flex flex-wrap gap-4">
+            <Link href="/privacy" className="hover:text-primary">
+              Privacy
+            </Link>
+            <Link href="/terms" className="hover:text-primary">
+              Terms
+            </Link>
+            <span>Next.js 16, Supabase, shadcn/ui, ElevenLabs-ready</span>
+          </div>
         </div>
       </footer>
     </div>
