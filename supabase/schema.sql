@@ -171,6 +171,22 @@ create table public.patient_feedback (
   updated_at timestamptz not null default now()
 );
 
+create table public.care_tasks (
+  id uuid primary key default gen_random_uuid(),
+  patient_id uuid references public.profiles(id) on delete set null,
+  assigned_to uuid references public.profiles(id) on delete set null,
+  source_type text not null default 'manual',
+  source_id text,
+  title text not null,
+  description text,
+  priority text not null default 'medium',
+  status text not null default 'open',
+  due_at timestamptz,
+  created_by uuid references public.profiles(id) on delete set null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 create table public.ai_documents (
   id uuid primary key default gen_random_uuid(),
   source_type text not null,
@@ -310,6 +326,7 @@ alter table public.appointments enable row level security;
 alter table public.clinical_notes enable row level security;
 alter table public.contact_leads enable row level security;
 alter table public.patient_feedback enable row level security;
+alter table public.care_tasks enable row level security;
 alter table public.ai_documents enable row level security;
 alter table public.ai_document_chunks enable row level security;
 alter table public.ai_chat_sessions enable row level security;
@@ -495,6 +512,11 @@ create policy "Admins can update patient feedback"
   on public.patient_feedback for update
   using (public.is_admin());
 
+create policy "Admins can manage care tasks"
+  on public.care_tasks for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
 create policy "Admins can read call logs"
   on public.call_logs for select
   using (public.is_admin());
@@ -555,6 +577,10 @@ create index contact_leads_ai_urgency_idx on public.contact_leads(ai_urgency);
 create index patient_feedback_status_idx on public.patient_feedback(status);
 create index patient_feedback_sentiment_idx on public.patient_feedback(ai_sentiment);
 create index patient_feedback_created_at_idx on public.patient_feedback(created_at desc);
+create index care_tasks_status_idx on public.care_tasks(status);
+create index care_tasks_priority_idx on public.care_tasks(priority);
+create index care_tasks_due_at_idx on public.care_tasks(due_at);
+create index care_tasks_assigned_to_idx on public.care_tasks(assigned_to);
 create index call_logs_status_idx on public.call_logs(status);
 create index whatsapp_messages_status_idx on public.whatsapp_messages(status);
 create index consent_logs_channel_idx on public.consent_logs(channel);

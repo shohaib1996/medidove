@@ -467,6 +467,74 @@ export type Database = {
           },
         ];
       };
+      care_tasks: {
+        Row: {
+          id: string;
+          patient_id: string | null;
+          assigned_to: string | null;
+          source_type: string;
+          source_id: string | null;
+          title: string;
+          description: string | null;
+          priority: string;
+          status: string;
+          due_at: string | null;
+          created_by: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          patient_id?: string | null;
+          assigned_to?: string | null;
+          source_type?: string;
+          source_id?: string | null;
+          title: string;
+          description?: string | null;
+          priority?: string;
+          status?: string;
+          due_at?: string | null;
+          created_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          patient_id?: string | null;
+          assigned_to?: string | null;
+          source_type?: string;
+          source_id?: string | null;
+          title?: string;
+          description?: string | null;
+          priority?: string;
+          status?: string;
+          due_at?: string | null;
+          created_by?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "care_tasks_patient_id_fkey";
+            columns: ["patient_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "care_tasks_assigned_to_fkey";
+            columns: ["assigned_to"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "care_tasks_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       ai_chat_sessions: {
         Row: {
           id: string;
