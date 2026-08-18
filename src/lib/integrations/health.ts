@@ -30,6 +30,13 @@ const integrationDefinitions = [
     href: "/receptionist",
   },
   {
+    name: "OpenAI Responses API",
+    category: "AI assistant",
+    requiredKeys: ["OPENAI_API_KEY"],
+    workflow: "LLM answers for the website clinic assistant",
+    href: "/",
+  },
+  {
     name: "ElevenLabs Outbound Webhook",
     category: "AI voice calls",
     requiredKeys: ["ELEVENLABS_OUTBOUND_CALL_WEBHOOK_URL"],

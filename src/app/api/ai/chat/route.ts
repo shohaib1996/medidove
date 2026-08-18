@@ -1,11 +1,20 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { captureLeadFromMessage } from "@/lib/ai/lead-capture";
+import { generateOpenAIText } from "@/lib/ai/openai";
 
 type ChatRequest = {
   message?: string;
   sessionId?: string;
   visitorId?: string;
+};
+
+type AssistantResponse = {
+  answer: string;
+  cta: string | null;
+  intent: string;
+  provider: "rules" | "openai";
+  model?: string;
 };
 
 const cleanText = (value: unknown) =>
@@ -90,8 +99,10 @@ const getStoredKnowledgeMatch = async (message: string) => {
 
     return {
       answer: `${match.title}: ${match.content}`,
+      context: `${match.title}: ${match.content}`,
       cta: "/contact",
       intent: `knowledge_${match.source_type}`,
+      provider: "rules" as const,
     };
   } catch (error) {
     console.error("AI knowledge lookup failed:", error);
@@ -99,7 +110,9 @@ const getStoredKnowledgeMatch = async (message: string) => {
   }
 };
 
-const getAssistantResponse = async (message: string) => {
+const getRuleBasedAssistantResponse = async (
+  message: string,
+): Promise<AssistantResponse> => {
   const normalized = message.toLowerCase();
   const emergencyMatch = emergencySignals.find((signal) =>
     normalized.includes(signal),
@@ -111,6 +124,7 @@ const getAssistantResponse = async (message: string) => {
         "This may require urgent medical attention. Please contact emergency services or visit the nearest emergency department immediately. I can help with routine appointment routing, but I cannot handle emergencies.",
       cta: null,
       intent: "urgent_safety",
+      provider: "rules",
     };
   }
 
@@ -129,6 +143,7 @@ const getAssistantResponse = async (message: string) => {
       answer: match.answer,
       cta: match.cta,
       intent: match.signals[0],
+      provider: "rules",
     };
   }
 
@@ -137,7 +152,69 @@ const getAssistantResponse = async (message: string) => {
       "I can help with appointments, doctor matching, medical services, AI receptionist workflows, WhatsApp reminders, and admin lead handling. Tell me what you want to do next.",
     cta: "/appointment",
     intent: "general_help",
+    provider: "rules",
   };
+};
+
+const getOpenAIAssistantResponse = async (
+  message: string,
+  fallbackResponse: AssistantResponse,
+): Promise<AssistantResponse | null> => {
+  const clinicInstructions = [
+    "You are MediDove AI Clinic Assistant for a modern healthcare website demo.",
+    "Help visitors with appointment booking, doctor matching, clinic services, voice receptionist workflows, WhatsApp/SMS follow-ups, and admin lead handling.",
+    "Do not diagnose, prescribe, or provide treatment plans. For urgent symptoms, tell the visitor to contact emergency services or visit the nearest emergency department.",
+    "Use the provided clinic context when it is relevant. If details are missing, say the clinic team can follow up.",
+    "Keep the answer concise, friendly, and under 110 words. Return plain text only.",
+  ].join("\n");
+
+  const input = [
+    `Visitor message: ${message}`,
+    "",
+    "Clinic context:",
+    fallbackResponse.answer,
+    "",
+    `Recommended CTA: ${fallbackResponse.cta || "none"}`,
+    `Detected intent: ${fallbackResponse.intent}`,
+  ].join("\n");
+
+  const result = await generateOpenAIText({
+    instructions: clinicInstructions,
+    input,
+    metadata: {
+      feature: "clinic_assistant",
+      intent: fallbackResponse.intent,
+    },
+  });
+
+  if (!result.ok) {
+    console.error("OpenAI assistant failed:", result.error);
+    return null;
+  }
+
+  return {
+    ...fallbackResponse,
+    answer: result.text,
+    provider: "openai",
+    model: result.model,
+  };
+};
+
+const getAssistantResponse = async (
+  message: string,
+): Promise<AssistantResponse> => {
+  const fallbackResponse = await getRuleBasedAssistantResponse(message);
+
+  if (fallbackResponse.intent === "urgent_safety") {
+    return fallbackResponse;
+  }
+
+  const openAIResponse = await getOpenAIAssistantResponse(
+    message,
+    fallbackResponse,
+  );
+
+  return openAIResponse || fallbackResponse;
 };
 
 const logConversation = async ({
@@ -146,12 +223,16 @@ const logConversation = async ({
   message,
   answer,
   intent,
+  provider,
+  model,
 }: {
   sessionId: string | null;
   visitorId: string;
   message: string;
   answer: string;
   intent: string;
+  provider: AssistantResponse["provider"];
+  model?: string;
 }) => {
   try {
     const supabase = createAdminClient();
@@ -178,13 +259,13 @@ const logConversation = async ({
         session_id: activeSessionId,
         role: "user",
         content: message,
-        metadata: { intent },
+        metadata: { intent, provider, model },
       },
       {
         session_id: activeSessionId,
         role: "assistant",
         content: answer,
-        metadata: { intent },
+        metadata: { intent, provider, model },
       },
     ]);
 
@@ -248,6 +329,8 @@ export async function POST(request: Request) {
     message,
     answer: response.answer,
     intent: response.intent,
+    provider: response.provider,
+    model: response.model,
   });
 
   return NextResponse.json({
