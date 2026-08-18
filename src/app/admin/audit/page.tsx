@@ -17,7 +17,12 @@ export const metadata = {
   title: "Audit Logs | MediDove Admin",
 };
 
-type AuditFilter = "all" | "status_updated" | "automation_runner_executed" | "outbox_dispatch_executed";
+type AuditFilter =
+  | "all"
+  | "status_updated"
+  | "automation_runner_executed"
+  | "outbox_dispatch_executed"
+  | "outbox_dispatch_blocked";
 
 type AuditLog = {
   id: string;
@@ -36,6 +41,7 @@ const filters: AuditFilter[] = [
   "status_updated",
   "automation_runner_executed",
   "outbox_dispatch_executed",
+  "outbox_dispatch_blocked",
 ];
 
 const formatDate = (value: string) =>

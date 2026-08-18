@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { createClient } from "@/lib/supabase/server";
+import type { Json } from "@/lib/supabase/database.types";
 import { dispatchOutboxNow, queueOutreachMessage } from "./actions";
 
 export const metadata = {
@@ -38,6 +39,7 @@ type OutboxRecord = {
   status: string;
   provider: string | null;
   provider_message_id: string | null;
+  metadata: Json;
   scheduled_for: string | null;
   sent_at: string | null;
   created_at: string;
@@ -48,6 +50,16 @@ const formatDate = (value: string) =>
     dateStyle: "medium",
     timeStyle: "short",
   }).format(new Date(value));
+
+const metadataValue = (metadata: Json, key: string) => {
+  if (!metadata || typeof metadata !== "object" || Array.isArray(metadata)) {
+    return null;
+  }
+
+  const value = metadata[key];
+
+  return typeof value === "string" ? value : null;
+};
 
 export default async function AdminOutreachPage() {
   const supabase = await createClient();
@@ -79,7 +91,7 @@ export default async function AdminOutreachPage() {
     supabase
       .from("communication_outbox")
       .select(
-        "id, channel, recipient_name, recipient_phone, recipient_email, subject, message, status, provider, provider_message_id, scheduled_for, sent_at, created_at",
+        "id, channel, recipient_name, recipient_phone, recipient_email, subject, message, status, provider, provider_message_id, metadata, scheduled_for, sent_at, created_at",
       )
       .order("created_at", { ascending: false })
       .limit(20),
@@ -258,6 +270,18 @@ export default async function AdminOutreachPage() {
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-3">
+                    {item.status === "blocked" ? (
+                      <div className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+                        {metadataValue(item.metadata, "consent_block_reason") ||
+                          "Dispatch blocked because active consent was not found."}
+                      </div>
+                    ) : null}
+                    {item.status === "failed" ? (
+                      <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-900">
+                        {metadataValue(item.metadata, "delivery_error") ||
+                          "Provider delivery failed."}
+                      </div>
+                    ) : null}
                     {item.subject ? (
                       <p className="text-sm font-semibold text-slate-800">
                         {item.subject}
