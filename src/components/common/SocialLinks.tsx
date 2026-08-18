@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 
 interface SocialLinksDataType {
   link: string;
@@ -151,7 +152,7 @@ export const TeamSocialLinks = () => {
 
 // copy right text 
 type CopyRightDataType = {
-  copy_right: JSX.Element;
+  copy_right: ReactNode;
 }
 
 const copy_right_text: CopyRightDataType = {
