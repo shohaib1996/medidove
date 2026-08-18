@@ -5,6 +5,7 @@ import {
   CheckCircle2,
   ClipboardList,
   Filter,
+  Sparkles,
   UserRound,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +21,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { createClient } from "@/lib/supabase/server";
-import { createCareTask, updateCareTaskStatus } from "./actions";
+import { createCareTask, generateCareTasks, updateCareTaskStatus } from "./actions";
 
 export const metadata = {
   title: "Care Tasks | MediDove Admin",
@@ -177,9 +178,17 @@ export default async function AdminTasksPage({
               follow-ups into trackable staff work.
             </p>
           </div>
-          <Button asChild>
-            <Link href="/admin">Back to dashboard</Link>
-          </Button>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <form action={generateCareTasks}>
+              <Button type="submit" variant="outline" className="w-full">
+                <Sparkles className="h-4 w-4" />
+                Generate from AI signals
+              </Button>
+            </form>
+            <Button asChild>
+              <Link href="/admin">Back to dashboard</Link>
+            </Button>
+          </div>
         </section>
 
         <section className="grid gap-4 md:grid-cols-3">

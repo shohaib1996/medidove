@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { writeAuditLog } from "@/lib/audit/log";
 import { createClient } from "@/lib/supabase/server";
+import { generateCareTasksFromSignals } from "@/lib/tasks/generator";
 
 const text = (value: FormDataEntryValue | null) =>
   typeof value === "string" ? value.trim() : "";
@@ -129,5 +130,12 @@ export const updateCareTaskStatus = async (formData: FormData) => {
     metadata: { status },
   });
 
+  refreshTasks();
+};
+
+export const generateCareTasks = async () => {
+  const { userId } = await assertAdmin();
+
+  await generateCareTasksFromSignals(userId);
   refreshTasks();
 };

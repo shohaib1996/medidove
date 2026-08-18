@@ -29,6 +29,7 @@ type AuditFilter =
   | "feedback_status_updated"
   | "care_task_created"
   | "care_task_status_updated"
+  | "care_tasks_generated"
   | "automation_runner_executed"
   | "outbox_dispatch_executed"
   | "outbox_dispatch_blocked";
@@ -57,6 +58,7 @@ const filters: AuditFilter[] = [
   "feedback_status_updated",
   "care_task_created",
   "care_task_status_updated",
+  "care_tasks_generated",
   "automation_runner_executed",
   "outbox_dispatch_executed",
   "outbox_dispatch_blocked",
