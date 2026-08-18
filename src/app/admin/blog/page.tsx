@@ -226,7 +226,7 @@ export default async function AdminBlogPage() {
                     </p>
                     <div className="flex flex-wrap gap-2">
                       <Button asChild variant="outline" size="sm">
-                        <Link href={`/blog-details?post=${post.slug}`}>
+                        <Link href={`/blog/${post.slug}`}>
                           Preview
                         </Link>
                       </Button>

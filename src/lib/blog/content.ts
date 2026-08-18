@@ -14,6 +14,43 @@ export type PublicBlogPost = {
   publishedAt: string;
 };
 
+const createPublicBlogClient = () => {
+  const { url, publishableKey } = getSupabaseBrowserEnv();
+
+  return createClient<Database>(url, publishableKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  });
+};
+
+type PublicBlogPostRow = Pick<
+  Database["public"]["Tables"]["blog_posts"]["Row"],
+  | "id"
+  | "title"
+  | "slug"
+  | "excerpt"
+  | "content"
+  | "category"
+  | "image_url"
+  | "author_name"
+  | "published_at"
+  | "created_at"
+>;
+
+const mapBlogPost = (post: PublicBlogPostRow): PublicBlogPost => ({
+  id: post.id,
+  title: post.title,
+  slug: post.slug,
+  excerpt: post.excerpt,
+  content: post.content,
+  category: post.category,
+  imageUrl: post.image_url || "/assets/img/blog/news-thumb-1.jpg",
+  authorName: post.author_name || "MediDove Team",
+  publishedAt: post.published_at || post.created_at,
+});
+
 export const fallbackBlogPosts: PublicBlogPost[] = [
   {
     id: "fallback-ai-receptionist",
@@ -58,13 +95,7 @@ export const fallbackBlogPosts: PublicBlogPost[] = [
 
 export const getPublicBlogPosts = async (): Promise<PublicBlogPost[]> => {
   try {
-    const { url, publishableKey } = getSupabaseBrowserEnv();
-    const supabase = createClient<Database>(url, publishableKey, {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-      },
-    });
+    const supabase = createPublicBlogClient();
 
     const { data } = await supabase
       .from("blog_posts")
@@ -79,19 +110,33 @@ export const getPublicBlogPosts = async (): Promise<PublicBlogPost[]> => {
       return fallbackBlogPosts;
     }
 
-    return data.map((post) => ({
-      id: post.id,
-      title: post.title,
-      slug: post.slug,
-      excerpt: post.excerpt,
-      content: post.content,
-      category: post.category,
-      imageUrl: post.image_url || "/assets/img/blog/news-thumb-1.jpg",
-      authorName: post.author_name || "MediDove Team",
-      publishedAt: post.published_at || post.created_at,
-    }));
+    return data.map(mapBlogPost);
   } catch (error) {
     console.error("Blog posts lookup failed:", error);
     return fallbackBlogPosts;
   }
+};
+
+export const getPublicBlogPostBySlug = async (
+  slug: string,
+): Promise<PublicBlogPost | null> => {
+  try {
+    const supabase = createPublicBlogClient();
+    const { data } = await supabase
+      .from("blog_posts")
+      .select(
+        "id, title, slug, excerpt, content, category, image_url, author_name, published_at, created_at",
+      )
+      .eq("slug", slug)
+      .eq("is_published", true)
+      .maybeSingle();
+
+    if (data) {
+      return mapBlogPost(data);
+    }
+  } catch (error) {
+    console.error("Blog post lookup failed:", error);
+  }
+
+  return fallbackBlogPosts.find((post) => post.slug === slug) || null;
 };

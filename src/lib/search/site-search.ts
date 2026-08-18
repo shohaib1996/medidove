@@ -266,7 +266,7 @@ export const searchSite = async (rawQuery: string): Promise<SiteSearchResponse> 
     type: "knowledge" as const,
     title: post.title,
     description: post.excerpt,
-    href: `/blog-details?post=${post.slug}`,
+    href: `/blog/${post.slug}`,
     meta: post.category,
     score: scoreResult({
       query,

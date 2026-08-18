@@ -68,6 +68,8 @@ For real healthcare clients, production compliance work may be required, includi
 
 - `/` public AI clinic home
 - `/appointment` appointment booking
+- `/blog` public healthcare SEO blog
+- `/blog/[slug]` CMS-backed article details
 - `/receptionist` ElevenLabs receptionist demo page
 - `/engagement` WhatsApp and patient engagement page
 - `/login` and `/register`

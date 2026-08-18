@@ -14,6 +14,8 @@ export default function robots(): MetadataRoute.Robots {
           "/doctor",
           "/appointment",
           "/contact",
+          "/blog",
+          "/blog/",
           "/receptionist",
           "/engagement",
           "/privacy",

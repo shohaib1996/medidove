@@ -77,7 +77,7 @@ const BlogPage = ({ posts }: { posts: PublicBlogPost[] }) => {
                       </span>
                     </div>
                     <Button asChild className="mt-8">
-                      <Link href={`/blog-details?post=${featured.slug}`}>
+                      <Link href={`/blog/${featured.slug}`}>
                         Read article
                       </Link>
                     </Button>
@@ -115,7 +115,7 @@ const BlogPage = ({ posts }: { posts: PublicBlogPost[] }) => {
                       {post.excerpt}
                     </CardDescription>
                     <Button asChild variant="outline" className="mt-6">
-                      <Link href={`/blog-details?post=${post.slug}`}>
+                      <Link href={`/blog/${post.slug}`}>
                         <FileText />
                         Read more
                       </Link>
