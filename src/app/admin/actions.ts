@@ -107,4 +107,5 @@ export const updateAdminRecordStatus = async (formData: FormData) => {
   revalidatePath("/admin");
   revalidatePath("/admin/appointments");
   revalidatePath("/admin/leads");
+  revalidatePath("/admin/communications");
 };
