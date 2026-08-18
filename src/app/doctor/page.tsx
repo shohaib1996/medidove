@@ -1,19 +1,14 @@
 
-import Doctor from '@/components/doctors/doctor';
-import Wrapper from '@/layout/Wrapper';
-import React from 'react';
+import DoctorsPage from "@/components/doctors/DoctorsPage";
 
 export const metadata = {
-  title: "Doctor MediDove React Next js Tempalte",
+  title: "Doctors | MediDove AI Clinic",
+  description:
+    "Explore MediDove doctors and AI-ready care matching workflows for appointment booking.",
 };
 
-
 const index = () => {
-  return (
-    <Wrapper>
-      <Doctor />
-    </Wrapper>
-  );
+  return <DoctorsPage />;
 };
 
 export default index;
