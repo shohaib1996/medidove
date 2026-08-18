@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { CalendarDays, LayoutDashboard, LogIn } from "lucide-react";
+import { CalendarDays, LayoutDashboard, LogIn, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ClinicAssistantWidget from "@/components/ai/ClinicAssistantWidget";
 
@@ -51,6 +51,12 @@ const PublicHeader = () => {
               <Link href="/admin">
                 <LayoutDashboard />
                 Admin
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="sm" className="hidden md:inline-flex">
+              <Link href="/portal">
+                <UserRound />
+                Portal
               </Link>
             </Button>
             <Button asChild size="sm">

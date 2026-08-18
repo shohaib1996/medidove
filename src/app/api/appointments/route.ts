@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
 
 type AppointmentRequest = {
   patientName?: string;
@@ -77,13 +78,18 @@ export async function POST(request: Request) {
   }
 
   const requestedAt = getRequestedAt(requestedDate, requestedTime);
+  const userClient = await createClient();
+  const {
+    data: { user },
+  } = await userClient.auth.getUser();
   const supabase = createAdminClient();
 
   const { data, error } = await supabase
     .from("appointments")
     .insert({
+      patient_id: user?.id || null,
       patient_name: patientName,
-      patient_email: patientEmail || null,
+      patient_email: patientEmail || user?.email || null,
       patient_phone: patientPhone,
       requested_department: requestedDepartment || null,
       requested_doctor: requestedDoctor || null,

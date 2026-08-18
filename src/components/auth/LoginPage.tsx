@@ -50,7 +50,7 @@ const LoginPage = () => {
 
       toast.success("Login successful.");
       router.refresh();
-      router.push("/");
+      router.push("/portal");
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unable to log in.";
       toast.error(message);
