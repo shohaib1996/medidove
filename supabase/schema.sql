@@ -153,6 +153,24 @@ create table public.contact_leads (
   created_at timestamptz not null default now()
 );
 
+create table public.patient_feedback (
+  id uuid primary key default gen_random_uuid(),
+  patient_id uuid references public.profiles(id) on delete set null,
+  appointment_id uuid references public.appointments(id) on delete set null,
+  name text not null,
+  email text,
+  phone text,
+  rating integer not null check (rating between 1 and 5),
+  category text not null default 'general',
+  message text not null,
+  ai_sentiment text not null,
+  ai_summary text not null,
+  ai_urgency text not null,
+  status text not null default 'new',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 create table public.ai_documents (
   id uuid primary key default gen_random_uuid(),
   source_type text not null,
@@ -291,6 +309,7 @@ alter table public.services enable row level security;
 alter table public.appointments enable row level security;
 alter table public.clinical_notes enable row level security;
 alter table public.contact_leads enable row level security;
+alter table public.patient_feedback enable row level security;
 alter table public.ai_documents enable row level security;
 alter table public.ai_document_chunks enable row level security;
 alter table public.ai_chat_sessions enable row level security;
@@ -388,6 +407,10 @@ create policy "Anyone can create contact leads"
   on public.contact_leads for insert
   with check (true);
 
+create policy "Anyone can create patient feedback"
+  on public.patient_feedback for insert
+  with check (true);
+
 create policy "Anyone can create appointment requests"
   on public.appointments for insert
   with check (true);
@@ -439,6 +462,10 @@ create policy "Patients can read own communication outbox"
   on public.communication_outbox for select
   using (auth.uid() = patient_id);
 
+create policy "Patients can read own feedback"
+  on public.patient_feedback for select
+  using (auth.uid() = patient_id);
+
 create policy "Admins can read appointments"
   on public.appointments for select
   using (public.is_admin());
@@ -458,6 +485,14 @@ create policy "Admins can read contact leads"
 
 create policy "Admins can update contact leads"
   on public.contact_leads for update
+  using (public.is_admin());
+
+create policy "Admins can read patient feedback"
+  on public.patient_feedback for select
+  using (public.is_admin());
+
+create policy "Admins can update patient feedback"
+  on public.patient_feedback for update
   using (public.is_admin());
 
 create policy "Admins can read call logs"
@@ -517,6 +552,9 @@ create index clinical_notes_patient_id_idx on public.clinical_notes(patient_id);
 create index clinical_notes_appointment_id_idx on public.clinical_notes(appointment_id);
 create index clinical_notes_created_at_idx on public.clinical_notes(created_at desc);
 create index contact_leads_ai_urgency_idx on public.contact_leads(ai_urgency);
+create index patient_feedback_status_idx on public.patient_feedback(status);
+create index patient_feedback_sentiment_idx on public.patient_feedback(ai_sentiment);
+create index patient_feedback_created_at_idx on public.patient_feedback(created_at desc);
 create index call_logs_status_idx on public.call_logs(status);
 create index whatsapp_messages_status_idx on public.whatsapp_messages(status);
 create index consent_logs_channel_idx on public.consent_logs(channel);

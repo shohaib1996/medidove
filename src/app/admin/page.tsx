@@ -250,6 +250,9 @@ const AdminPage = async () => {
               <Link href="/admin/leads">Leads</Link>
             </Button>
             <Button asChild variant="outline">
+              <Link href="/admin/feedback">Feedback</Link>
+            </Button>
+            <Button asChild variant="outline">
               <Link href="/admin/communications">Inbox</Link>
             </Button>
             <Button asChild variant="outline">

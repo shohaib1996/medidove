@@ -400,6 +400,73 @@ export type Database = {
         };
         Relationships: [];
       };
+      patient_feedback: {
+        Row: {
+          id: string;
+          patient_id: string | null;
+          appointment_id: string | null;
+          name: string;
+          email: string | null;
+          phone: string | null;
+          rating: number;
+          category: string;
+          message: string;
+          ai_sentiment: string;
+          ai_summary: string;
+          ai_urgency: string;
+          status: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          patient_id?: string | null;
+          appointment_id?: string | null;
+          name: string;
+          email?: string | null;
+          phone?: string | null;
+          rating: number;
+          category?: string;
+          message: string;
+          ai_sentiment: string;
+          ai_summary: string;
+          ai_urgency: string;
+          status?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          patient_id?: string | null;
+          appointment_id?: string | null;
+          name?: string;
+          email?: string | null;
+          phone?: string | null;
+          rating?: number;
+          category?: string;
+          message?: string;
+          ai_sentiment?: string;
+          ai_summary?: string;
+          ai_urgency?: string;
+          status?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "patient_feedback_patient_id_fkey";
+            columns: ["patient_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "patient_feedback_appointment_id_fkey";
+            columns: ["appointment_id"];
+            isOneToOne: false;
+            referencedRelation: "appointments";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       ai_chat_sessions: {
         Row: {
           id: string;
