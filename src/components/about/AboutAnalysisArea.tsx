@@ -83,7 +83,7 @@ const AboutAnalysisArea = () => {
                       data-bs-toggle="pill"
                       data-bs-target={`#pills-${item.id}`}
                       type="button" role="tab"
-                      aria-controls={`pills-${item.id}`} aria-selected={`${i === 0 ? "true" : "false"}`}>
+                      aria-controls={`pills-${item.id}`} aria-selected={i === 0}>
                       <Image src={item.img} alt="theme-pure" />
                       <h6>{item.title}</h6>
                     </button>

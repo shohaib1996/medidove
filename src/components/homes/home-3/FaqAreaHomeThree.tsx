@@ -82,7 +82,7 @@ const FaqAreaHomeThree = () => {
                             type="button"
                             data-bs-toggle="collapse"
                             data-bs-target={`#collapse${item.tab_id}`}
-                            aria-expanded={`${i === 1 ? "true" : "false"}`}
+                            aria-expanded={i === 1}
                             aria-controls={`collapse${item.tab_id}`}
                           >
                             {item.qustion}
