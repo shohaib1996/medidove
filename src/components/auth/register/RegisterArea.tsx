@@ -1,12 +1,14 @@
 'use client'
 import Link from 'next/link';
-import React from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 
 
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
+import { createClient } from '@/lib/supabase/client';
 
 
 interface FormData {
@@ -25,13 +27,40 @@ const schema = yup
 
 
 const RegisterArea = () => {
-  
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { register, handleSubmit, reset, formState: { errors }, } = useForm<FormData>({ resolver: yupResolver(schema), });
-  const onSubmit = (data: FormData) => { 
-    const notify = () => toast("Register Successful");
-    notify()
-    reset();
-    console.log(data);
+
+  const onSubmit = async (data: FormData) => {
+    setIsSubmitting(true);
+
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          data: {
+            full_name: data.name,
+          },
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      toast.success("Account created. Check your email if confirmation is enabled.");
+      reset();
+      router.refresh();
+      router.push("/login");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unable to create account.";
+      toast.error(message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
 
@@ -44,12 +73,12 @@ const RegisterArea = () => {
               <div className="basic-login">
                 <h3 className="text-center mb-60">Signup From Here</h3>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                  <label htmlFor="name">Username <span>**</span></label>
-                  <input id="name" type="text" {...register("name")} placeholder="Enter Username or Email address..." />
+                  <label htmlFor="register-name">Full Name <span>**</span></label>
+                  <input id="register-name" type="text" {...register("name")} placeholder="Enter your full name..." />
                   <p className="form_error">{errors.name?.message}</p>
 
                   <label htmlFor="email-id">Email Address <span>**</span></label>
-                  <input id="email-id" type="text" {...register("email")} placeholder="Enter Username or Email address..." />
+                  <input id="email-id" type="email" {...register("email")} placeholder="Enter email address..." />
                   <p className="form_error">{errors.email?.message}</p>
 
                   <label htmlFor="pass">Password <span>**</span></label>
@@ -57,7 +86,9 @@ const RegisterArea = () => {
                   <p className="form_error">{errors.password?.message}</p>
 
                   <div className="mt-10"></div>
-                  <button className="primary_btn theme-btn-2 w-100">Register Now</button>
+                  <button className="primary_btn theme-btn-2 w-100" disabled={isSubmitting}>
+                    {isSubmitting ? "Creating account..." : "Register Now"}
+                  </button>
                   <div className="or-divide"><span>or</span></div>
                   <Link href="/login" className="primary_btn btn-icon-green w-100">login Now</Link>
                   <ToastContainer />
