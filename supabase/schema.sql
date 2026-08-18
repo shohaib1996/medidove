@@ -107,6 +107,24 @@ create table public.appointments (
   updated_at timestamptz not null default now()
 );
 
+create table public.clinical_notes (
+  id uuid primary key default gen_random_uuid(),
+  patient_id uuid references public.profiles(id) on delete set null,
+  appointment_id uuid references public.appointments(id) on delete set null,
+  author_id uuid references public.profiles(id) on delete set null,
+  patient_name text not null,
+  visit_type text not null default 'consultation',
+  raw_note text not null,
+  subjective text not null,
+  objective text not null,
+  assessment text not null,
+  care_plan text not null,
+  risk_flags text[] not null default '{}',
+  status text not null default 'draft',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 create table public.contact_leads (
   id uuid primary key default gen_random_uuid(),
   name text not null,
@@ -257,6 +275,7 @@ alter table public.departments enable row level security;
 alter table public.doctors enable row level security;
 alter table public.services enable row level security;
 alter table public.appointments enable row level security;
+alter table public.clinical_notes enable row level security;
 alter table public.contact_leads enable row level security;
 alter table public.ai_documents enable row level security;
 alter table public.ai_document_chunks enable row level security;
@@ -359,6 +378,11 @@ create policy "Admins can update appointments"
   on public.appointments for update
   using (public.is_admin());
 
+create policy "Admins can manage clinical notes"
+  on public.clinical_notes for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
 create policy "Admins can read contact leads"
   on public.contact_leads for select
   using (public.is_admin());
@@ -417,6 +441,9 @@ create index services_slug_idx on public.services(slug);
 create index services_department_id_idx on public.services(department_id);
 create index appointments_status_idx on public.appointments(status);
 create index appointments_requested_at_idx on public.appointments(requested_at);
+create index clinical_notes_patient_id_idx on public.clinical_notes(patient_id);
+create index clinical_notes_appointment_id_idx on public.clinical_notes(appointment_id);
+create index clinical_notes_created_at_idx on public.clinical_notes(created_at desc);
 create index contact_leads_ai_urgency_idx on public.contact_leads(ai_urgency);
 create index call_logs_status_idx on public.call_logs(status);
 create index whatsapp_messages_status_idx on public.whatsapp_messages(status);

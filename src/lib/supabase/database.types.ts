@@ -236,6 +236,80 @@ export type Database = {
           },
         ];
       };
+      clinical_notes: {
+        Row: {
+          id: string;
+          patient_id: string | null;
+          appointment_id: string | null;
+          author_id: string | null;
+          patient_name: string;
+          visit_type: string;
+          raw_note: string;
+          subjective: string;
+          objective: string;
+          assessment: string;
+          care_plan: string;
+          risk_flags: string[];
+          status: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          patient_id?: string | null;
+          appointment_id?: string | null;
+          author_id?: string | null;
+          patient_name: string;
+          visit_type?: string;
+          raw_note: string;
+          subjective: string;
+          objective: string;
+          assessment: string;
+          care_plan: string;
+          risk_flags?: string[];
+          status?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          patient_id?: string | null;
+          appointment_id?: string | null;
+          author_id?: string | null;
+          patient_name?: string;
+          visit_type?: string;
+          raw_note?: string;
+          subjective?: string;
+          objective?: string;
+          assessment?: string;
+          care_plan?: string;
+          risk_flags?: string[];
+          status?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "clinical_notes_patient_id_fkey";
+            columns: ["patient_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "clinical_notes_appointment_id_fkey";
+            columns: ["appointment_id"];
+            isOneToOne: false;
+            referencedRelation: "appointments";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "clinical_notes_author_id_fkey";
+            columns: ["author_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       contact_leads: {
         Row: {
           id: string;
