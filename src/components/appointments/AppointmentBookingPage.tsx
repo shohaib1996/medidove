@@ -29,6 +29,7 @@ import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import PublicHeader from "@/components/marketing/PublicHeader";
+import type { BookingOption } from "@/lib/clinic/content";
 
 type AppointmentForm = {
   patientName: string;
@@ -64,22 +65,6 @@ const initialForm: AppointmentForm = {
   consentAccepted: false,
 };
 
-const departments = [
-  "General Medicine",
-  "Surgery and Radiology",
-  "Pediatrics",
-  "Dental Care",
-  "Neurology",
-];
-
-const doctorPreferences = [
-  "First available doctor",
-  "Dentist",
-  "Neurologist",
-  "Pediatrician",
-  "Surgery consultant",
-];
-
 const supportCards = [
   {
     icon: Bot,
@@ -98,8 +83,21 @@ const supportCards = [
   },
 ];
 
-const AppointmentBookingPage = () => {
-  const [form, setForm] = useState<AppointmentForm>(initialForm);
+const AppointmentBookingPage = ({
+  bookingOptions,
+}: {
+  bookingOptions: {
+    departments: BookingOption[];
+    doctors: BookingOption[];
+  };
+}) => {
+  const resolvedInitialForm = {
+    ...initialForm,
+    requestedDepartment:
+      bookingOptions.departments[0]?.value || initialForm.requestedDepartment,
+    requestedDoctor: bookingOptions.doctors[0]?.value || initialForm.requestedDoctor,
+  };
+  const [form, setForm] = useState<AppointmentForm>(resolvedInitialForm);
   const [intakeResult, setIntakeResult] = useState<IntakeResult | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -145,7 +143,7 @@ const AppointmentBookingPage = () => {
       }
 
       toast.success("Appointment request submitted successfully.");
-      setForm(initialForm);
+      setForm(resolvedInitialForm);
       setIntakeResult(null);
     } catch (error) {
       const message =
@@ -284,9 +282,9 @@ const AppointmentBookingPage = () => {
                           updateField("requestedDepartment", event.target.value)
                         }
                       >
-                        {departments.map((department) => (
-                          <option key={department} value={department}>
-                            {department}
+                        {bookingOptions.departments.map((department) => (
+                          <option key={department.value} value={department.value}>
+                            {department.label}
                           </option>
                         ))}
                       </Select>
@@ -301,9 +299,9 @@ const AppointmentBookingPage = () => {
                           updateField("requestedDoctor", event.target.value)
                         }
                       >
-                        {doctorPreferences.map((doctor) => (
-                          <option key={doctor} value={doctor}>
-                            {doctor}
+                        {bookingOptions.doctors.map((doctor) => (
+                          <option key={doctor.value} value={doctor.value}>
+                            {doctor.label}
                           </option>
                         ))}
                       </Select>

@@ -3,6 +3,10 @@ import { fallbackDoctors, fallbackServices } from "./static-content";
 
 export type PublicService = (typeof fallbackServices)[number];
 export type PublicDoctor = (typeof fallbackDoctors)[number];
+export type BookingOption = {
+  label: string;
+  value: string;
+};
 
 export const getPublicServices = async (): Promise<PublicService[]> => {
   const supabase = await createClient();
@@ -48,4 +52,51 @@ export const getPublicDoctors = async (): Promise<PublicDoctor[]> => {
     availability: "Admin managed",
     languages: "Configured by clinic",
   }));
+};
+
+export const getBookingOptions = async (): Promise<{
+  departments: BookingOption[];
+  doctors: BookingOption[];
+}> => {
+  const supabase = await createClient();
+  const [{ data: departmentsData }, { data: doctorsData }] = await Promise.all([
+    supabase
+      .from("departments")
+      .select("name")
+      .eq("is_active", true)
+      .order("name", { ascending: true }),
+    supabase
+      .from("doctors")
+      .select("full_name, specialty")
+      .eq("is_active", true)
+      .order("full_name", { ascending: true }),
+  ]);
+
+  const departments = departmentsData?.length
+    ? departmentsData.map((department) => ({
+        label: department.name,
+        value: department.name,
+      }))
+    : fallbackServices.map((service) => ({
+        label: service.title,
+        value: service.title,
+      }));
+
+  const doctors = doctorsData?.length
+    ? [
+        { label: "First available doctor", value: "First available doctor" },
+        ...doctorsData.map((doctor) => ({
+          label: `${doctor.full_name} - ${doctor.specialty}`,
+          value: doctor.full_name,
+        })),
+      ]
+    : [
+        { label: "First available doctor", value: "First available doctor" },
+        ...fallbackDoctors.map((doctor) => ({
+          label: `${doctor.name} - ${doctor.specialty}`,
+          value: doctor.name,
+        })),
+      ];
+
+  return { departments, doctors };
 };
