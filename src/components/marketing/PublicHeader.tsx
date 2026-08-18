@@ -3,6 +3,7 @@ import Link from "next/link";
 import { CalendarDays, LayoutDashboard, LogIn, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ClinicAssistantWidget from "@/components/ai/ClinicAssistantWidget";
+import PublicSearchButton from "@/components/common/PublicSearchButton";
 
 const navItems = [
   { href: "/service", label: "Services" },
@@ -41,6 +42,7 @@ const PublicHeader = () => {
           </nav>
 
           <div className="flex items-center gap-2">
+            <PublicSearchButton />
             <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
               <Link href="/login">
                 <LogIn />
