@@ -58,6 +58,8 @@ create table public.appointments (
   patient_name text not null,
   patient_email text,
   patient_phone text not null,
+  requested_department text,
+  requested_doctor text,
   requested_at timestamptz,
   reason text,
   ai_summary text,

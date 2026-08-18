@@ -45,6 +45,7 @@ export type Database = {
           avatar_url?: string | null;
           updated_at?: string;
         };
+        Relationships: [];
       };
       departments: {
         Row: {
@@ -69,6 +70,7 @@ export type Database = {
           description?: string | null;
           is_active?: boolean;
         };
+        Relationships: [];
       };
       doctors: {
         Row: {
@@ -105,6 +107,15 @@ export type Database = {
           image_url?: string | null;
           is_active?: boolean;
         };
+        Relationships: [
+          {
+            foreignKeyName: "doctors_department_id_fkey";
+            columns: ["department_id"];
+            isOneToOne: false;
+            referencedRelation: "departments";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       services: {
         Row: {
@@ -138,6 +149,15 @@ export type Database = {
           image_url?: string | null;
           is_active?: boolean;
         };
+        Relationships: [
+          {
+            foreignKeyName: "services_department_id_fkey";
+            columns: ["department_id"];
+            isOneToOne: false;
+            referencedRelation: "departments";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       appointments: {
         Row: {
@@ -148,6 +168,8 @@ export type Database = {
           patient_name: string;
           patient_email: string | null;
           patient_phone: string;
+          requested_department: string | null;
+          requested_doctor: string | null;
           requested_at: string | null;
           reason: string | null;
           ai_summary: string | null;
@@ -165,6 +187,8 @@ export type Database = {
           patient_name: string;
           patient_email?: string | null;
           patient_phone: string;
+          requested_department?: string | null;
+          requested_doctor?: string | null;
           requested_at?: string | null;
           reason?: string | null;
           ai_summary?: string | null;
@@ -179,6 +203,8 @@ export type Database = {
           department_id?: string | null;
           patient_email?: string | null;
           patient_phone?: string;
+          requested_department?: string | null;
+          requested_doctor?: string | null;
           requested_at?: string | null;
           reason?: string | null;
           ai_summary?: string | null;
@@ -186,6 +212,29 @@ export type Database = {
           status?: AppointmentStatus;
           updated_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: "appointments_department_id_fkey";
+            columns: ["department_id"];
+            isOneToOne: false;
+            referencedRelation: "departments";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "appointments_doctor_id_fkey";
+            columns: ["doctor_id"];
+            isOneToOne: false;
+            referencedRelation: "doctors";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "appointments_patient_id_fkey";
+            columns: ["patient_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       contact_leads: {
         Row: {
@@ -217,6 +266,7 @@ export type Database = {
           ai_summary?: string | null;
           status?: LeadStatus;
         };
+        Relationships: [];
       };
       ai_chat_sessions: {
         Row: {
@@ -235,6 +285,15 @@ export type Database = {
           user_id?: string | null;
           visitor_id?: string | null;
         };
+        Relationships: [
+          {
+            foreignKeyName: "ai_chat_sessions_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       ai_chat_messages: {
         Row: {
@@ -257,6 +316,15 @@ export type Database = {
           content?: string;
           metadata?: Json | null;
         };
+        Relationships: [
+          {
+            foreignKeyName: "ai_chat_messages_session_id_fkey";
+            columns: ["session_id"];
+            isOneToOne: false;
+            referencedRelation: "ai_chat_sessions";
+            referencedColumns: ["id"];
+          },
+        ];
       };
     };
     Views: Record<string, never>;
@@ -267,5 +335,6 @@ export type Database = {
       lead_status: LeadStatus;
       communication_channel: Channel;
     };
+    CompositeTypes: Record<string, never>;
   };
 };
