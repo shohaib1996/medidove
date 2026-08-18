@@ -556,6 +556,79 @@ export type Database = {
         };
         Relationships: [];
       };
+      communication_outbox: {
+        Row: {
+          id: string;
+          template_id: string | null;
+          patient_id: string | null;
+          channel: Channel;
+          recipient_name: string | null;
+          recipient_phone: string | null;
+          recipient_email: string | null;
+          subject: string | null;
+          message: string;
+          status: string;
+          provider: string | null;
+          provider_message_id: string | null;
+          metadata: Json;
+          scheduled_for: string | null;
+          sent_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          template_id?: string | null;
+          patient_id?: string | null;
+          channel: Channel;
+          recipient_name?: string | null;
+          recipient_phone?: string | null;
+          recipient_email?: string | null;
+          subject?: string | null;
+          message: string;
+          status?: string;
+          provider?: string | null;
+          provider_message_id?: string | null;
+          metadata?: Json;
+          scheduled_for?: string | null;
+          sent_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          template_id?: string | null;
+          patient_id?: string | null;
+          channel?: Channel;
+          recipient_name?: string | null;
+          recipient_phone?: string | null;
+          recipient_email?: string | null;
+          subject?: string | null;
+          message?: string;
+          status?: string;
+          provider?: string | null;
+          provider_message_id?: string | null;
+          metadata?: Json;
+          scheduled_for?: string | null;
+          sent_at?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "communication_outbox_template_id_fkey";
+            columns: ["template_id"];
+            isOneToOne: false;
+            referencedRelation: "message_templates";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "communication_outbox_patient_id_fkey";
+            columns: ["patient_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: Record<string, never>;
     Functions: {
