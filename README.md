@@ -60,6 +60,7 @@ For real healthcare clients, production compliance work may be required, includi
 - Care task board and AI task generation endpoint
 - Integration health dashboard
 - AI campaign dashboard
+- Admin clinic settings
 - Privacy and terms pages
 
 ## Important Routes
@@ -88,6 +89,7 @@ For real healthcare clients, production compliance work may be required, includi
 - `/admin/analytics`
 - `/admin/audit`
 - `/admin/integrations`
+- `/admin/settings`
 - `/privacy`
 - `/terms`
 

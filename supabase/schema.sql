@@ -100,6 +100,20 @@ create table public.services (
   created_at timestamptz not null default now()
 );
 
+create table public.clinic_settings (
+  id text primary key default 'default',
+  clinic_name text not null,
+  phone text not null,
+  email text not null,
+  address text,
+  business_hours text,
+  whatsapp_number text,
+  emergency_notice text,
+  ai_disclosure text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 create table public.appointments (
   id uuid primary key default gen_random_uuid(),
   patient_id uuid references public.profiles(id) on delete set null,
@@ -367,6 +381,7 @@ alter table public.departments enable row level security;
 alter table public.doctors enable row level security;
 alter table public.doctor_availability enable row level security;
 alter table public.services enable row level security;
+alter table public.clinic_settings enable row level security;
 alter table public.appointments enable row level security;
 alter table public.clinical_notes enable row level security;
 alter table public.contact_leads enable row level security;
@@ -418,6 +433,10 @@ create policy "Public can read active services"
   on public.services for select
   using (is_active = true);
 
+create policy "Public can read clinic settings"
+  on public.clinic_settings for select
+  using (id = 'default');
+
 create policy "Admins can manage departments"
   on public.departments for all
   using (public.is_admin())
@@ -435,6 +454,11 @@ create policy "Admins can manage doctor availability"
 
 create policy "Admins can manage services"
   on public.services for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+create policy "Admins can manage clinic settings"
+  on public.clinic_settings for all
   using (public.is_admin())
   with check (public.is_admin());
 

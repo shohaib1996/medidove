@@ -287,6 +287,9 @@ const AdminPage = async () => {
               <Link href="/admin/integrations">Integrations</Link>
             </Button>
             <Button asChild variant="outline">
+              <Link href="/admin/settings">Settings</Link>
+            </Button>
+            <Button asChild variant="outline">
               <Link href="/admin/patients">Patients</Link>
             </Button>
             <Button asChild variant="outline">

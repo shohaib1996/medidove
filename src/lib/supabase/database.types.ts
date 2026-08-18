@@ -211,6 +211,46 @@ export type Database = {
           },
         ];
       };
+      clinic_settings: {
+        Row: {
+          id: string;
+          clinic_name: string;
+          phone: string;
+          email: string;
+          address: string | null;
+          business_hours: string | null;
+          whatsapp_number: string | null;
+          emergency_notice: string | null;
+          ai_disclosure: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          clinic_name: string;
+          phone: string;
+          email: string;
+          address?: string | null;
+          business_hours?: string | null;
+          whatsapp_number?: string | null;
+          emergency_notice?: string | null;
+          ai_disclosure?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          clinic_name?: string;
+          phone?: string;
+          email?: string;
+          address?: string | null;
+          business_hours?: string | null;
+          whatsapp_number?: string | null;
+          emergency_notice?: string | null;
+          ai_disclosure?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       appointments: {
         Row: {
           id: string;

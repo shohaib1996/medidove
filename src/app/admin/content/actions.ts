@@ -53,6 +53,8 @@ const refreshContent = () => {
   revalidatePath("/admin/feedback");
   revalidatePath("/admin/clinical-notes");
   revalidatePath("/admin/schedule");
+  revalidatePath("/admin/settings");
+  revalidatePath("/contact");
 };
 
 export const createDepartment = async (formData: FormData) => {
@@ -525,8 +527,28 @@ const seedAiLeadIfMissing = async (
   });
 };
 
+const seedClinicSettings = async (
+  supabase: Awaited<ReturnType<typeof assertAdmin>>,
+) => {
+  await supabase.from("clinic_settings").upsert({
+    id: "default",
+    clinic_name: "MediDove AI Care Center",
+    phone: "+1 800 833 9780",
+    email: "care@medidove.ai",
+    address: "MediDove Care Center, Digital Health District",
+    business_hours: "Monday to Friday, 9:00 AM - 6:00 PM",
+    whatsapp_number: "+1 555 0103",
+    emergency_notice:
+      "For urgent or life-threatening symptoms, contact emergency services or visit the nearest emergency department.",
+    ai_disclosure:
+      "MediDove uses AI for scheduling, routing, summaries, and communication support. AI does not provide diagnosis or treatment.",
+    updated_at: new Date().toISOString(),
+  });
+};
+
 export const seedDemoWorkspace = async () => {
   const supabase = await assertAdmin();
+  await seedClinicSettings(supabase);
 
   await supabase.from("departments").upsert(
     demoDepartments.map((department) => ({

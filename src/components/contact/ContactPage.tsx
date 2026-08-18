@@ -27,6 +27,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import type { ClinicSettings } from "@/lib/clinic/settings";
 
 type ContactFormState = {
   name: string;
@@ -44,27 +45,26 @@ const initialForm: ContactFormState = {
   message: "",
 };
 
-const contactMethods = [
-  {
-    icon: Phone,
-    label: "Phone",
-    value: "+1 800 833 9780",
-  },
-  {
-    icon: Mail,
-    label: "Email",
-    value: "care@medidove.ai",
-  },
-  {
-    icon: MapPin,
-    label: "Clinic",
-    value: "MediDove Care Center",
-  },
-];
-
-const ContactPage = () => {
+const ContactPage = ({ settings }: { settings: ClinicSettings }) => {
   const [form, setForm] = useState<ContactFormState>(initialForm);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const contactMethods = [
+    {
+      icon: Phone,
+      label: "Phone",
+      value: settings.phone,
+    },
+    {
+      icon: Mail,
+      label: "Email",
+      value: settings.email,
+    },
+    {
+      icon: MapPin,
+      label: "Clinic",
+      value: settings.address,
+    },
+  ];
 
   const updateField = (key: keyof ContactFormState, value: string) => {
     setForm((current) => ({ ...current, [key]: value }));
@@ -126,7 +126,7 @@ const ContactPage = () => {
               AI-ready lead capture
             </Badge>
             <h1 className="max-w-4xl text-4xl font-bold leading-tight tracking-normal md:text-6xl">
-              Contact MediDove care team
+              Contact {settings.clinicName}
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-200">
               Send a message to the clinic team. Every submission is stored in
@@ -258,9 +258,7 @@ const ContactPage = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm leading-6 text-slate-600">
-                  New messages appear in the admin dashboard with a starter
-                  category such as appointment, billing, shop, partnership, or
-                  general.
+                  {settings.businessHours}
                 </CardContent>
               </Card>
 
@@ -275,8 +273,17 @@ const ContactPage = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm leading-6 text-slate-300">
-                  The next enhancement can summarize each message, score
-                  urgency, and suggest a staff reply before human follow-up.
+                  {settings.aiDisclosure}
+                </CardContent>
+              </Card>
+
+              <Card className="border-amber-200 bg-amber-50">
+                <CardHeader>
+                  <CardDescription>Emergency notice</CardDescription>
+                  <CardTitle>Urgent symptoms</CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm leading-6 text-amber-950">
+                  {settings.emergencyNotice}
                 </CardContent>
               </Card>
             </aside>
