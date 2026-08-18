@@ -39,6 +39,20 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
 
+create or replace function public.is_admin()
+returns boolean
+language sql
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1
+    from public.profiles
+    where id = auth.uid()
+      and role = 'admin'
+  );
+$$;
+
 create table public.departments (
   id uuid primary key default gen_random_uuid(),
   name text not null,
@@ -223,6 +237,22 @@ create policy "Anyone can create appointment requests"
 create policy "Patients can read own appointments"
   on public.appointments for select
   using (auth.uid() = patient_id);
+
+create policy "Admins can read appointments"
+  on public.appointments for select
+  using (public.is_admin());
+
+create policy "Admins can update appointments"
+  on public.appointments for update
+  using (public.is_admin());
+
+create policy "Admins can read contact leads"
+  on public.contact_leads for select
+  using (public.is_admin());
+
+create policy "Admins can update contact leads"
+  on public.contact_leads for update
+  using (public.is_admin());
 
 create index departments_slug_idx on public.departments(slug);
 create index doctors_slug_idx on public.doctors(slug);

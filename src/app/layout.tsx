@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Poppins, Rubik } from "next/font/google";
-import "../styles/index.scss";
+import "./globals.css";
 
 const poppins = Poppins({
   weight: ["200", "300", "400", "500", "600", "700"],
