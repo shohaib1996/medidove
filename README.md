@@ -51,6 +51,7 @@ For real healthcare clients, production compliance work may be required, includi
 - Patient portal with profile, consent, and timeline views
 - Doctor portal for assigned appointments and clinical context
 - Admin staff directory for doctors, receptionists, and operators
+- Shared admin sidebar shell for faster demo navigation
 - Admin dashboard with appointments, leads, calls, WhatsApp, analytics, and audit logs
 - Admin content seeding for demo data
 - Admin appointment operations

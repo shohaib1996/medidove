@@ -3,12 +3,9 @@ import { redirect } from "next/navigation";
 import {
   Activity,
   CalendarClock,
-  CheckCircle2,
   Headphones,
   Inbox,
-  Megaphone,
   MessageCircle,
-  Send,
   Stethoscope,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -236,86 +233,6 @@ const AdminPage = async () => {
               Review patient appointment requests, contact leads, and AI
               receptionist callback requests captured from the public website.
             </p>
-          </div>
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Button asChild variant="outline">
-              <Link href="/admin/appointments">Appointments</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/admin/clinical-notes">Clinical notes</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/admin/schedule">Schedule</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/admin/staff">Staff</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/admin/leads">Leads</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/admin/feedback">Feedback</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/admin/tasks">Tasks</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/admin/communications">Inbox</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/admin/analytics">Analytics</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/admin/conversations">AI conversations</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/admin/ai-leads">AI leads</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/admin/templates">Templates</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/admin/outreach">Outreach</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/admin/opt-outs">Opt-outs</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/admin/campaigns">Campaigns</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/admin/automations">Automations</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/admin/audit">Audit</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/admin/integrations">Integrations</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/admin/settings">Settings</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/admin/patients">Patients</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/admin/content">Manage content</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/admin/blog">Blog</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/admin/packages">Packages</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/admin/products">Products</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/admin/testimonials">Testimonials</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link href="/">View website</Link>
-            </Button>
           </div>
         </section>
 
