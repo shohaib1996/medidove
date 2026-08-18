@@ -3,6 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { triageLead } from "@/lib/ai/lead-triage";
 import { createClient } from "@/lib/supabase/server";
+import type { Database } from "@/lib/supabase/database.types";
+
+type MessageTemplateInsert =
+  Database["public"]["Tables"]["message_templates"]["Insert"];
 
 const slugify = (value: string) =>
   value
@@ -262,6 +266,30 @@ const demoKnowledge = [
   },
 ];
 
+const demoTemplates: MessageTemplateInsert[] = [
+  {
+    name: "Appointment confirmation",
+    channel: "whatsapp" as const,
+    category: "appointment",
+    body: "Hi {{patient_name}}, your MediDove appointment request for {{appointment_time}} has been received. A coordinator will confirm the final schedule shortly.",
+    variables: ["patient_name", "appointment_time"],
+  },
+  {
+    name: "AI receptionist callback",
+    channel: "voice" as const,
+    category: "callback",
+    body: "Hello {{patient_name}}, this is MediDove calling about your callback request. I can help collect your preferred department, doctor, and appointment time.",
+    variables: ["patient_name"],
+  },
+  {
+    name: "Lead follow-up",
+    channel: "email" as const,
+    category: "lead",
+    body: "Hi {{patient_name}}, thanks for contacting MediDove. We reviewed your message and a care coordinator will help with the next step.",
+    variables: ["patient_name"],
+  },
+];
+
 const seedLeadIfMissing = async (
   supabase: Awaited<ReturnType<typeof assertAdmin>>,
 ) => {
@@ -361,6 +389,18 @@ export const seedDemoWorkspace = async () => {
           searchable_without_embeddings: true,
         },
       });
+    }
+  }
+
+  for (const template of demoTemplates) {
+    const { data: existing } = await supabase
+      .from("message_templates")
+      .select("id")
+      .eq("name", template.name)
+      .maybeSingle();
+
+    if (!existing) {
+      await supabase.from("message_templates").insert(template);
     }
   }
 

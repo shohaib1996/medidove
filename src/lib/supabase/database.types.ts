@@ -522,6 +522,40 @@ export type Database = {
           },
         ];
       };
+      message_templates: {
+        Row: {
+          id: string;
+          name: string;
+          channel: Channel;
+          category: string;
+          body: string;
+          variables: string[];
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          channel: Channel;
+          category: string;
+          body: string;
+          variables?: string[];
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          name?: string;
+          channel?: Channel;
+          category?: string;
+          body?: string;
+          variables?: string[];
+          is_active?: boolean;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {

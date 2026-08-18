@@ -194,6 +194,18 @@ create table public.consent_logs (
   created_at timestamptz not null default now()
 );
 
+create table public.message_templates (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  channel public.communication_channel not null,
+  category text not null,
+  body text not null,
+  variables text[] not null default '{}',
+  is_active boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 alter table public.profiles enable row level security;
 alter table public.departments enable row level security;
 alter table public.doctors enable row level security;
@@ -207,6 +219,7 @@ alter table public.ai_chat_messages enable row level security;
 alter table public.call_logs enable row level security;
 alter table public.whatsapp_messages enable row level security;
 alter table public.consent_logs enable row level security;
+alter table public.message_templates enable row level security;
 
 create policy "Public can read active departments"
   on public.departments for select
@@ -321,6 +334,11 @@ create policy "Admins can read consent logs"
   on public.consent_logs for select
   using (public.is_admin());
 
+create policy "Admins can manage message templates"
+  on public.message_templates for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
 create index departments_slug_idx on public.departments(slug);
 create index doctors_slug_idx on public.doctors(slug);
 create index doctors_department_id_idx on public.doctors(department_id);
@@ -332,6 +350,8 @@ create index contact_leads_ai_urgency_idx on public.contact_leads(ai_urgency);
 create index call_logs_status_idx on public.call_logs(status);
 create index whatsapp_messages_status_idx on public.whatsapp_messages(status);
 create index consent_logs_channel_idx on public.consent_logs(channel);
+create index message_templates_channel_idx on public.message_templates(channel);
+create index message_templates_category_idx on public.message_templates(category);
 create index ai_chat_messages_session_id_idx on public.ai_chat_messages(session_id);
 create index ai_document_chunks_embedding_idx
   on public.ai_document_chunks
