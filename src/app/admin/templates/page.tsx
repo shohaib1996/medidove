@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import TemplatePreview from "@/components/admin/TemplatePreview";
 import { createClient } from "@/lib/supabase/server";
 import { createMessageTemplate, toggleMessageTemplate } from "./actions";
 
@@ -89,6 +90,8 @@ export default async function AdminTemplatesPage() {
             </Button>
           </div>
         </section>
+
+        <TemplatePreview templates={templates} />
 
         <section className="grid gap-6 lg:grid-cols-[420px_1fr]">
           <Card>
