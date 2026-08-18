@@ -45,3 +45,40 @@ export const updateProfile = async (formData: FormData) => {
 
   revalidatePath("/portal");
 };
+
+export const createConsentLog = async (formData: FormData) => {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const channel = text(formData.get("channel"));
+  const consented = formData.get("consented") === "on";
+  const reason = text(formData.get("reason"));
+  const phone = text(formData.get("phone"));
+  const email = text(formData.get("email")) || user.email || "";
+
+  if (!["email", "sms", "whatsapp", "voice"].includes(channel)) {
+    throw new Error("Choose a valid communication channel.");
+  }
+
+  const { error } = await supabase.from("consent_logs").insert({
+    patient_id: user.id,
+    phone: phone || null,
+    email: email || null,
+    channel: channel as never,
+    consented,
+    reason: reason || null,
+  });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  revalidatePath("/portal");
+  revalidatePath("/portal/consents");
+};

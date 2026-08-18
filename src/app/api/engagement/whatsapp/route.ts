@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
 
 const phonePattern = /^[+()0-9\s-]{7,24}$/;
 
@@ -41,6 +42,10 @@ export async function POST(request: Request) {
   }
 
   const supabase = createAdminClient();
+  const userClient = await createClient();
+  const {
+    data: { user },
+  } = await userClient.auth.getUser();
   const message = normalizeMessage(name, interest);
 
   const [{ error: messageError }, { error: consentError }] = await Promise.all([
@@ -51,6 +56,7 @@ export async function POST(request: Request) {
       status: "requested",
     }),
     supabase.from("consent_logs").insert({
+      patient_id: user?.id || null,
       phone,
       email: body.email?.trim() || null,
       channel: "whatsapp",

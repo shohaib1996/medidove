@@ -281,6 +281,10 @@ create policy "Patients can read own appointments"
   on public.appointments for select
   using (auth.uid() = patient_id);
 
+create policy "Patients can read own consent logs"
+  on public.consent_logs for select
+  using (auth.uid() = patient_id);
+
 create policy "Admins can read appointments"
   on public.appointments for select
   using (public.is_admin());

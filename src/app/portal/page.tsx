@@ -233,9 +233,9 @@ export default async function PatientPortalPage() {
               </div>
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Button asChild variant="outline">
-                  <Link href="/engagement">
+                  <Link href="/portal/consents">
                     <MessageCircle />
-                    WhatsApp opt-in
+                    Consent center
                   </Link>
                 </Button>
                 <Button asChild>
