@@ -20,8 +20,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/server";
-import { signOut } from "./actions";
+import { signOut, updateProfile } from "./actions";
 
 export const metadata = {
   title: "Patient Portal | MediDove",
@@ -153,12 +155,38 @@ export default async function PatientPortalPage() {
                   {profile?.full_name || user.email}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="text-sm leading-6 text-slate-600">
-                <p>{user.email}</p>
-                <p>{profile?.phone || "Phone not added"}</p>
-                <Badge variant="secondary" className="mt-4 capitalize">
+              <CardContent className="space-y-5 text-sm leading-6 text-slate-600">
+                <div>
+                  <p>{user.email}</p>
+                  <p>{profile?.phone || "Phone not added"}</p>
+                  <Badge variant="secondary" className="mt-4 capitalize">
                   {profile?.role || "patient"}
-                </Badge>
+                  </Badge>
+                </div>
+                <form action={updateProfile} className="space-y-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="full_name">Full name</Label>
+                    <Input
+                      id="full_name"
+                      name="full_name"
+                      defaultValue={profile?.full_name || ""}
+                      placeholder="Your full name"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">Phone</Label>
+                    <Input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      defaultValue={profile?.phone || ""}
+                      placeholder="+1 555 0100"
+                    />
+                  </div>
+                  <Button type="submit" size="sm" variant="outline">
+                    Save profile
+                  </Button>
+                </form>
               </CardContent>
             </Card>
 
