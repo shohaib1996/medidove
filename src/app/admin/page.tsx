@@ -6,6 +6,7 @@ import {
   CheckCircle2,
   Headphones,
   Inbox,
+  Megaphone,
   MessageCircle,
   Send,
   Stethoscope,
@@ -269,6 +270,9 @@ const AdminPage = async () => {
             </Button>
             <Button asChild variant="outline">
               <Link href="/admin/outreach">Outreach</Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link href="/admin/campaigns">Campaigns</Link>
             </Button>
             <Button asChild variant="outline">
               <Link href="/admin/automations">Automations</Link>

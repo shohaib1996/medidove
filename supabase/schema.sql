@@ -305,6 +305,36 @@ create table public.automation_rules (
   updated_at timestamptz not null default now()
 );
 
+create table public.campaigns (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  campaign_type text not null,
+  audience text not null,
+  channel public.communication_channel not null,
+  goal text,
+  message text not null,
+  ai_recommendation text,
+  status text not null default 'draft',
+  recipient_count integer not null default 0,
+  queued_at timestamptz,
+  created_by uuid references public.profiles(id) on delete set null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table public.campaign_recipients (
+  id uuid primary key default gen_random_uuid(),
+  campaign_id uuid not null references public.campaigns(id) on delete cascade,
+  patient_id uuid references public.profiles(id) on delete set null,
+  recipient_name text,
+  recipient_phone text,
+  recipient_email text,
+  status text not null default 'queued',
+  provider_message_id text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 create table public.audit_logs (
   id uuid primary key default gen_random_uuid(),
   actor_id uuid references public.profiles(id) on delete set null,
@@ -337,6 +367,8 @@ alter table public.consent_logs enable row level security;
 alter table public.message_templates enable row level security;
 alter table public.communication_outbox enable row level security;
 alter table public.automation_rules enable row level security;
+alter table public.campaigns enable row level security;
+alter table public.campaign_recipients enable row level security;
 alter table public.audit_logs enable row level security;
 
 create policy "Public can read active departments"
@@ -552,6 +584,16 @@ create policy "Admins can manage automation rules"
   using (public.is_admin())
   with check (public.is_admin());
 
+create policy "Admins can manage campaigns"
+  on public.campaigns for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+create policy "Admins can manage campaign recipients"
+  on public.campaign_recipients for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
 create policy "Admins can read audit logs"
   on public.audit_logs for select
   using (public.is_admin());
@@ -593,6 +635,10 @@ create index communication_outbox_channel_idx on public.communication_outbox(cha
 create index communication_outbox_status_idx on public.communication_outbox(status);
 create index automation_rules_trigger_event_idx on public.automation_rules(trigger_event);
 create index automation_rules_active_idx on public.automation_rules(is_active);
+create index campaigns_status_idx on public.campaigns(status);
+create index campaigns_channel_idx on public.campaigns(channel);
+create index campaign_recipients_campaign_id_idx on public.campaign_recipients(campaign_id);
+create index campaign_recipients_status_idx on public.campaign_recipients(status);
 create index audit_logs_event_type_idx on public.audit_logs(event_type);
 create index audit_logs_created_at_idx on public.audit_logs(created_at desc);
 create index ai_chat_messages_session_id_idx on public.ai_chat_messages(session_id);
