@@ -6,6 +6,7 @@ import {
   Bot,
   CalendarClock,
   ClipboardPlus,
+  ClipboardList,
   Headphones,
   Inbox,
   MessageCircle,
@@ -67,6 +68,12 @@ type AutomationRuleRecord = CreatedRecord & {
 
 type OutboxRecord = StatusRecord & {
   channel: string;
+};
+
+type CareTaskRecord = StatusRecord & {
+  priority: string;
+  source_type: string;
+  due_at: string | null;
 };
 
 const formatDate = (value: string) =>
@@ -184,6 +191,7 @@ export default async function AdminAnalyticsPage() {
     { data: clinicalNotesData },
     { data: automationRulesData },
     { data: outboxData },
+    { data: careTasksData },
     { data: doctorsData },
     { data: availabilityData },
   ] = await Promise.all([
@@ -233,6 +241,11 @@ export default async function AdminAnalyticsPage() {
       .order("created_at", { ascending: false })
       .limit(200),
     supabase
+      .from("care_tasks")
+      .select("status, priority, source_type, due_at, created_at")
+      .order("created_at", { ascending: false })
+      .limit(200),
+    supabase
       .from("doctors")
       .select("is_active, created_at")
       .order("created_at", { ascending: false })
@@ -256,6 +269,7 @@ export default async function AdminAnalyticsPage() {
   const clinicalNotes = (clinicalNotesData || []) as ClinicalNoteRecord[];
   const automationRules = (automationRulesData || []) as AutomationRuleRecord[];
   const outbox = (outboxData || []) as OutboxRecord[];
+  const careTasks = (careTasksData || []) as CareTaskRecord[];
   const doctors = (doctorsData || []) as (CreatedRecord & { is_active: boolean })[];
   const availability = (availabilityData || []) as (CreatedRecord & {
     is_active: boolean;
@@ -271,7 +285,8 @@ export default async function AdminAnalyticsPage() {
     whatsAppMessages.length +
     feedback.length +
     clinicalNotes.length +
-    outbox.length;
+    outbox.length +
+    careTasks.length;
   const todayRecords = [
     ...appointments,
     ...leads,
@@ -280,6 +295,7 @@ export default async function AdminAnalyticsPage() {
     ...feedback,
     ...clinicalNotes,
     ...outbox,
+    ...careTasks,
   ].filter((record) => isToday(record.created_at)).length;
   const highUrgency =
     appointments.filter((appointment) => appointment.urgency === "high").length +
@@ -296,6 +312,18 @@ export default async function AdminAnalyticsPage() {
   const reviewedNotes = clinicalNotes.filter((note) => note.status === "reviewed").length;
   const flaggedNotes = clinicalNotes.filter(
     (note) => note.risk_flags.length > 0,
+  ).length;
+  const nowMs = new Date().getTime();
+  const openCareTasks = careTasks.filter((task) => task.status === "open").length;
+  const urgentCareTasks = careTasks.filter(
+    (task) => task.priority === "urgent" || task.priority === "high",
+  ).length;
+  const overdueCareTasks = careTasks.filter(
+    (task) =>
+      task.due_at &&
+      new Date(task.due_at).getTime() < nowMs &&
+      task.status !== "done" &&
+      task.status !== "cancelled",
   ).length;
 
   const latestActivity = [
@@ -333,6 +361,11 @@ export default async function AdminAnalyticsPage() {
       label: "Outbox message",
       created_at: record.created_at,
       status: record.status,
+    })),
+    ...careTasks.map((record) => ({
+      label: "Care task",
+      created_at: record.created_at,
+      status: record.priority,
     })),
   ]
     .sort(
@@ -433,6 +466,27 @@ export default async function AdminAnalyticsPage() {
           />
         </section>
 
+        <section className="grid gap-4 md:grid-cols-3">
+          <MetricCard
+            title="Open tasks"
+            value={openCareTasks}
+            detail={`${urgentCareTasks} high or urgent tasks`}
+            icon={ClipboardList}
+          />
+          <MetricCard
+            title="Overdue tasks"
+            value={overdueCareTasks}
+            detail="open tasks past due date"
+            icon={CalendarClock}
+          />
+          <MetricCard
+            title="Task volume"
+            value={careTasks.length}
+            detail="manual and AI-generated tasks"
+            icon={Activity}
+          />
+        </section>
+
         <section className="grid gap-6 xl:grid-cols-3">
           <Breakdown
             title="Appointment Status"
@@ -469,6 +523,19 @@ export default async function AdminAnalyticsPage() {
             title="Automation Channels"
             description="Configured care automation"
             data={countBy(automationRules, (rule) => rule.channel)}
+          />
+        </section>
+
+        <section className="grid gap-6 xl:grid-cols-2">
+          <Breakdown
+            title="Task Priority"
+            description="Care coordination workload"
+            data={countBy(careTasks, (task) => task.priority)}
+          />
+          <Breakdown
+            title="Task Sources"
+            description="Where staff work originates"
+            data={countBy(careTasks, (task) => task.source_type)}
           />
         </section>
 
