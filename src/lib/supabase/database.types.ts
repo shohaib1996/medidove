@@ -629,6 +629,54 @@ export type Database = {
           },
         ];
       };
+      automation_rules: {
+        Row: {
+          id: string;
+          name: string;
+          trigger_event: string;
+          channel: Channel;
+          audience: string;
+          delay_minutes: number;
+          template_id: string | null;
+          instructions: string;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          trigger_event: string;
+          channel: Channel;
+          audience: string;
+          delay_minutes?: number;
+          template_id?: string | null;
+          instructions: string;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          name?: string;
+          trigger_event?: string;
+          channel?: Channel;
+          audience?: string;
+          delay_minutes?: number;
+          template_id?: string | null;
+          instructions?: string;
+          is_active?: boolean;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "automation_rules_template_id_fkey";
+            columns: ["template_id"];
+            isOneToOne: false;
+            referencedRelation: "message_templates";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: Record<string, never>;
     Functions: {

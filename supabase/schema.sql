@@ -226,6 +226,20 @@ create table public.communication_outbox (
   updated_at timestamptz not null default now()
 );
 
+create table public.automation_rules (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  trigger_event text not null,
+  channel public.communication_channel not null,
+  audience text not null,
+  delay_minutes integer not null default 0,
+  template_id uuid references public.message_templates(id) on delete set null,
+  instructions text not null,
+  is_active boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 alter table public.profiles enable row level security;
 alter table public.departments enable row level security;
 alter table public.doctors enable row level security;
@@ -241,6 +255,7 @@ alter table public.whatsapp_messages enable row level security;
 alter table public.consent_logs enable row level security;
 alter table public.message_templates enable row level security;
 alter table public.communication_outbox enable row level security;
+alter table public.automation_rules enable row level security;
 
 create policy "Public can read active departments"
   on public.departments for select
@@ -369,6 +384,11 @@ create policy "Admins can manage communication outbox"
   using (public.is_admin())
   with check (public.is_admin());
 
+create policy "Admins can manage automation rules"
+  on public.automation_rules for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
 create index departments_slug_idx on public.departments(slug);
 create index doctors_slug_idx on public.doctors(slug);
 create index doctors_department_id_idx on public.doctors(department_id);
@@ -384,6 +404,8 @@ create index message_templates_channel_idx on public.message_templates(channel);
 create index message_templates_category_idx on public.message_templates(category);
 create index communication_outbox_channel_idx on public.communication_outbox(channel);
 create index communication_outbox_status_idx on public.communication_outbox(status);
+create index automation_rules_trigger_event_idx on public.automation_rules(trigger_event);
+create index automation_rules_active_idx on public.automation_rules(is_active);
 create index ai_chat_messages_session_id_idx on public.ai_chat_messages(session_id);
 create index ai_document_chunks_embedding_idx
   on public.ai_document_chunks
