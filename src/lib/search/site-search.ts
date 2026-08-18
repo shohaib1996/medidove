@@ -1,7 +1,13 @@
 import { fallbackDoctors, fallbackServices } from "@/lib/clinic/static-content";
+import { fallbackHealthPackages } from "@/lib/packages/content";
 import { createClient } from "@/lib/supabase/server";
 
-export type SearchResultType = "service" | "doctor" | "department" | "knowledge";
+export type SearchResultType =
+  | "service"
+  | "doctor"
+  | "department"
+  | "package"
+  | "knowledge";
 
 export type SiteSearchResult = {
   id: string;
@@ -92,6 +98,7 @@ const groupResults = (results: SiteSearchResult[]) => ({
   service: results.filter((result) => result.type === "service"),
   doctor: results.filter((result) => result.type === "doctor"),
   department: results.filter((result) => result.type === "department"),
+  package: results.filter((result) => result.type === "package"),
   knowledge: results.filter((result) => result.type === "knowledge"),
 });
 
@@ -136,7 +143,23 @@ const fallbackSearch = (query: string, terms: string[]): SiteSearchResult[] => {
     };
   });
 
-  return sortAndLimit([...services, ...doctors]);
+  const packages = fallbackHealthPackages.map((item) => ({
+    id: `fallback-package-${item.slug}`,
+    type: "package" as const,
+    title: item.name,
+    description: item.description,
+    href: "/packages",
+    meta: item.badge,
+    score: scoreResult({
+      query,
+      terms,
+      title: item.name,
+      description: `${item.description} ${item.features.join(" ")}`,
+      meta: item.audience,
+    }),
+  }));
+
+  return sortAndLimit([...services, ...doctors, ...packages]);
 };
 
 export const searchSite = async (rawQuery: string): Promise<SiteSearchResponse> => {
@@ -162,6 +185,7 @@ export const searchSite = async (rawQuery: string): Promise<SiteSearchResponse> 
     { data: departmentsData },
     { data: documentsData },
     { data: blogPostsData },
+    { data: packagesData },
   ] = await Promise.all([
     supabase
       .from("services")
@@ -186,6 +210,11 @@ export const searchSite = async (rawQuery: string): Promise<SiteSearchResponse> 
       .from("blog_posts")
       .select("id, title, slug, excerpt, content, category")
       .eq("is_published", true)
+      .limit(50),
+    supabase
+      .from("health_packages")
+      .select("id, name, description, slug, audience, features, badge")
+      .eq("is_active", true)
       .limit(50),
   ]);
 
@@ -277,10 +306,27 @@ export const searchSite = async (rawQuery: string): Promise<SiteSearchResponse> 
     }),
   }));
 
+  const packages = (packagesData || []).map((item) => ({
+    id: item.id,
+    type: "package" as const,
+    title: item.name,
+    description: item.description,
+    href: `/packages?package=${item.slug}`,
+    meta: item.badge || "Package",
+    score: scoreResult({
+      query,
+      terms,
+      title: item.name,
+      description: `${item.description} ${item.features.join(" ")}`,
+      meta: item.audience || "",
+    }),
+  }));
+
   const results = sortAndLimit([
     ...services,
     ...doctors,
     ...departments,
+    ...packages,
     ...documents,
     ...blogPosts,
   ]);

@@ -100,6 +100,23 @@ create table public.services (
   created_at timestamptz not null default now()
 );
 
+create table public.health_packages (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  slug text not null unique,
+  description text not null,
+  price numeric(10,2) not null default 0,
+  duration text,
+  audience text,
+  features text[] not null default '{}',
+  badge text,
+  image_url text,
+  is_featured boolean not null default false,
+  is_active boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 create table public.blog_posts (
   id uuid primary key default gen_random_uuid(),
   title text not null,
@@ -397,6 +414,7 @@ alter table public.departments enable row level security;
 alter table public.doctors enable row level security;
 alter table public.doctor_availability enable row level security;
 alter table public.services enable row level security;
+alter table public.health_packages enable row level security;
 alter table public.blog_posts enable row level security;
 alter table public.clinic_settings enable row level security;
 alter table public.appointments enable row level security;
@@ -450,6 +468,10 @@ create policy "Public can read active services"
   on public.services for select
   using (is_active = true);
 
+create policy "Public can read active health packages"
+  on public.health_packages for select
+  using (is_active = true);
+
 create policy "Public can read published blog posts"
   on public.blog_posts for select
   using (is_published = true);
@@ -475,6 +497,11 @@ create policy "Admins can manage doctor availability"
 
 create policy "Admins can manage services"
   on public.services for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+create policy "Admins can manage health packages"
+  on public.health_packages for all
   using (public.is_admin())
   with check (public.is_admin());
 
@@ -681,6 +708,8 @@ create index doctor_availability_doctor_id_idx on public.doctor_availability(doc
 create index doctor_availability_weekday_idx on public.doctor_availability(weekday);
 create index services_slug_idx on public.services(slug);
 create index services_department_id_idx on public.services(department_id);
+create index health_packages_slug_idx on public.health_packages(slug);
+create index health_packages_active_idx on public.health_packages(is_active, is_featured);
 create index blog_posts_slug_idx on public.blog_posts(slug);
 create index blog_posts_published_idx on public.blog_posts(is_published, published_at desc);
 create index appointments_status_idx on public.appointments(status);

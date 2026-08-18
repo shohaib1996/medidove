@@ -150,6 +150,8 @@ export default async function AdminContentPage() {
                 opt-in, schedules, feedback, task, clinical note, and campaign
                 draft, public clinic settings, AI blog posts, plus one AI chat
                 lead so the dashboard and analytics pages are ready to demo.
+                It also seeds public health packages for package booking
+                workflows.
               </p>
             </div>
             <form action={seedDemoWorkspace}>

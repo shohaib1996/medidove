@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { triageLead } from "@/lib/ai/lead-triage";
 import { fallbackBlogPosts } from "@/lib/blog/content";
+import { fallbackHealthPackages } from "@/lib/packages/content";
 import { createClient } from "@/lib/supabase/server";
 import type { Database } from "@/lib/supabase/database.types";
 
@@ -58,6 +59,8 @@ const refreshContent = () => {
   revalidatePath("/contact");
   revalidatePath("/admin/blog");
   revalidatePath("/blog");
+  revalidatePath("/admin/packages");
+  revalidatePath("/packages");
 };
 
 export const createDepartment = async (formData: FormData) => {
@@ -568,10 +571,32 @@ const seedBlogPosts = async (
   );
 };
 
+const seedHealthPackages = async (
+  supabase: Awaited<ReturnType<typeof assertAdmin>>,
+) => {
+  await supabase.from("health_packages").upsert(
+    fallbackHealthPackages.map((item) => ({
+      name: item.name,
+      slug: item.slug,
+      description: item.description,
+      price: item.price,
+      duration: item.duration,
+      audience: item.audience,
+      features: item.features,
+      badge: item.badge,
+      image_url: item.imageUrl,
+      is_featured: item.isFeatured,
+      is_active: true,
+    })),
+    { onConflict: "slug" },
+  );
+};
+
 export const seedDemoWorkspace = async () => {
   const supabase = await assertAdmin();
   await seedClinicSettings(supabase);
   await seedBlogPosts(supabase);
+  await seedHealthPackages(supabase);
 
   await supabase.from("departments").upsert(
     demoDepartments.map((department) => ({

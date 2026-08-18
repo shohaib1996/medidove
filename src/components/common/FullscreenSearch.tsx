@@ -6,7 +6,12 @@ import { AlertTriangle, Loader2, Search, Stethoscope, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
-type SearchResultType = "service" | "doctor" | "department" | "knowledge";
+type SearchResultType =
+  | "service"
+  | "doctor"
+  | "department"
+  | "package"
+  | "knowledge";
 
 type SearchResult = {
   id: string;
@@ -33,6 +38,7 @@ const resultLabels: Record<SearchResultType, string> = {
   service: "Services",
   doctor: "Doctors",
   department: "Departments",
+  package: "Packages",
   knowledge: "Knowledge",
 };
 
@@ -40,6 +46,7 @@ const typeStyles: Record<SearchResultType, string> = {
   service: "bg-cyan-50 text-cyan-700",
   doctor: "bg-emerald-50 text-emerald-700",
   department: "bg-amber-50 text-amber-700",
+  package: "bg-violet-50 text-violet-700",
   knowledge: "bg-slate-100 text-slate-700",
 };
 
@@ -47,6 +54,7 @@ const emptyGroups: Record<SearchResultType, SearchResult[]> = {
   service: [],
   doctor: [],
   department: [],
+  package: [],
   knowledge: [],
 };
 
@@ -159,7 +167,7 @@ const FullscreenSearch = ({
               MediDove Search
             </p>
             <h2 className="mt-2 text-2xl font-bold md:text-3xl">
-              Find care, doctors, and AI knowledge
+              Find care, doctors, packages, and AI knowledge
             </h2>
           </div>
           <Button
@@ -210,7 +218,7 @@ const FullscreenSearch = ({
 
           {!error && query.trim().length < 2 ? (
             <div className="grid gap-4 md:grid-cols-3">
-              {["Services", "Doctors", "Appointment routing"].map((item) => (
+              {["Services", "Doctors", "Care packages"].map((item) => (
                 <div key={item} className="rounded-lg border border-white/10 bg-white/5 p-5">
                   <Stethoscope className="mb-4 size-7 text-cyan-300" />
                   <h3 className="font-semibold">{item}</h3>

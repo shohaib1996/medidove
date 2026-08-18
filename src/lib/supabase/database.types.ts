@@ -211,6 +211,55 @@ export type Database = {
           },
         ];
       };
+      health_packages: {
+        Row: {
+          id: string;
+          name: string;
+          slug: string;
+          description: string;
+          price: number;
+          duration: string | null;
+          audience: string | null;
+          features: string[];
+          badge: string | null;
+          image_url: string | null;
+          is_featured: boolean;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          slug: string;
+          description: string;
+          price?: number;
+          duration?: string | null;
+          audience?: string | null;
+          features?: string[];
+          badge?: string | null;
+          image_url?: string | null;
+          is_featured?: boolean;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          name?: string;
+          slug?: string;
+          description?: string;
+          price?: number;
+          duration?: string | null;
+          audience?: string | null;
+          features?: string[];
+          badge?: string | null;
+          image_url?: string | null;
+          is_featured?: boolean;
+          is_active?: boolean;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       blog_posts: {
         Row: {
           id: string;

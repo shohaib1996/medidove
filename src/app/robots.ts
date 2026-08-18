@@ -12,6 +12,7 @@ export default function robots(): MetadataRoute.Robots {
           "/about",
           "/service",
           "/doctor",
+          "/packages",
           "/appointment",
           "/contact",
           "/blog",

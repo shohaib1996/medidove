@@ -38,6 +38,7 @@ For real healthcare clients, production compliance work may be required, includi
 - Public AI clinic landing page
 - Supabase-backed doctors, departments, services, and AI knowledge content
 - Supabase-backed blog CMS for healthcare SEO content
+- Supabase-backed health packages for wellness, dental, and screening offers
 - Real appointment request form
 - Smart appointment intake API with emergency-safe routing language
 - Floating AI clinic assistant widget
@@ -68,6 +69,7 @@ For real healthcare clients, production compliance work may be required, includi
 
 - `/` public AI clinic home
 - `/appointment` appointment booking
+- `/packages` health package offers
 - `/blog` public healthcare SEO blog
 - `/blog/[slug]` CMS-backed article details
 - `/receptionist` ElevenLabs receptionist demo page
