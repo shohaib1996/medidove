@@ -260,6 +260,46 @@ export type Database = {
         };
         Relationships: [];
       };
+      testimonials: {
+        Row: {
+          id: string;
+          author_name: string;
+          author_role: string | null;
+          quote: string;
+          rating: number;
+          category: string;
+          image_url: string | null;
+          is_featured: boolean;
+          is_published: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          author_name: string;
+          author_role?: string | null;
+          quote: string;
+          rating?: number;
+          category?: string;
+          image_url?: string | null;
+          is_featured?: boolean;
+          is_published?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          author_name?: string;
+          author_role?: string | null;
+          quote?: string;
+          rating?: number;
+          category?: string;
+          image_url?: string | null;
+          is_featured?: boolean;
+          is_published?: boolean;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       blog_posts: {
         Row: {
           id: string;

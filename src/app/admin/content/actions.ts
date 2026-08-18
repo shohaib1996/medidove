@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { triageLead } from "@/lib/ai/lead-triage";
 import { fallbackBlogPosts } from "@/lib/blog/content";
 import { fallbackHealthPackages } from "@/lib/packages/content";
+import { fallbackTestimonials } from "@/lib/testimonials/content";
 import { createClient } from "@/lib/supabase/server";
 import type { Database } from "@/lib/supabase/database.types";
 
@@ -61,6 +62,8 @@ const refreshContent = () => {
   revalidatePath("/blog");
   revalidatePath("/admin/packages");
   revalidatePath("/packages");
+  revalidatePath("/admin/testimonials");
+  revalidatePath("/testimonials");
 };
 
 export const createDepartment = async (formData: FormData) => {
@@ -592,11 +595,37 @@ const seedHealthPackages = async (
   );
 };
 
+const seedTestimonials = async (
+  supabase: Awaited<ReturnType<typeof assertAdmin>>,
+) => {
+  for (const item of fallbackTestimonials) {
+    const { data: existing } = await supabase
+      .from("testimonials")
+      .select("id")
+      .eq("author_name", item.authorName)
+      .maybeSingle();
+
+    if (!existing) {
+      await supabase.from("testimonials").insert({
+        author_name: item.authorName,
+        author_role: item.authorRole,
+        quote: item.quote,
+        rating: item.rating,
+        category: item.category,
+        image_url: item.imageUrl,
+        is_featured: item.isFeatured,
+        is_published: true,
+      });
+    }
+  }
+};
+
 export const seedDemoWorkspace = async () => {
   const supabase = await assertAdmin();
   await seedClinicSettings(supabase);
   await seedBlogPosts(supabase);
   await seedHealthPackages(supabase);
+  await seedTestimonials(supabase);
 
   await supabase.from("departments").upsert(
     demoDepartments.map((department) => ({

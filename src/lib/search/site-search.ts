@@ -1,5 +1,6 @@
 import { fallbackDoctors, fallbackServices } from "@/lib/clinic/static-content";
 import { fallbackHealthPackages } from "@/lib/packages/content";
+import { fallbackTestimonials } from "@/lib/testimonials/content";
 import { createClient } from "@/lib/supabase/server";
 
 export type SearchResultType =
@@ -159,7 +160,23 @@ const fallbackSearch = (query: string, terms: string[]): SiteSearchResult[] => {
     }),
   }));
 
-  return sortAndLimit([...services, ...doctors, ...packages]);
+  const testimonials = fallbackTestimonials.map((item) => ({
+    id: `fallback-testimonial-${item.id}`,
+    type: "knowledge" as const,
+    title: item.authorName,
+    description: item.quote,
+    href: "/testimonials",
+    meta: item.category,
+    score: scoreResult({
+      query,
+      terms,
+      title: `${item.authorName} ${item.authorRole}`,
+      description: item.quote,
+      meta: item.category,
+    }),
+  }));
+
+  return sortAndLimit([...services, ...doctors, ...packages, ...testimonials]);
 };
 
 export const searchSite = async (rawQuery: string): Promise<SiteSearchResponse> => {
@@ -186,6 +203,7 @@ export const searchSite = async (rawQuery: string): Promise<SiteSearchResponse> 
     { data: documentsData },
     { data: blogPostsData },
     { data: packagesData },
+    { data: testimonialsData },
   ] = await Promise.all([
     supabase
       .from("services")
@@ -215,6 +233,11 @@ export const searchSite = async (rawQuery: string): Promise<SiteSearchResponse> 
       .from("health_packages")
       .select("id, name, description, slug, audience, features, badge")
       .eq("is_active", true)
+      .limit(50),
+    supabase
+      .from("testimonials")
+      .select("id, author_name, author_role, quote, category")
+      .eq("is_published", true)
       .limit(50),
   ]);
 
@@ -322,6 +345,22 @@ export const searchSite = async (rawQuery: string): Promise<SiteSearchResponse> 
     }),
   }));
 
+  const testimonials = (testimonialsData || []).map((item) => ({
+    id: item.id,
+    type: "knowledge" as const,
+    title: item.author_name,
+    description: item.quote,
+    href: "/testimonials",
+    meta: item.category,
+    score: scoreResult({
+      query,
+      terms,
+      title: `${item.author_name} ${item.author_role || ""}`,
+      description: item.quote,
+      meta: item.category,
+    }),
+  }));
+
   const results = sortAndLimit([
     ...services,
     ...doctors,
@@ -329,6 +368,7 @@ export const searchSite = async (rawQuery: string): Promise<SiteSearchResponse> 
     ...packages,
     ...documents,
     ...blogPosts,
+    ...testimonials,
   ]);
   const safeResults = results.length > 0 ? results : fallbackSearch(query, terms);
 
