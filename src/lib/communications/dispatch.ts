@@ -1,4 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
+import { writeAuditLog } from "@/lib/audit/log";
 import type { Channel, Json } from "@/lib/supabase/database.types";
 
 type OutboxRecord = {
@@ -249,11 +250,21 @@ export const dispatchQueuedOutbox = async (limit = 20) => {
     });
   }
 
-  return {
+  const summary = {
     ok: true,
     scanned: records.length,
     sent,
     failed,
     results,
   };
+
+  await writeAuditLog(supabase, {
+    actorType: "system",
+    eventType: "outbox_dispatch_executed",
+    entityType: "communication_outbox",
+    summary: `Outbox dispatch scanned ${summary.scanned} records, sent ${summary.sent}, and failed ${summary.failed}.`,
+    metadata: summary,
+  });
+
+  return summary;
 };

@@ -240,6 +240,18 @@ create table public.automation_rules (
   updated_at timestamptz not null default now()
 );
 
+create table public.audit_logs (
+  id uuid primary key default gen_random_uuid(),
+  actor_id uuid references public.profiles(id) on delete set null,
+  actor_type text not null default 'system',
+  event_type text not null,
+  entity_type text not null,
+  entity_id text,
+  summary text not null,
+  metadata jsonb not null default '{}',
+  created_at timestamptz not null default now()
+);
+
 alter table public.profiles enable row level security;
 alter table public.departments enable row level security;
 alter table public.doctors enable row level security;
@@ -256,6 +268,7 @@ alter table public.consent_logs enable row level security;
 alter table public.message_templates enable row level security;
 alter table public.communication_outbox enable row level security;
 alter table public.automation_rules enable row level security;
+alter table public.audit_logs enable row level security;
 
 create policy "Public can read active departments"
   on public.departments for select
@@ -389,6 +402,14 @@ create policy "Admins can manage automation rules"
   using (public.is_admin())
   with check (public.is_admin());
 
+create policy "Admins can read audit logs"
+  on public.audit_logs for select
+  using (public.is_admin());
+
+create policy "Admins can create audit logs"
+  on public.audit_logs for insert
+  with check (public.is_admin() or actor_type = 'system');
+
 create index departments_slug_idx on public.departments(slug);
 create index doctors_slug_idx on public.doctors(slug);
 create index doctors_department_id_idx on public.doctors(department_id);
@@ -406,6 +427,8 @@ create index communication_outbox_channel_idx on public.communication_outbox(cha
 create index communication_outbox_status_idx on public.communication_outbox(status);
 create index automation_rules_trigger_event_idx on public.automation_rules(trigger_event);
 create index automation_rules_active_idx on public.automation_rules(is_active);
+create index audit_logs_event_type_idx on public.audit_logs(event_type);
+create index audit_logs_created_at_idx on public.audit_logs(created_at desc);
 create index ai_chat_messages_session_id_idx on public.ai_chat_messages(session_id);
 create index ai_document_chunks_embedding_idx
   on public.ai_document_chunks

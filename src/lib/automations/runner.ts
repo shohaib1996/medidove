@@ -1,4 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
+import { writeAuditLog } from "@/lib/audit/log";
 import type { Channel } from "@/lib/supabase/database.types";
 
 type AutomationRule = {
@@ -260,13 +261,23 @@ export const runAutomationRules = async () => {
     });
   }
 
-  return {
+  const summary = {
     ok: true,
     rules: results.length,
     queued: results.reduce((total, result) => total + result.queued, 0),
     skipped: results.reduce((total, result) => total + result.skipped, 0),
     results,
   };
+
+  await writeAuditLog(supabase, {
+    actorType: "system",
+    eventType: "automation_runner_executed",
+    entityType: "automation_rules",
+    summary: `Automation runner processed ${summary.rules} rules and queued ${summary.queued} messages.`,
+    metadata: summary,
+  });
+
+  return summary;
 };
 
 const getSourcesForRule = async (

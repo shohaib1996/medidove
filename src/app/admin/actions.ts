@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { writeAuditLog } from "@/lib/audit/log";
 import { createClient } from "@/lib/supabase/server";
 
 type AdminTable =
@@ -42,7 +43,7 @@ const assertAdmin = async () => {
     throw new Error("Admin access is required.");
   }
 
-  return supabase;
+  return { supabase, userId: user.id };
 };
 
 export const updateAdminRecordStatus = async (formData: FormData) => {
@@ -58,7 +59,7 @@ export const updateAdminRecordStatus = async (formData: FormData) => {
     throw new Error("Unsupported status for this record type.");
   }
 
-  const supabase = await assertAdmin();
+  const { supabase, userId } = await assertAdmin();
 
   if (table === "appointments") {
     const { error } = await supabase
@@ -104,8 +105,22 @@ export const updateAdminRecordStatus = async (formData: FormData) => {
     }
   }
 
+  await writeAuditLog(supabase, {
+    actorId: userId,
+    actorType: "admin",
+    eventType: "status_updated",
+    entityType: table,
+    entityId: id,
+    summary: `Updated ${table} status to ${status}.`,
+    metadata: {
+      table,
+      status,
+    },
+  });
+
   revalidatePath("/admin");
   revalidatePath("/admin/appointments");
   revalidatePath("/admin/leads");
   revalidatePath("/admin/communications");
+  revalidatePath("/admin/audit");
 };
