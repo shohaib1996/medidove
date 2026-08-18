@@ -1,19 +1,14 @@
 
-import Service from '@/components/services/service';
-import Wrapper from '@/layout/Wrapper'; 
+import ServicesPage from "@/components/services/ServicesPage";
 
 export const metadata = {
-  title: "Service MediDove React Next js Tempalte",
+  title: "Services | MediDove AI Clinic",
+  description:
+    "Explore AI-ready medical services and departments connected to the MediDove Supabase booking workflow.",
 };
 
-
-
 const index = () => {
-  return (
-    <Wrapper>
-      <Service />      
-    </Wrapper>
-  );
+  return <ServicesPage />;
 };
 
 export default index;
