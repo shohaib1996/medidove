@@ -1,19 +1,13 @@
-import Contact from '@/components/contact';
-import Wrapper from '@/layout/Wrapper';
-import React from 'react';
-
+import ContactPage from "@/components/contact/ContactPage";
 
 export const metadata = {
-  title: "Contact MediDove React Next js Tempalte",
+  title: "Contact | MediDove AI Clinic",
+  description:
+    "Send a message to MediDove AI Clinic. Contact leads are stored in Supabase for admin and AI follow-up workflows.",
 };
 
-
 const index = () => {
-  return (
-    <Wrapper>
-      <Contact />
-    </Wrapper>
-  );
+  return <ContactPage />;
 };
 
 export default index;

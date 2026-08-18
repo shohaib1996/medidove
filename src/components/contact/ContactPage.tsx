@@ -1,0 +1,292 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import { FormEvent, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import {
+  CalendarDays,
+  Clock,
+  Headphones,
+  Mail,
+  MapPin,
+  MessageSquareText,
+  Phone,
+  ShieldCheck,
+} from "lucide-react";
+import PublicHeader from "@/components/marketing/PublicHeader";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+
+type ContactFormState = {
+  name: string;
+  email: string;
+  phone: string;
+  subject: string;
+  message: string;
+};
+
+const initialForm: ContactFormState = {
+  name: "",
+  email: "",
+  phone: "",
+  subject: "",
+  message: "",
+};
+
+const contactMethods = [
+  {
+    icon: Phone,
+    label: "Phone",
+    value: "+1 800 833 9780",
+  },
+  {
+    icon: Mail,
+    label: "Email",
+    value: "care@medidove.ai",
+  },
+  {
+    icon: MapPin,
+    label: "Clinic",
+    value: "MediDove Care Center",
+  },
+];
+
+const ContactPage = () => {
+  const [form, setForm] = useState<ContactFormState>(initialForm);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const updateField = (key: keyof ContactFormState, value: string) => {
+    setForm((current) => ({ ...current, [key]: value }));
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!form.name || !form.email || !form.message) {
+      toast.error("Name, email, and message are required.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Unable to submit your message.");
+      }
+
+      toast.success("Message submitted successfully.");
+      setForm(initialForm);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Unable to submit your message.";
+      toast.error(message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-900">
+      <PublicHeader />
+
+      <main>
+        <section className="relative overflow-hidden bg-slate-950 px-4 py-20 text-white md:px-8">
+          <Image
+            src="/assets/img/bg/appointment.jpg"
+            alt="Medical support desk"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover opacity-25"
+          />
+          <div className="absolute inset-0 bg-slate-950/75" />
+          <div className="relative mx-auto max-w-7xl">
+            <Badge className="mb-5 bg-white/10 text-white hover:bg-white/15">
+              <Headphones className="size-3.5" />
+              AI-ready lead capture
+            </Badge>
+            <h1 className="max-w-4xl text-4xl font-bold leading-tight tracking-normal md:text-6xl">
+              Contact MediDove care team
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-200">
+              Send a message to the clinic team. Every submission is stored in
+              Supabase and prepared for AI triage, admin follow-up, and future
+              WhatsApp or voice workflows.
+            </p>
+          </div>
+        </section>
+
+        <section className="px-4 py-16 md:px-8">
+          <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_380px]">
+            <Card>
+              <CardHeader>
+                <CardDescription>Contact Lead</CardDescription>
+                <CardTitle className="text-2xl">Send a message</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form className="grid gap-5" onSubmit={handleSubmit}>
+                  <div className="grid gap-5 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="name">Full name</Label>
+                      <Input
+                        id="name"
+                        value={form.name}
+                        onChange={(event) =>
+                          updateField("name", event.target.value)
+                        }
+                        placeholder="Enter your name"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={form.email}
+                        onChange={(event) =>
+                          updateField("email", event.target.value)
+                        }
+                        placeholder="name@example.com"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="phone">Phone</Label>
+                      <Input
+                        id="phone"
+                        type="tel"
+                        value={form.phone}
+                        onChange={(event) =>
+                          updateField("phone", event.target.value)
+                        }
+                        placeholder="+1 555 000 0000"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="subject">Subject</Label>
+                      <Input
+                        id="subject"
+                        value={form.subject}
+                        onChange={(event) =>
+                          updateField("subject", event.target.value)
+                        }
+                        placeholder="Appointment, billing, service question"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="message">Message</Label>
+                    <Textarea
+                      id="message"
+                      value={form.message}
+                      onChange={(event) =>
+                        updateField("message", event.target.value)
+                      }
+                      placeholder="Tell us how the clinic team can help."
+                      rows={7}
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-3 sm:flex-row">
+                    <Button type="submit" size="lg" disabled={isSubmitting}>
+                      <MessageSquareText />
+                      {isSubmitting ? "Submitting..." : "Submit message"}
+                    </Button>
+                    <Button asChild type="button" variant="outline" size="lg">
+                      <Link href="/appoinment">
+                        <CalendarDays />
+                        Book instead
+                      </Link>
+                    </Button>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+
+            <aside className="space-y-5">
+              <Card>
+                <CardHeader>
+                  <CardDescription>Clinic channels</CardDescription>
+                  <CardTitle>Reach the care team</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {contactMethods.map((method) => (
+                    <div
+                      key={method.label}
+                      className="flex gap-3 rounded-lg border border-slate-200 p-4"
+                    >
+                      <method.icon className="mt-0.5 size-5 text-primary" />
+                      <div>
+                        <p className="text-sm font-semibold text-slate-900">
+                          {method.label}
+                        </p>
+                        <p className="mt-1 text-sm text-slate-600">
+                          {method.value}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardDescription>Response workflow</CardDescription>
+                  <CardTitle className="flex items-center gap-2">
+                    <Clock className="size-5 text-primary" />
+                    Admin follow-up
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm leading-6 text-slate-600">
+                  New messages appear in the admin dashboard with a starter
+                  category such as appointment, billing, shop, partnership, or
+                  general.
+                </CardContent>
+              </Card>
+
+              <Card className="bg-slate-950 text-white">
+                <CardHeader>
+                  <CardDescription className="text-slate-300">
+                    Next AI layer
+                  </CardDescription>
+                  <CardTitle className="flex items-center gap-2">
+                    <ShieldCheck className="size-5 text-primary" />
+                    AI lead triage
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm leading-6 text-slate-300">
+                  The next enhancement can summarize each message, score
+                  urgency, and suggest a staff reply before human follow-up.
+                </CardContent>
+              </Card>
+            </aside>
+          </div>
+        </section>
+      </main>
+
+      <ToastContainer />
+    </div>
+  );
+};
+
+export default ContactPage;
