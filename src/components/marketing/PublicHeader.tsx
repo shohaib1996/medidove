@@ -1,0 +1,64 @@
+import Image from "next/image";
+import Link from "next/link";
+import { CalendarDays, LayoutDashboard, LogIn } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+const navItems = [
+  { href: "/service", label: "Services" },
+  { href: "/doctor", label: "Doctors" },
+  { href: "/appoinment", label: "Appointment" },
+  { href: "/contact", label: "Contact" },
+];
+
+const PublicHeader = () => {
+  return (
+    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
+      <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-6 px-4 md:px-8">
+        <Link href="/" className="flex items-center gap-3">
+          <Image
+            src="/assets/img/logo/logo.png"
+            alt="MediDove"
+            width={164}
+            height={48}
+            priority
+          />
+        </Link>
+
+        <nav className="hidden items-center gap-7 lg:flex">
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="text-sm font-semibold text-slate-600 transition hover:text-primary"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="flex items-center gap-2">
+          <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
+            <Link href="/login">
+              <LogIn />
+              Login
+            </Link>
+          </Button>
+          <Button asChild variant="outline" size="sm" className="hidden md:inline-flex">
+            <Link href="/admin">
+              <LayoutDashboard />
+              Admin
+            </Link>
+          </Button>
+          <Button asChild size="sm">
+            <Link href="/appoinment">
+              <CalendarDays />
+              Book
+            </Link>
+          </Button>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default PublicHeader;

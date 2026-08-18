@@ -1,17 +1,13 @@
-import HomeOne from '@/components/homes/home';
-import Wrapper from '@/layout/Wrapper';
-import React from 'react';
+import HomePage from "@/components/marketing/HomePage";
 
 export const metadata = {
-  title: "Main Home MediDove React Next js Tempalte",
+  title: "MediDove AI Clinic Platform",
+  description:
+    "AI-powered clinic website with Supabase appointments, admin dashboard, voice receptionist, and patient engagement workflows.",
 };
 
 const HomeMain = () => {
-  return (
-    <Wrapper>
-      <HomeOne />
-    </Wrapper>
-  );
+  return <HomePage />;
 };
 
 export default HomeMain;
