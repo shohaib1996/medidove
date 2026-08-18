@@ -37,6 +37,11 @@ type ContactFormState = {
   message: string;
 };
 
+export type ContactInquiryContext = {
+  type: "product" | "package" | "general";
+  label: string;
+};
+
 const initialForm: ContactFormState = {
   name: "",
   email: "",
@@ -45,8 +50,33 @@ const initialForm: ContactFormState = {
   message: "",
 };
 
-const ContactPage = ({ settings }: { settings: ClinicSettings }) => {
-  const [form, setForm] = useState<ContactFormState>(initialForm);
+const getInitialForm = (
+  inquiryContext?: ContactInquiryContext,
+): ContactFormState => {
+  if (!inquiryContext || inquiryContext.type === "general") {
+    return initialForm;
+  }
+
+  const inquiryType =
+    inquiryContext.type === "product" ? "product inquiry" : "package inquiry";
+
+  return {
+    ...initialForm,
+    subject: `Staff review request: ${inquiryContext.label}`,
+    message: `I am interested in the ${inquiryContext.label} ${inquiryType}. Please have a clinic coordinator review and contact me with the next step.`,
+  };
+};
+
+const ContactPage = ({
+  settings,
+  inquiryContext,
+}: {
+  settings: ClinicSettings;
+  inquiryContext?: ContactInquiryContext;
+}) => {
+  const [form, setForm] = useState<ContactFormState>(() =>
+    getInitialForm(inquiryContext),
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const contactMethods = [
     {
@@ -133,6 +163,11 @@ const ContactPage = ({ settings }: { settings: ClinicSettings }) => {
               Supabase and prepared for AI triage, admin follow-up, and future
               WhatsApp or voice workflows.
             </p>
+            {inquiryContext && inquiryContext.type !== "general" ? (
+              <div className="mt-6 inline-flex rounded-lg border border-white/15 bg-white/10 px-4 py-3 text-sm text-slate-100">
+                Staff review inquiry for {inquiryContext.label}
+              </div>
+            ) : null}
           </div>
         </section>
 

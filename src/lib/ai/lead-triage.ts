@@ -42,9 +42,19 @@ const getLeadCategory = (content: string) => {
   }
 
   if (
+    content.includes("package") ||
+    content.includes("screening") ||
+    content.includes("wellness")
+  ) {
+    return "package";
+  }
+
+  if (
     content.includes("product") ||
     content.includes("shop") ||
-    content.includes("medicine")
+    content.includes("medicine") ||
+    content.includes("monitor") ||
+    content.includes("bundle")
   ) {
     return "shop";
   }
@@ -90,6 +100,14 @@ const buildSuggestedReply = (
 
   if (category === "billing") {
     return `Hi ${name}, thanks for reaching out. A care coordinator can help with pricing, billing, or insurance questions. Please share the service name so we can guide you correctly.`;
+  }
+
+  if (category === "package") {
+    return `Hi ${name}, thanks for your interest in a MediDove health package. A clinic coordinator will review the package, availability, and any preparation steps before confirming the next step.`;
+  }
+
+  if (category === "shop") {
+    return `Hi ${name}, thanks for your product inquiry. A clinic coordinator will review availability and any staff or clinical review requirements before follow-up.`;
   }
 
   return `Hi ${name}, thanks for contacting MediDove. We received your message and a clinic coordinator will follow up with the right next step.`;

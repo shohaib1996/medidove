@@ -96,16 +96,25 @@ const PackagesPage = ({ packages }: { packages: HealthPackage[] }) => (
                     </li>
                   ))}
                 </ul>
-                <Button asChild className="w-full">
-                  <Link
-                    href={`/appointment?package=${encodeURIComponent(
-                      item.name,
-                    )}`}
-                  >
-                    <CalendarDays />
-                    Request package
-                  </Link>
-                </Button>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <Button asChild>
+                    <Link
+                      href={`/appointment?package=${encodeURIComponent(
+                        item.name,
+                      )}`}
+                    >
+                      <CalendarDays />
+                      Book
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline">
+                    <Link
+                      href={`/contact?package=${encodeURIComponent(item.name)}`}
+                    >
+                      Ask staff
+                    </Link>
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           ))}

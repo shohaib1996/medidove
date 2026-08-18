@@ -7,10 +7,28 @@ export const metadata = {
     "Send a message to MediDove AI Clinic. Contact leads are stored in Supabase for admin and AI follow-up workflows.",
 };
 
-const index = async () => {
-  const settings = await getClinicSettings();
+const getSingleParam = (value: string | string[] | undefined) =>
+  Array.isArray(value) ? value[0] : value;
 
-  return <ContactPage settings={settings} />;
+const index = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    product?: string | string[];
+    "package"?: string | string[];
+  }>;
+}) => {
+  const settings = await getClinicSettings();
+  const params = await searchParams;
+  const product = getSingleParam(params.product);
+  const packageName = getSingleParam(params["package"]);
+  const inquiryContext = product
+    ? { type: "product" as const, label: product }
+    : packageName
+      ? { type: "package" as const, label: packageName }
+      : undefined;
+
+  return <ContactPage settings={settings} inquiryContext={inquiryContext} />;
 };
 
 export default index;

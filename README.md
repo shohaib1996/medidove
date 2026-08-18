@@ -40,6 +40,7 @@ For real healthcare clients, production compliance work may be required, includi
 - Supabase-backed blog CMS for healthcare SEO content
 - Supabase-backed health packages for wellness, dental, and screening offers
 - Supabase-backed wellness product catalog with staff-reviewed inquiries
+- Product and package inquiry links that prefill contact leads for staff review
 - Supabase-backed testimonials and proof points for buyer trust
 - Real appointment request form
 - Smart appointment intake API with emergency-safe routing language
@@ -73,6 +74,7 @@ For real healthcare clients, production compliance work may be required, includi
 - `/appointment` appointment booking
 - `/packages` health package offers
 - `/shop` wellness product catalog
+- `/contact?product=...` and `/contact?package=...` staff-reviewed inquiries
 - `/testimonials` testimonials and clinic proof
 - `/blog` public healthcare SEO blog
 - `/blog/[slug]` CMS-backed article details
