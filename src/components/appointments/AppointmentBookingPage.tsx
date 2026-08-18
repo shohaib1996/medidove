@@ -1,0 +1,380 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import { FormEvent, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import {
+  Bot,
+  CalendarCheck,
+  Clock3,
+  Headphones,
+  MessageCircle,
+  Phone,
+  ShieldCheck,
+  Stethoscope,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import PublicHeader from "@/components/marketing/PublicHeader";
+
+type AppointmentForm = {
+  patientName: string;
+  patientEmail: string;
+  patientPhone: string;
+  requestedDepartment: string;
+  requestedDoctor: string;
+  requestedDate: string;
+  requestedTime: string;
+  reason: string;
+  consentAccepted: boolean;
+};
+
+const initialForm: AppointmentForm = {
+  patientName: "",
+  patientEmail: "",
+  patientPhone: "",
+  requestedDepartment: "General Medicine",
+  requestedDoctor: "First available doctor",
+  requestedDate: "",
+  requestedTime: "",
+  reason: "",
+  consentAccepted: false,
+};
+
+const departments = [
+  "General Medicine",
+  "Surgery and Radiology",
+  "Pediatrics",
+  "Dental Care",
+  "Neurology",
+];
+
+const doctorPreferences = [
+  "First available doctor",
+  "Dentist",
+  "Neurologist",
+  "Pediatrician",
+  "Surgery consultant",
+];
+
+const supportCards = [
+  {
+    icon: Bot,
+    title: "AI intake ready",
+    text: "This form structure is ready for symptom-based routing in the next AI phase.",
+  },
+  {
+    icon: Headphones,
+    title: "Receptionist handoff",
+    text: "Requests can be created from web forms today and ElevenLabs voice calls later.",
+  },
+  {
+    icon: MessageCircle,
+    title: "WhatsApp consent",
+    text: "The consent field prepares the workflow for reminders and confirmations.",
+  },
+];
+
+const AppointmentBookingPage = () => {
+  const [form, setForm] = useState<AppointmentForm>(initialForm);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const updateField = <Key extends keyof AppointmentForm>(
+    key: Key,
+    value: AppointmentForm[Key],
+  ) => {
+    setForm((current) => ({ ...current, [key]: value }));
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!form.patientName || !form.patientPhone || !form.reason) {
+      toast.error("Name, phone, and appointment reason are required.");
+      return;
+    }
+
+    if (!form.consentAccepted) {
+      toast.error("Please accept communication consent before submitting.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/appointments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Unable to submit appointment.");
+      }
+
+      toast.success("Appointment request submitted successfully.");
+      setForm(initialForm);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Unable to submit appointment.";
+      toast.error(message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-900">
+      <PublicHeader />
+
+      <main>
+        <section className="relative overflow-hidden bg-slate-950 px-4 py-20 text-white md:px-8">
+          <Image
+            src="/assets/img/appoinment/appointment-bg.jpg"
+            alt="Clinic appointment desk"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover opacity-25"
+          />
+          <div className="absolute inset-0 bg-slate-950/70" />
+          <div className="relative mx-auto max-w-7xl">
+            <Badge className="mb-5 bg-white/10 text-white hover:bg-white/15">
+              <CalendarCheck className="size-3.5" />
+              Supabase booking flow
+            </Badge>
+            <h1 className="max-w-4xl text-4xl font-bold leading-tight tracking-normal md:text-6xl">
+              Book a smarter appointment with MediDove
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-200">
+              Submit a structured request for the clinic team. The same booking
+              data will power AI intake, voice receptionist calls, and WhatsApp
+              reminders in the next phases.
+            </p>
+          </div>
+        </section>
+
+        <section className="px-4 py-16 md:px-8">
+          <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_380px]">
+            <Card>
+              <CardHeader>
+                <CardDescription>Appointment Request</CardDescription>
+                <CardTitle className="text-2xl">Patient details</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form className="grid gap-5" onSubmit={handleSubmit}>
+                  <div className="grid gap-5 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="patientName">Full name</Label>
+                      <Input
+                        id="patientName"
+                        value={form.patientName}
+                        onChange={(event) =>
+                          updateField("patientName", event.target.value)
+                        }
+                        placeholder="Enter patient name"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="patientEmail">Email</Label>
+                      <Input
+                        id="patientEmail"
+                        type="email"
+                        value={form.patientEmail}
+                        onChange={(event) =>
+                          updateField("patientEmail", event.target.value)
+                        }
+                        placeholder="name@example.com"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="patientPhone">Phone</Label>
+                      <Input
+                        id="patientPhone"
+                        type="tel"
+                        value={form.patientPhone}
+                        onChange={(event) =>
+                          updateField("patientPhone", event.target.value)
+                        }
+                        placeholder="+1 555 000 0000"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="requestedDepartment">Department</Label>
+                      <Select
+                        id="requestedDepartment"
+                        value={form.requestedDepartment}
+                        onChange={(event) =>
+                          updateField("requestedDepartment", event.target.value)
+                        }
+                      >
+                        {departments.map((department) => (
+                          <option key={department} value={department}>
+                            {department}
+                          </option>
+                        ))}
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="requestedDoctor">Doctor preference</Label>
+                      <Select
+                        id="requestedDoctor"
+                        value={form.requestedDoctor}
+                        onChange={(event) =>
+                          updateField("requestedDoctor", event.target.value)
+                        }
+                      >
+                        {doctorPreferences.map((doctor) => (
+                          <option key={doctor} value={doctor}>
+                            {doctor}
+                          </option>
+                        ))}
+                      </Select>
+                    </div>
+
+                    <div className="grid gap-5 sm:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="requestedDate">Date</Label>
+                        <Input
+                          id="requestedDate"
+                          type="date"
+                          value={form.requestedDate}
+                          onChange={(event) =>
+                            updateField("requestedDate", event.target.value)
+                          }
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="requestedTime">Time</Label>
+                        <Input
+                          id="requestedTime"
+                          type="time"
+                          value={form.requestedTime}
+                          onChange={(event) =>
+                            updateField("requestedTime", event.target.value)
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="reason">Reason for visit</Label>
+                    <Textarea
+                      id="reason"
+                      value={form.reason}
+                      onChange={(event) =>
+                        updateField("reason", event.target.value)
+                      }
+                      placeholder="Tell us what kind of care you need. Do not include emergency details here; call emergency services for urgent symptoms."
+                      rows={6}
+                    />
+                  </div>
+
+                  <label className="flex items-start gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
+                    <input
+                      type="checkbox"
+                      checked={form.consentAccepted}
+                      onChange={(event) =>
+                        updateField("consentAccepted", event.target.checked)
+                      }
+                      className="mt-1 size-4 rounded border-slate-300"
+                    />
+                    <span>
+                      I agree to be contacted about this appointment by phone,
+                      email, SMS, or WhatsApp.
+                    </span>
+                  </label>
+
+                  <div className="flex flex-col gap-3 sm:flex-row">
+                    <Button type="submit" size="lg" disabled={isSubmitting}>
+                      <CalendarCheck />
+                      {isSubmitting ? "Submitting..." : "Submit request"}
+                    </Button>
+                    <Button asChild type="button" variant="outline" size="lg">
+                      <Link href="/contact">
+                        <Phone />
+                        Contact first
+                      </Link>
+                    </Button>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+
+            <aside className="space-y-5">
+              <Card>
+                <CardHeader>
+                  <CardDescription>Emergency note</CardDescription>
+                  <CardTitle className="flex items-center gap-2">
+                    <ShieldCheck className="size-5 text-primary" />
+                    Safety first
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm leading-6 text-slate-600">
+                  This form is for appointment requests only. For chest pain,
+                  severe breathing trouble, stroke symptoms, heavy bleeding, or
+                  loss of consciousness, contact emergency services immediately.
+                </CardContent>
+              </Card>
+
+              {supportCards.map((card) => (
+                <Card key={card.title}>
+                  <CardHeader>
+                    <card.icon className="size-7 text-primary" />
+                    <CardTitle className="text-lg">{card.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="leading-6">
+                      {card.text}
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+              ))}
+
+              <Card className="bg-slate-950 text-white">
+                <CardHeader>
+                  <CardDescription className="text-slate-300">
+                    Upcoming AI phase
+                  </CardDescription>
+                  <CardTitle className="flex items-center gap-2">
+                    <Stethoscope className="size-5 text-primary" />
+                    Smart routing
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm leading-6 text-slate-300">
+                  Next we can add AI that reads the reason for visit and
+                  suggests department, doctor type, urgency, and admin notes.
+                </CardContent>
+              </Card>
+            </aside>
+          </div>
+        </section>
+      </main>
+
+      <ToastContainer />
+    </div>
+  );
+};
+
+export default AppointmentBookingPage;

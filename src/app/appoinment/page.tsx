@@ -1,18 +1,14 @@
 
-import React from 'react';
-import Wrapper from '@/layout/Wrapper';
-import Appoinment from '@/components/appoinment';
+import AppointmentBookingPage from "@/components/appointments/AppointmentBookingPage";
 
 export const metadata = {
-  title: "Appoinment MediDove React Next js Tempalte",
+  title: "Book Appointment | MediDove AI Clinic",
+  description:
+    "Submit a Supabase-backed appointment request for the MediDove AI clinic platform.",
 };
 
 const index = () => {
-  return (
-    <Wrapper>
-      <Appoinment />
-    </Wrapper>
-  );
+  return <AppointmentBookingPage />;
 };
 
 export default index;
