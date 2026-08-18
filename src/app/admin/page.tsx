@@ -1,6 +1,12 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Activity, CalendarClock, Inbox, Stethoscope } from "lucide-react";
+import {
+  Activity,
+  CalendarClock,
+  Headphones,
+  Inbox,
+  Stethoscope,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -40,6 +46,19 @@ type LeadRow = {
   message: string;
   ai_category: string | null;
   status: string;
+  created_at: string;
+};
+
+type CallLogRow = {
+  id: string;
+  phone_number: string;
+  direction: "inbound" | "outbound";
+  provider: string;
+  transcript: string | null;
+  ai_summary: string | null;
+  status: string | null;
+  started_at: string | null;
+  ended_at: string | null;
   created_at: string;
 };
 
@@ -114,7 +133,8 @@ const AdminPage = async () => {
     );
   }
 
-  const [{ data: appointmentsData }, { data: leadsData }] = await Promise.all([
+  const [{ data: appointmentsData }, { data: leadsData }, { data: callLogsData }] =
+    await Promise.all([
     supabase
       .from("appointments")
       .select(
@@ -129,14 +149,25 @@ const AdminPage = async () => {
       )
       .order("created_at", { ascending: false })
       .limit(8),
+    supabase
+      .from("call_logs")
+      .select(
+        "id, phone_number, direction, provider, transcript, ai_summary, status, started_at, ended_at, created_at",
+      )
+      .order("created_at", { ascending: false })
+      .limit(8),
   ]);
 
   const appointments = (appointmentsData || []) as AppointmentRow[];
   const leads = (leadsData || []) as LeadRow[];
+  const callLogs = (callLogsData || []) as CallLogRow[];
   const pendingAppointments = appointments.filter(
     (appointment) => appointment.status === "pending",
   ).length;
   const newLeads = leads.filter((lead) => lead.status === "new").length;
+  const requestedCallbacks = callLogs.filter(
+    (callLog) => callLog.status === "requested",
+  ).length;
 
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-10 text-slate-900 md:px-8">
@@ -150,8 +181,8 @@ const AdminPage = async () => {
               Clinic Operations Dashboard
             </h1>
             <p className="mt-3 max-w-2xl text-slate-600">
-              Review patient appointment requests and contact leads captured
-              from the public website.
+              Review patient appointment requests, contact leads, and AI
+              receptionist callback requests captured from the public website.
             </p>
           </div>
           <Button asChild variant="secondary">
@@ -159,7 +190,7 @@ const AdminPage = async () => {
           </Button>
         </section>
 
-        <section className="grid gap-4 md:grid-cols-3">
+        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between gap-4">
               <div>
@@ -191,9 +222,24 @@ const AdminPage = async () => {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between gap-4">
               <div>
+                <CardDescription>AI callbacks</CardDescription>
+                <CardTitle className="mt-2 text-3xl">
+                  {callLogs.length}
+                </CardTitle>
+              </div>
+              <Headphones className="size-8 text-indigo-600" />
+            </CardHeader>
+            <CardContent className="text-sm text-slate-500">
+              {requestedCallbacks} waiting for review
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between gap-4">
+              <div>
                 <CardDescription>Today</CardDescription>
                 <CardTitle className="mt-2 text-3xl">
-                  {getTodayCount([...appointments, ...leads])}
+                  {getTodayCount([...appointments, ...leads, ...callLogs])}
                 </CardTitle>
               </div>
               <Activity className="size-8 text-sky-600" />
@@ -204,7 +250,7 @@ const AdminPage = async () => {
           </Card>
         </section>
 
-        <section className="grid gap-6 xl:grid-cols-2">
+        <section className="grid gap-6 xl:grid-cols-3">
           <Card>
             <CardHeader>
               <CardDescription>Appointments</CardDescription>
@@ -249,6 +295,53 @@ const AdminPage = async () => {
                 <div className="rounded-lg border border-dashed border-slate-300 p-8 text-center text-slate-500">
                   <Stethoscope className="mx-auto mb-3 size-8" />
                   No appointment requests yet.
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardDescription>Voice</CardDescription>
+              <CardTitle>AI receptionist callbacks</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {callLogs.length > 0 ? (
+                callLogs.map((callLog) => (
+                  <article
+                    key={callLog.id}
+                    className="rounded-lg border border-slate-200 p-4"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <h2 className="font-semibold text-slate-900">
+                          {callLog.phone_number}
+                        </h2>
+                        <p className="mt-2 line-clamp-3 text-sm text-slate-600">
+                          {callLog.ai_summary ||
+                            callLog.transcript ||
+                            "No call summary yet."}
+                        </p>
+                      </div>
+                      <Badge variant="secondary" className="capitalize">
+                        {callLog.status || callLog.direction}
+                      </Badge>
+                    </div>
+                    <dl className="mt-4 grid gap-3 sm:grid-cols-2">
+                      <DetailItem label="Direction" value={callLog.direction} />
+                      <DetailItem label="Provider" value={callLog.provider} />
+                      <DetailItem
+                        label="Started"
+                        value={formatDate(callLog.started_at)}
+                      />
+                      <DetailItem label="Created" value={formatDate(callLog.created_at)} />
+                    </dl>
+                  </article>
+                ))
+              ) : (
+                <div className="rounded-lg border border-dashed border-slate-300 p-8 text-center text-slate-500">
+                  <Headphones className="mx-auto mb-3 size-8" />
+                  No AI callback requests yet.
                 </div>
               )}
             </CardContent>

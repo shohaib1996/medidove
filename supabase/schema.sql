@@ -254,6 +254,14 @@ create policy "Admins can update contact leads"
   on public.contact_leads for update
   using (public.is_admin());
 
+create policy "Admins can read call logs"
+  on public.call_logs for select
+  using (public.is_admin());
+
+create policy "Admins can update call logs"
+  on public.call_logs for update
+  using (public.is_admin());
+
 create index departments_slug_idx on public.departments(slug);
 create index doctors_slug_idx on public.doctors(slug);
 create index doctors_department_id_idx on public.doctors(department_id);
