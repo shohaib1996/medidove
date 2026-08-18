@@ -47,6 +47,11 @@ const refreshContent = () => {
   revalidatePath("/admin/analytics");
   revalidatePath("/service");
   revalidatePath("/doctor");
+  revalidatePath("/admin/campaigns");
+  revalidatePath("/admin/tasks");
+  revalidatePath("/admin/feedback");
+  revalidatePath("/admin/clinical-notes");
+  revalidatePath("/admin/schedule");
 };
 
 export const createDepartment = async (formData: FormData) => {
@@ -245,6 +250,33 @@ const demoDoctors = [
   },
 ];
 
+const demoAvailability = [
+  {
+    doctorSlug: "dr-amina-rahman",
+    weekday: 1,
+    start_time: "09:00",
+    end_time: "13:00",
+    slot_minutes: 30,
+    location: "Main clinic",
+  },
+  {
+    doctorSlug: "dr-sarah-patel",
+    weekday: 3,
+    start_time: "10:00",
+    end_time: "15:00",
+    slot_minutes: 30,
+    location: "Pediatrics wing",
+  },
+  {
+    doctorSlug: "dr-michael-chen",
+    weekday: 5,
+    start_time: "11:00",
+    end_time: "16:00",
+    slot_minutes: 30,
+    location: "Dental suite",
+  },
+];
+
 const demoKnowledge = [
   {
     source_type: "faq",
@@ -290,6 +322,31 @@ const demoTemplates: MessageTemplateInsert[] = [
   },
 ];
 
+const seedConsentIfMissing = async (
+  supabase: Awaited<ReturnType<typeof assertAdmin>>,
+) => {
+  const phone = "+1 555 0103";
+  const { data: existing } = await supabase
+    .from("consent_logs")
+    .select("id")
+    .eq("phone", phone)
+    .eq("channel", "whatsapp")
+    .eq("consented", true)
+    .maybeSingle();
+
+  if (existing) {
+    return;
+  }
+
+  await supabase.from("consent_logs").insert({
+    phone,
+    email: "whatsapp.demo@medidove.ai",
+    channel: "whatsapp",
+    consented: true,
+    reason: "Demo opt-in for appointment reminders and patient engagement.",
+  });
+};
+
 const seedLeadIfMissing = async (
   supabase: Awaited<ReturnType<typeof assertAdmin>>,
 ) => {
@@ -323,6 +380,120 @@ const seedLeadIfMissing = async (
     ai_urgency: triage.urgency,
     ai_suggested_reply: triage.suggestedReply,
     status: "new",
+  });
+};
+
+const seedFeedbackIfMissing = async (
+  supabase: Awaited<ReturnType<typeof assertAdmin>>,
+) => {
+  const email = "feedback.demo@medidove.ai";
+  const { data: existing } = await supabase
+    .from("patient_feedback")
+    .select("id")
+    .eq("email", email)
+    .maybeSingle();
+
+  if (existing) {
+    return;
+  }
+
+  await supabase.from("patient_feedback").insert({
+    name: "Demo Feedback",
+    email,
+    phone: "+1 555 0104",
+    rating: 3,
+    category: "wait_time",
+    message:
+      "The doctor was helpful, but I waited longer than expected and would like better updates next time.",
+    ai_sentiment: "mixed",
+    ai_summary:
+      "Mixed wait-time feedback: patient appreciated care quality but wants better delay communication.",
+    ai_urgency: "medium",
+    status: "new",
+  });
+};
+
+const seedCareTaskIfMissing = async (
+  supabase: Awaited<ReturnType<typeof assertAdmin>>,
+) => {
+  const sourceId = "demo-seed-wait-time-feedback";
+  const { data: existing } = await supabase
+    .from("care_tasks")
+    .select("id")
+    .eq("source_id", sourceId)
+    .maybeSingle();
+
+  if (existing) {
+    return;
+  }
+
+  await supabase.from("care_tasks").insert({
+    source_type: "feedback",
+    source_id: sourceId,
+    title: "Follow up on demo wait-time feedback",
+    description:
+      "Call the demo patient, acknowledge the wait, and explain how arrival updates will be improved.",
+    priority: "medium",
+    status: "open",
+    due_at: new Date(Date.now() + 2 * 86400000).toISOString(),
+  });
+};
+
+const seedClinicalNoteIfMissing = async (
+  supabase: Awaited<ReturnType<typeof assertAdmin>>,
+) => {
+  const patientName = "Demo Appointment";
+  const { data: existing } = await supabase
+    .from("clinical_notes")
+    .select("id")
+    .eq("patient_name", patientName)
+    .maybeSingle();
+
+  if (existing) {
+    return;
+  }
+
+  await supabase.from("clinical_notes").insert({
+    patient_name: patientName,
+    visit_type: "dental consultation",
+    raw_note:
+      "Patient requested dental pain consultation. Staff should confirm duration, swelling, bleeding, and preferred appointment time.",
+    subjective: "Patient reports dental pain and requests appointment support.",
+    objective: "No exam data recorded in demo note.",
+    assessment:
+      "Administrative note for routing only; clinician review is required before care decisions.",
+    care_plan:
+      "Schedule dental consultation, confirm red-flag symptoms, and send opt-in reminder after confirmation.",
+    risk_flags: ["swelling_check"],
+    status: "reviewed",
+  });
+};
+
+const seedCampaignIfMissing = async (
+  supabase: Awaited<ReturnType<typeof assertAdmin>>,
+) => {
+  const name = "Demo wellness reactivation";
+  const { data: existing } = await supabase
+    .from("campaigns")
+    .select("id")
+    .eq("name", name)
+    .maybeSingle();
+
+  if (existing) {
+    return;
+  }
+
+  await supabase.from("campaigns").insert({
+    name,
+    campaign_type: "wellness_check",
+    audience: "whatsapp_opt_ins",
+    channel: "whatsapp",
+    goal: "Invite opted-in patients to book a routine wellness visit.",
+    message:
+      "Hi {{patient_name}}, this is MediDove Clinic. We are checking in to see whether you would like support scheduling a routine wellness visit. Reply CONFIRM to confirm, HELP for staff support, or STOP to opt out.",
+    ai_recommendation:
+      "Use approved WhatsApp templates for business-initiated outreach and dispatch only after consent validation.",
+    status: "draft",
   });
 };
 
@@ -373,6 +544,46 @@ export const seedDemoWorkspace = async () => {
     })),
     { onConflict: "slug" },
   );
+
+  const { data: doctors } = await supabase
+    .from("doctors")
+    .select("id, slug")
+    .in(
+      "slug",
+      demoDoctors.map((doctor) => doctor.slug),
+    );
+
+  const doctorBySlug = new Map(
+    (doctors || []).map((doctor) => [doctor.slug, doctor.id]),
+  );
+
+  for (const block of demoAvailability) {
+    const doctorId = doctorBySlug.get(block.doctorSlug);
+
+    if (!doctorId) {
+      continue;
+    }
+
+    const { data: existing } = await supabase
+      .from("doctor_availability")
+      .select("id")
+      .eq("doctor_id", doctorId)
+      .eq("weekday", block.weekday)
+      .eq("start_time", block.start_time)
+      .maybeSingle();
+
+    if (!existing) {
+      await supabase.from("doctor_availability").insert({
+        doctor_id: doctorId,
+        weekday: block.weekday,
+        start_time: block.start_time,
+        end_time: block.end_time,
+        slot_minutes: block.slot_minutes,
+        location: block.location,
+        is_active: true,
+      });
+    }
+  }
 
   for (const document of demoKnowledge) {
     const { data: existing } = await supabase
@@ -429,6 +640,11 @@ export const seedDemoWorkspace = async () => {
   }
 
   await seedLeadIfMissing(supabase);
+  await seedConsentIfMissing(supabase);
+  await seedFeedbackIfMissing(supabase);
+  await seedCareTaskIfMissing(supabase);
+  await seedClinicalNoteIfMissing(supabase);
+  await seedCampaignIfMissing(supabase);
 
   const { data: existingCall } = await supabase
     .from("call_logs")

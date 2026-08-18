@@ -146,8 +146,9 @@ export default async function AdminContentPage() {
               <CardTitle>Populate buyer-ready sample data</CardTitle>
               <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
                 Adds sample departments, services, doctors, AI knowledge, one
-                appointment, one lead, one callback request, and one WhatsApp
-                opt-in so the dashboard and analytics pages are ready to demo.
+                appointment, one lead, one callback request, one WhatsApp
+                opt-in, schedules, feedback, task, clinical note, and campaign
+                draft so the dashboard and analytics pages are ready to demo.
               </p>
             </div>
             <form action={seedDemoWorkspace}>
