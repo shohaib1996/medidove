@@ -18,7 +18,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
-import { createAutomationRule, toggleAutomationRule } from "./actions";
+import {
+  createAutomationRule,
+  runAutomationsNow,
+  toggleAutomationRule,
+} from "./actions";
 
 export const metadata = {
   title: "Automation Rules | MediDove Admin",
@@ -163,6 +167,12 @@ const AdminAutomationsPage = async () => {
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
+            <form action={runAutomationsNow}>
+              <Button type="submit" variant="outline" className="w-full">
+                <PlayCircle className="mr-2 h-4 w-4" />
+                Run now
+              </Button>
+            </form>
             <Button asChild variant="outline">
               <Link href="/admin/templates">Message templates</Link>
             </Button>

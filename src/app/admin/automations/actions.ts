@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { runAutomationRules } from "@/lib/automations/runner";
 import { createClient } from "@/lib/supabase/server";
 
 const channels = ["email", "sms", "whatsapp", "voice"] as const;
@@ -88,4 +89,12 @@ export const toggleAutomationRule = async (formData: FormData) => {
   }
 
   revalidatePath("/admin/automations");
+};
+
+export const runAutomationsNow = async () => {
+  await assertAdmin();
+  await runAutomationRules();
+
+  revalidatePath("/admin/automations");
+  revalidatePath("/admin/outreach");
 };
