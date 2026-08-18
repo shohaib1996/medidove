@@ -364,6 +364,17 @@ create table public.consent_logs (
   created_at timestamptz not null default now()
 );
 
+create table public.opt_outs (
+  id uuid primary key default gen_random_uuid(),
+  patient_id uuid references public.profiles(id) on delete set null,
+  channel public.communication_channel not null,
+  phone text,
+  email text,
+  reason text,
+  source text not null default 'public_unsubscribe',
+  created_at timestamptz not null default now()
+);
+
 create table public.message_templates (
   id uuid primary key default gen_random_uuid(),
   name text not null,
@@ -476,6 +487,7 @@ alter table public.ai_leads enable row level security;
 alter table public.call_logs enable row level security;
 alter table public.whatsapp_messages enable row level security;
 alter table public.consent_logs enable row level security;
+alter table public.opt_outs enable row level security;
 alter table public.message_templates enable row level security;
 alter table public.communication_outbox enable row level security;
 alter table public.automation_rules enable row level security;
@@ -643,6 +655,10 @@ create policy "Anyone can create consent logs"
   on public.consent_logs for insert
   with check (true);
 
+create policy "Anyone can create opt outs"
+  on public.opt_outs for insert
+  with check (true);
+
 create policy "Patients can read own appointments"
   on public.appointments for select
   using (auth.uid() = patient_id);
@@ -660,6 +676,10 @@ create policy "Doctors can read assigned appointments"
 
 create policy "Patients can read own consent logs"
   on public.consent_logs for select
+  using (auth.uid() = patient_id);
+
+create policy "Patients can read own opt outs"
+  on public.opt_outs for select
   using (auth.uid() = patient_id);
 
 create policy "Patients can read own reviewed clinical notes"
@@ -740,6 +760,10 @@ create policy "Admins can read consent logs"
   on public.consent_logs for select
   using (public.is_admin());
 
+create policy "Admins can read opt outs"
+  on public.opt_outs for select
+  using (public.is_admin());
+
 create policy "Admins can manage message templates"
   on public.message_templates for all
   using (public.is_admin())
@@ -810,6 +834,9 @@ create index consent_logs_channel_idx on public.consent_logs(channel);
 create index consent_logs_patient_channel_idx on public.consent_logs(patient_id, channel, created_at desc);
 create index consent_logs_phone_channel_idx on public.consent_logs(phone, channel, created_at desc);
 create index consent_logs_email_channel_idx on public.consent_logs(email, channel, created_at desc);
+create index opt_outs_patient_channel_idx on public.opt_outs(patient_id, channel, created_at desc);
+create index opt_outs_phone_channel_idx on public.opt_outs(phone, channel, created_at desc);
+create index opt_outs_email_channel_idx on public.opt_outs(email, channel, created_at desc);
 create index message_templates_channel_idx on public.message_templates(channel);
 create index message_templates_category_idx on public.message_templates(category);
 create index communication_outbox_channel_idx on public.communication_outbox(channel);

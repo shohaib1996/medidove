@@ -53,6 +53,7 @@ const refreshContent = () => {
   revalidatePath("/doctor");
   revalidatePath("/admin/campaigns");
   revalidatePath("/admin/ai-leads");
+  revalidatePath("/admin/opt-outs");
   revalidatePath("/admin/tasks");
   revalidatePath("/admin/feedback");
   revalidatePath("/admin/clinical-notes");
@@ -390,6 +391,29 @@ const seedConsentIfMissing = async (
     channel: "whatsapp",
     consented: true,
     reason: "Demo opt-in for appointment reminders and patient engagement.",
+  });
+};
+
+const seedOptOutIfMissing = async (
+  supabase: Awaited<ReturnType<typeof assertAdmin>>,
+) => {
+  const email = "optout.demo@medidove.ai";
+  const { data: existing } = await supabase
+    .from("opt_outs")
+    .select("id")
+    .eq("email", email)
+    .eq("channel", "email")
+    .maybeSingle();
+
+  if (existing) {
+    return;
+  }
+
+  await supabase.from("opt_outs").insert({
+    email,
+    channel: "email",
+    reason: "Demo patient opted out of marketing emails.",
+    source: "demo_seed",
   });
 };
 
@@ -832,6 +856,7 @@ export const seedDemoWorkspace = async () => {
 
   await seedLeadIfMissing(supabase);
   await seedConsentIfMissing(supabase);
+  await seedOptOutIfMissing(supabase);
   await seedFeedbackIfMissing(supabase);
   await seedCareTaskIfMissing(supabase);
   await seedClinicalNoteIfMissing(supabase);

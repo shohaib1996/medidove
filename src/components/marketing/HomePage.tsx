@@ -329,6 +329,9 @@ const HomePage = () => {
             <Link href="/terms" className="hover:text-primary">
               Terms
             </Link>
+            <Link href="/unsubscribe" className="hover:text-primary">
+              Unsubscribe
+            </Link>
             <span>Next.js 16, Supabase, shadcn/ui, ElevenLabs-ready</span>
           </div>
         </div>

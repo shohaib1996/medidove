@@ -42,6 +42,7 @@ For real healthcare clients, production compliance work may be required, includi
 - Supabase-backed wellness product catalog with staff-reviewed inquiries
 - Product and package inquiry links that prefill contact leads for staff review
 - Supabase-backed testimonials and proof points for buyer trust
+- Public unsubscribe flow with opt-out suppression before message dispatch
 - Real appointment request form
 - Smart appointment intake API with emergency-safe routing language
 - Floating AI clinic assistant widget
@@ -81,6 +82,7 @@ For real healthcare clients, production compliance work may be required, includi
 - `/blog/[slug]` CMS-backed article details
 - `/receptionist` ElevenLabs receptionist demo page
 - `/engagement` WhatsApp and patient engagement page
+- `/unsubscribe` public communication opt-out page
 - `/login` and `/register`
 - `/portal`
 - `/portal/consents`
@@ -94,6 +96,7 @@ For real healthcare clients, production compliance work may be required, includi
 - `/admin/communications`
 - `/admin/campaigns`
 - `/admin/outreach`
+- `/admin/opt-outs`
 - `/admin/automations`
 - `/admin/tasks`
 - `/admin/clinical-notes`
@@ -206,7 +209,8 @@ Twilio:
 - `/api/twilio/whatsapp/inbound` logs inbound WhatsApp messages and returns TwiML.
 - SMS dispatch uses `TWILIO_FROM_PHONE`.
 - WhatsApp dispatch uses `TWILIO_WHATSAPP_FROM`.
-- Consent is checked before dispatching SMS, WhatsApp, voice, or email records.
+- Consent and opt-out suppression are checked before dispatching SMS, WhatsApp, voice, or email records.
+- `/api/unsubscribe` records public opt-out requests and negative consent history.
 
 Automation:
 

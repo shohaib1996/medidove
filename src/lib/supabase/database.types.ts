@@ -1108,6 +1108,45 @@ export type Database = {
           },
         ];
       };
+      opt_outs: {
+        Row: {
+          id: string;
+          patient_id: string | null;
+          channel: Channel;
+          phone: string | null;
+          email: string | null;
+          reason: string | null;
+          source: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          patient_id?: string | null;
+          channel: Channel;
+          phone?: string | null;
+          email?: string | null;
+          reason?: string | null;
+          source?: string;
+          created_at?: string;
+        };
+        Update: {
+          patient_id?: string | null;
+          channel?: Channel;
+          phone?: string | null;
+          email?: string | null;
+          reason?: string | null;
+          source?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "opt_outs_patient_id_fkey";
+            columns: ["patient_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       message_templates: {
         Row: {
           id: string;

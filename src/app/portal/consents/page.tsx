@@ -38,6 +38,15 @@ type ConsentLog = {
   created_at: string;
 };
 
+type OptOut = {
+  id: string;
+  phone: string | null;
+  email: string | null;
+  channel: "email" | "sms" | "whatsapp" | "voice";
+  reason: string | null;
+  created_at: string;
+};
+
 const formatDate = (value: string) =>
   new Intl.DateTimeFormat("en", {
     dateStyle: "medium",
@@ -61,7 +70,8 @@ export default async function PatientConsentsPage() {
     redirect("/login");
   }
 
-  const [{ data: profile }, { data: consentsData }] = await Promise.all([
+  const [{ data: profile }, { data: consentsData }, { data: optOutsData }] =
+    await Promise.all([
     supabase
       .from("profiles")
       .select("full_name, phone")
@@ -73,12 +83,22 @@ export default async function PatientConsentsPage() {
       .eq("patient_id", user.id)
       .order("created_at", { ascending: false })
       .limit(20),
+    supabase
+      .from("opt_outs")
+      .select("id, phone, email, channel, reason, created_at")
+      .eq("patient_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(20),
   ]);
 
   const consents = (consentsData || []) as ConsentLog[];
+  const optOuts = (optOutsData || []) as OptOut[];
+  const blockedChannels = new Set(optOuts.map((optOut) => optOut.channel));
   const activeChannels = new Set(
     consents
-      .filter((consent) => consent.consented)
+      .filter(
+        (consent) => consent.consented && !blockedChannels.has(consent.channel),
+      )
       .map((consent) => consent.channel),
   );
 
@@ -117,12 +137,18 @@ export default async function PatientConsentsPage() {
                     <div className="flex items-center justify-between gap-3">
                       <Icon className="size-7 text-primary" />
                       <Badge variant={isActive ? "default" : "outline"}>
-                        {isActive ? "Opted in" : "No active opt-in"}
+                        {blockedChannels.has(channel)
+                          ? "Opted out"
+                          : isActive
+                            ? "Opted in"
+                            : "No active opt-in"}
                       </Badge>
                     </div>
                     <CardTitle className="capitalize">{channel}</CardTitle>
                     <CardDescription>
-                      {isActive
+                      {blockedChannels.has(channel)
+                        ? "A recent opt-out blocks this channel."
+                        : isActive
                         ? "Latest consent allows this channel."
                         : "No consent has been recorded for this channel."}
                     </CardDescription>
@@ -250,6 +276,61 @@ export default async function PatientConsentsPage() {
                     No consent records yet.
                   </div>
                 )}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardDescription>Suppression</CardDescription>
+                <CardTitle>Recent opt-outs</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {optOuts.length > 0 ? (
+                  optOuts.map((optOut) => {
+                    const Icon = channelIcons[optOut.channel];
+
+                    return (
+                      <div
+                        key={optOut.id}
+                        className="rounded-lg border border-slate-200 bg-white p-4"
+                      >
+                        <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
+                          <div className="flex gap-3">
+                            <Icon className="mt-1 size-5 shrink-0 text-red-600" />
+                            <div>
+                              <p className="font-semibold capitalize text-slate-900">
+                                {optOut.channel}
+                              </p>
+                              <p className="mt-1 text-sm text-slate-500">
+                                {formatDate(optOut.created_at)}
+                              </p>
+                            </div>
+                          </div>
+                          <Badge variant="outline">Blocked</Badge>
+                        </div>
+                        <p className="mt-3 text-sm leading-6 text-slate-600">
+                          {optOut.reason || "No reason provided."}
+                        </p>
+                        <div className="mt-3 flex flex-wrap gap-2 text-xs text-slate-500">
+                          {optOut.phone ? (
+                            <Badge variant="secondary">{optOut.phone}</Badge>
+                          ) : null}
+                          {optOut.email ? (
+                            <Badge variant="secondary">{optOut.email}</Badge>
+                          ) : null}
+                        </div>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="rounded-lg border border-dashed border-slate-300 p-8 text-center text-slate-500">
+                    <ShieldCheck className="mx-auto mb-3 size-8" />
+                    No opt-outs recorded for your account.
+                  </div>
+                )}
+                <Button asChild variant="outline">
+                  <Link href="/unsubscribe">Open unsubscribe page</Link>
+                </Button>
               </CardContent>
             </Card>
           </section>

@@ -55,6 +55,36 @@ const getLatestConsent = async (
   record: OutboxRecord,
 ): Promise<ConsentResult> => {
   const supabase = createAdminClient();
+  const hasOptOut = async (
+    column: "patient_id" | "email" | "phone",
+    value: string | null,
+  ) => {
+    if (!value) {
+      return false;
+    }
+
+    const { data } = await supabase
+      .from("opt_outs")
+      .select("id")
+      .eq("channel", record.channel)
+      .eq(column, value)
+      .order("created_at", { ascending: false })
+      .limit(1);
+
+    return Boolean(data?.[0]);
+  };
+
+  if (
+    (await hasOptOut("patient_id", record.patient_id)) ||
+    (await hasOptOut("email", record.recipient_email)) ||
+    (await hasOptOut("phone", record.recipient_phone))
+  ) {
+    return {
+      consented: false,
+      reason: "Recipient has an active opt-out for this channel.",
+    };
+  }
+
   const baseQuery = supabase
     .from("consent_logs")
     .select("consented, created_at")

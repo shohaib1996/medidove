@@ -17,6 +17,7 @@ const publicRoutes = [
   "/receptionist",
   "/engagement",
   "/feedback",
+  "/unsubscribe",
   "/privacy",
   "/terms",
 ];
