@@ -1,0 +1,333 @@
+import Image from "next/image";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import {
+  CalendarClock,
+  FileText,
+  MessageCircle,
+  Send,
+  ShieldCheck,
+  Stethoscope,
+} from "lucide-react";
+import PublicHeader from "@/components/marketing/PublicHeader";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { createClient } from "@/lib/supabase/server";
+
+export const metadata = {
+  title: "Health Timeline | MediDove",
+};
+
+type AppointmentRow = {
+  id: string;
+  requested_department: string | null;
+  requested_doctor: string | null;
+  requested_at: string | null;
+  reason: string | null;
+  ai_summary: string | null;
+  status: string;
+  created_at: string;
+};
+
+type ClinicalNoteRow = {
+  id: string;
+  patient_name: string;
+  visit_type: string;
+  subjective: string;
+  assessment: string;
+  care_plan: string;
+  risk_flags: string[];
+  status: string;
+  created_at: string;
+};
+
+type ConsentRow = {
+  id: string;
+  channel: string;
+  consented: boolean;
+  reason: string | null;
+  created_at: string;
+};
+
+type OutboxRow = {
+  id: string;
+  channel: string;
+  subject: string | null;
+  message: string;
+  status: string;
+  sent_at: string | null;
+  created_at: string;
+};
+
+type TimelineItem = {
+  id: string;
+  type: "appointment" | "note" | "consent" | "message";
+  title: string;
+  description: string;
+  date: string;
+  status: string;
+};
+
+const formatDate = (value: string | null) => {
+  if (!value) {
+    return "Not selected";
+  }
+
+  return new Intl.DateTimeFormat("en", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(new Date(value));
+};
+
+const itemIcon = (type: TimelineItem["type"]) => {
+  if (type === "appointment") {
+    return <CalendarClock className="h-5 w-5 text-primary" />;
+  }
+
+  if (type === "note") {
+    return <FileText className="h-5 w-5 text-primary" />;
+  }
+
+  if (type === "consent") {
+    return <ShieldCheck className="h-5 w-5 text-primary" />;
+  }
+
+  return <Send className="h-5 w-5 text-primary" />;
+};
+
+export default async function PatientTimelinePage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const [
+    { data: profile },
+    { data: appointmentsData },
+    { data: notesData },
+    { data: consentsData },
+    { data: outboxData },
+  ] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select("full_name, phone")
+      .eq("id", user.id)
+      .single(),
+    supabase
+      .from("appointments")
+      .select(
+        "id, requested_department, requested_doctor, requested_at, reason, ai_summary, status, created_at",
+      )
+      .eq("patient_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(20),
+    supabase
+      .from("clinical_notes")
+      .select(
+        "id, patient_name, visit_type, subjective, assessment, care_plan, risk_flags, status, created_at",
+      )
+      .eq("patient_id", user.id)
+      .eq("status", "reviewed")
+      .order("created_at", { ascending: false })
+      .limit(20),
+    supabase
+      .from("consent_logs")
+      .select("id, channel, consented, reason, created_at")
+      .eq("patient_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(20),
+    supabase
+      .from("communication_outbox")
+      .select("id, channel, subject, message, status, sent_at, created_at")
+      .eq("patient_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(20),
+  ]);
+
+  const appointments = (appointmentsData || []) as AppointmentRow[];
+  const notes = (notesData || []) as ClinicalNoteRow[];
+  const consents = (consentsData || []) as ConsentRow[];
+  const outbox = (outboxData || []) as OutboxRow[];
+  const timeline: TimelineItem[] = [
+    ...appointments.map((appointment) => ({
+      id: appointment.id,
+      type: "appointment" as const,
+      title: appointment.requested_department || "Appointment request",
+      description:
+        appointment.ai_summary ||
+        appointment.reason ||
+        `Requested with ${appointment.requested_doctor || "the care team"}.`,
+      date: appointment.created_at,
+      status: appointment.status,
+    })),
+    ...notes.map((note) => ({
+      id: note.id,
+      type: "note" as const,
+      title: `${note.visit_type} note`,
+      description: `${note.assessment} Plan: ${note.care_plan}`,
+      date: note.created_at,
+      status: note.risk_flags.length > 0 ? "reviewed with flags" : note.status,
+    })),
+    ...consents.map((consent) => ({
+      id: consent.id,
+      type: "consent" as const,
+      title: `${consent.channel} consent`,
+      description:
+        consent.reason ||
+        (consent.consented
+          ? "You allowed this communication channel."
+          : "You opted out of this communication channel."),
+      date: consent.created_at,
+      status: consent.consented ? "active" : "revoked",
+    })),
+    ...outbox.map((message) => ({
+      id: message.id,
+      type: "message" as const,
+      title: message.subject || `${message.channel} message`,
+      description: message.message,
+      date: message.sent_at || message.created_at,
+      status: message.status,
+    })),
+  ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-900">
+      <PublicHeader />
+
+      <main>
+        <section className="relative overflow-hidden bg-slate-950 px-4 py-16 text-white md:px-8">
+          <Image
+            src="/assets/img/slider/slider-bg-2.jpg"
+            alt="Patient timeline"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover opacity-25"
+          />
+          <div className="absolute inset-0 bg-slate-950/75" />
+          <div className="relative mx-auto flex max-w-7xl flex-col justify-between gap-8 md:flex-row md:items-end">
+            <div>
+              <Badge className="mb-5 bg-white/10 text-white hover:bg-white/15">
+                <Stethoscope className="h-3.5 w-3.5" />
+                Health timeline
+              </Badge>
+              <h1 className="max-w-3xl text-4xl font-bold leading-tight tracking-normal md:text-5xl">
+                Your care history in one secure view
+              </h1>
+              <p className="mt-5 max-w-2xl leading-8 text-slate-300">
+                Review appointments, reviewed clinical notes, consent changes,
+                and patient communication history.
+              </p>
+            </div>
+            <Button asChild variant="outline" className="border-white/30 bg-white/10 text-white hover:bg-white hover:text-slate-950">
+              <Link href="/portal">Back to portal</Link>
+            </Button>
+          </div>
+        </section>
+
+        <section className="px-4 py-10 md:px-8">
+          <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-4">
+            <Card>
+              <CardHeader>
+                <CardDescription>Patient</CardDescription>
+                <CardTitle className="text-xl">
+                  {profile?.full_name || user.email}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm text-slate-500">
+                {profile?.phone || "Phone not added"}
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardDescription>Appointments</CardDescription>
+                <CardTitle className="text-3xl">{appointments.length}</CardTitle>
+              </CardHeader>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardDescription>Reviewed Notes</CardDescription>
+                <CardTitle className="text-3xl">{notes.length}</CardTitle>
+              </CardHeader>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardDescription>Messages</CardDescription>
+                <CardTitle className="text-3xl">{outbox.length}</CardTitle>
+              </CardHeader>
+            </Card>
+          </div>
+        </section>
+
+        <section className="px-4 pb-16 md:px-8">
+          <div className="mx-auto max-w-5xl">
+            <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="text-sm font-bold uppercase text-primary">
+                  Timeline
+                </p>
+                <h2 className="mt-2 text-3xl font-bold tracking-normal">
+                  Recent care activity
+                </h2>
+              </div>
+              <Button asChild variant="outline">
+                <Link href="/portal/consents">
+                  <MessageCircle className="h-4 w-4" />
+                  Consent center
+                </Link>
+              </Button>
+            </div>
+
+            {timeline.length > 0 ? (
+              <div className="space-y-4">
+                {timeline.map((item) => (
+                  <Card key={`${item.type}-${item.id}`}>
+                    <CardContent className="flex gap-4 p-5">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-primary/10">
+                        {itemIcon(item.type)}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                          <div>
+                            <p className="font-semibold">{item.title}</p>
+                            <p className="mt-1 text-sm text-slate-500">
+                              {formatDate(item.date)}
+                            </p>
+                          </div>
+                          <Badge variant="secondary" className="capitalize">
+                            {item.status}
+                          </Badge>
+                        </div>
+                        <p className="mt-3 line-clamp-4 text-sm leading-6 text-slate-700">
+                          {item.description}
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <Card>
+                <CardContent className="py-14 text-center text-slate-500">
+                  <FileText className="mx-auto mb-3 h-9 w-9" />
+                  No timeline activity is available yet.
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        </section>
+      </main>
+    </div>
+  );
+}

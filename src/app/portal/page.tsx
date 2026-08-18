@@ -5,6 +5,7 @@ import {
   CalendarClock,
   CheckCircle2,
   Clock,
+  FileText,
   LogOut,
   MessageCircle,
   Stethoscope,
@@ -232,6 +233,12 @@ export default async function PatientPortalPage() {
                 </h2>
               </div>
               <div className="flex flex-col gap-3 sm:flex-row">
+                <Button asChild variant="outline">
+                  <Link href="/portal/timeline">
+                    <FileText />
+                    Health timeline
+                  </Link>
+                </Button>
                 <Button asChild variant="outline">
                   <Link href="/portal/consents">
                     <MessageCircle />
