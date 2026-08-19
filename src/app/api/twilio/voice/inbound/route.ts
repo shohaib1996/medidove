@@ -1,6 +1,7 @@
 import {
   logInboundVoiceCall,
   parseTwilioForm,
+  receptionistGatherResponse,
   voiceResponse,
 } from "@/lib/communications/twilio";
 
@@ -12,9 +13,9 @@ export async function POST(request: Request) {
       await logInboundVoiceCall({ from, callSid, callStatus });
     }
 
-    return voiceResponse(
-      "Hello, this is MediDove Clinic. You are speaking with an AI-assisted phone workflow demo. Your call has been logged for the reception team. If this is urgent, please contact emergency services.",
-    );
+    const actionUrl = new URL("/api/twilio/voice/intake", request.url);
+
+    return receptionistGatherResponse(actionUrl.toString());
   } catch (error) {
     console.error("Twilio voice inbound webhook failed", error);
 
