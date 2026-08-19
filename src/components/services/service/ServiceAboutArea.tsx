@@ -11,9 +11,9 @@ type DataType = {
   sm_des: string;
 }
 const service_content: DataType = {
-  sub_title: "health care facility",
-  title: "Would you rather stay at home than go into a health care facility?",
-  sm_des: "Perspiciatis unde omnis iste natus lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nost rud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat  nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut error sit voluptatem accusantium.",
+  sub_title: "AI clinic services",
+  title: "Route patients to the right care path without diagnosis claims.",
+  sm_des: "MediDove combines clinic service pages with Supabase booking, AI intake, voice receptionist workflows, and consent-based reminders. Patients get clearer next steps while staff keep control of final scheduling and follow-up.",
 
 }
 const { sub_title, title, sm_des } = service_content

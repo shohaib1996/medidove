@@ -61,19 +61,19 @@ interface DataType {
 
 const service_details_content: DataType = {
   sub_title: "Dental Care",
-  title: "We are here to help when you need us.",
-  des_1: "Neque porro quisquam est, qui dolorem ipsum quia dolor lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.  Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non",
-  des_2: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
+  title: "Dental care supported by smart intake and reminders.",
+  des_1: "Patients can describe dental pain, cleaning needs, or follow-up requests in plain language. The smart intake workflow suggests the dental department, prepares an admin note, and keeps the final decision with clinic staff.",
+  des_2: "For demos, this page shows how service content can feed appointment booking, semantic search, receptionist scripts, and consent-based WhatsApp reminders without making diagnosis or treatment claims.",
   features: [
     {
       id: 1,
       img: icon_1,
       title: "Personal care",
       lists: [
-        "Cillum dolore eu fugiat nulla.",
-        "Lorem ipsum dolor sit amet.",
-        "Consectetur adipisicing elit,",
-        "Sed do eiusmod tempor inci.",
+        "Structured dental appointment intake.",
+        "Receptionist callback handoff.",
+        "Consent-aware reminder workflow.",
+        "Admin-reviewed patient notes.",
       ],
     },
     {
@@ -81,10 +81,10 @@ const service_details_content: DataType = {
       img: icon_2,
       title: "Lifestyle support",
       lists: [
-        "Didunt ut labore et dolore magna.",
-        "Aliqua. Ut enim ad minim veniam.",
-        "Quis nostrud exercitation ullamco.",
-        "Laboris nisi ut aliquip ex ea.",
+        "Routine cleaning reminders.",
+        "Follow-up message templates.",
+        "Patient support request capture.",
+        "Safe emergency guidance.",
       ],
     },
   ],
@@ -110,10 +110,10 @@ const service_details_content: DataType = {
       file_size: "112KB",
     },
   ],
-  des_3: "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.",
+  des_3: "The strongest clinic demos show AI supporting operations while staff remain responsible for patient care decisions.",
   name: "Rosalina D. Williamson",
-  job_title: "founder, uithemes",
-  service_title: "service_title",
+  job_title: "Clinic Operations Lead",
+  service_title: "More services",
   service_data: [
     {
       id: 1,
@@ -138,7 +138,7 @@ const service_details_content: DataType = {
     {
       id: 5,
       img: service_icon_5,
-      title: "Neurology Sargery",
+      title: "Neurology Routing",
     },
     {
       id: 6,

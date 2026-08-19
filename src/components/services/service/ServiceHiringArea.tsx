@@ -6,8 +6,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const hiring_content = {
-  title: "For Employers",
-  description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  title: "For Clinic Teams",
+  description: "Use MediDove to capture appointment requests, summarize patient intent, queue receptionist callbacks, and keep WhatsApp, SMS, email, and voice outreach tied to consent records.",
 }
 const { title, description } = hiring_content
 
@@ -40,7 +40,7 @@ const ServiceHiringArea = () => {
               <div className="hire-text">
                 <h1>{title}</h1>
                 <p>{description}</p>
-                <Link data-animation="fadeInLeft" data-delay=".6s" href="#"
+                <Link data-animation="fadeInLeft" data-delay=".6s" href="/appointment"
                   className="btn btn-icon ml-0"><span>+</span>apply today</Link>
               </div>
             </div>
