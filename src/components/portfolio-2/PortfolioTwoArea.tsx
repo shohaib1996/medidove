@@ -1,8 +1,9 @@
-'use client'
+"use client";
+
 import Image from "next/image";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import portfolio_data from "@/data/PortfolioData";
-import ImagePopup from '@/modals/ImagePopup';
+import ImagePopup from "@/modals/ImagePopup";
 
 // data
 const categories = [
@@ -11,7 +12,11 @@ const categories = [
 ];
 const perView = 6;
 
-const PortfolioTwoArea = ({style}: any) => {
+type PortfolioTwoAreaProps = {
+  style?: boolean;
+};
+
+const PortfolioTwoArea = ({ style }: PortfolioTwoAreaProps) => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [items, setItems] = useState(portfolio_data);
   const [next, setNext] = useState(perView);
@@ -37,11 +42,11 @@ const PortfolioTwoArea = ({style}: any) => {
   };
 
   // photoIndex
-  const [photoIndex, setPhotoIndex] = useState(null);
+  const [photoIndex, setPhotoIndex] = useState(0);
   // image open state
   const [isOpen, setIsOpen] = useState(false);
   // handleImagePopup
-  const handleImagePopup = (i: any) => {
+  const handleImagePopup = (i: number) => {
     setPhotoIndex(i);
     setIsOpen(true);
   };
@@ -81,6 +86,13 @@ const PortfolioTwoArea = ({style}: any) => {
                         <a className="popup-image" 
                         style={{ cursor: "pointer" }}
                         onClick={() => handleImagePopup(i)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(event) => {
+                          if (event.key === "Enter" || event.key === " ") {
+                            handleImagePopup(i);
+                          }
+                        }}
                         >
                           <i className="fas fa-plus"></i>
                         </a>

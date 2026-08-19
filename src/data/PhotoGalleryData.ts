@@ -9,17 +9,17 @@ import gallery_thumb_6 from "@/assets/img/home5/gallery/gallery__thumb6.jpg";
 import { StaticImageData } from "next/image";
 
 
-interface DataType {
+type PhotoGalleryItem = {
   id: number;
   img: StaticImageData;
-  category?: string;
+  category: string;
   title: string;
   tag_1: string;
   tag_2: string;
-}
+};
 
 
-const photo_gallery_data: DataType[] = [
+const photo_gallery_data: PhotoGalleryItem[] = [
   {
     id: 1, 
     img: gallery_thumb_1,

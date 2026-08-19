@@ -1,14 +1,12 @@
-'use client'
-import Link from 'next/link';
-import Image from 'next/image';
-import React, { useState } from 'react';
-import photo_gallery_data from '@/data/PhotoGalleryData';
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import React, { useState } from "react";
+import photo_gallery_data from "@/data/PhotoGalleryData";
 import back_icon from "@/assets/img/section/section-back-icon.png";
 import title_line from "@/assets/img/shape/section-title-line.png";
-import ImagePopup from "@/modals/ImagePopup"
-
-  
-
+import ImagePopup from "@/modals/ImagePopup";
 
 // data
 const categories = ["All", ...new Set(photo_gallery_data.map((item) => item.category))];
@@ -22,7 +20,7 @@ const PhotoGalleryHomeFive = () => {
   const [items, setItems] = useState(photo_gallery_data);
   const [next, setNext] = useState(perView);
 
-  const filterItems = (cateItem: any) => {
+  const filterItems = (cateItem: string) => {
     setActiveCategory(cateItem);
     setNext(perView);
     if (cateItem === "All") {
@@ -41,11 +39,11 @@ const PhotoGalleryHomeFive = () => {
   };
 
   // photoIndex
-  const [photoIndex, setPhotoIndex] = useState(null);
+  const [photoIndex, setPhotoIndex] = useState(0);
   // image open state
   const [isOpen, setIsOpen] = useState(false);
   // handleImagePopup
-  const handleImagePopup = (i: any) => {
+  const handleImagePopup = (i: number) => {
     setPhotoIndex(i);
     setIsOpen(true);
   };
@@ -100,6 +98,13 @@ const PhotoGalleryHomeFive = () => {
                     <a className="popup-image" 
                       style={{ cursor: "pointer" }}
                       onClick={() => handleImagePopup(i)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          handleImagePopup(i);
+                        }
+                      }}
                     >
                       <i className="fal fa-plus"></i>
                     </a>

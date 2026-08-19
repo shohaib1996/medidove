@@ -8,15 +8,15 @@ import portfolio_img_4 from "@/assets/img/portfolio/port4.jpg";
 import portfolio_img_5 from "@/assets/img/portfolio/port5.jpg";
 import portfolio_img_6 from "@/assets/img/portfolio/port6.jpg"; 
 
-interface DataType {
+type PortfolioItem = {
   id: number;
   img: StaticImageData;
   title: string;
   tag: string;
   category: string;
-}
+};
 
-const portfolio_data = [
+const portfolio_data: PortfolioItem[] = [
   {
     id: 1,
     img: portfolio_img_1,
