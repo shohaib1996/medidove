@@ -10,10 +10,10 @@ import avatar_img from "@/assets/img/home4/about/ava.png";
 const about_content  = {
   phone: "012 (963) 15632",
   sub_title: "About Medidove",
-  title: "25+ Years We Provide Services",
-  sm_des_1: "Temponcididunt ipsum dolor sit amet, consectetur adipisicing elit, sed eiusmod lorem ut labore dolore magna aliqua. Ut enim ad minimveniam, quis nos exercitation ullamco laboris nisi ut aliquip",
-  sm_des_2: "Consectetur adipisicing elit Temponcididunt ipsum dolor sit amet, sed eiusmod lorem ut labore dolore magna aliqua. Ut enim ad minimveniam, quis nos exercitation ullamco laboris nisi ut aliquip",
-  avatar_info: "Consectetur adipisicing elit, sed do eiusmod temponc ididunt ut labore dolore magna aliqua.",
+  title: "AI workflows for busy clinic teams",
+  sm_des_1: "MediDove turns appointment forms, website chat, phone calls, and WhatsApp messages into structured records that staff can review quickly.",
+  sm_des_2: "The platform is designed for operational support: intake summaries, receptionist handoffs, reminder queues, campaign drafts, and consent tracking.",
+  avatar_info: "AI supports routing and summaries while clinicians and staff remain responsible for patient decisions.",
   avatar_name: "Annie J. Fisher",
 }
 const {phone, sub_title, title, sm_des_1, sm_des_2, avatar_info, avatar_name} = about_content

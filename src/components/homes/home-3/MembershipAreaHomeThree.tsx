@@ -34,43 +34,43 @@ interface DataType {
 }
 
 const membership_content: DataType = {
-  sub_title: "Exclusive Buyer",
-  title: "Premium Membership",
+  sub_title: "Care packages",
+  title: "AI-ready patient engagement packages",
   membership_data: [
     {
       id: 1,
       img: membership_img_1,
-      title: "Hourly Home Care",
-      sm_des: "adipisicing ipsum dolor sit amet, consectetur elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation lorem ullamco laboris nisi ut aliquip.",
+      title: "Wellness Follow-Up",
+      sm_des: "Bundle routine checkup reminders, feedback requests, smart intake summaries, and WhatsApp confirmations into one patient engagement flow.",
     },
     {
       id: 2,
       img: membership_img_2,
-      title: "Medicine Quick Delivery",
-      sm_des: "incididunt ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation lorem ullamco laboris nisi ut aliquip.",
+      title: "Reception Desk Automation",
+      sm_des: "Use AI receptionist callbacks, lead capture, appointment routing, and admin task generation to reduce missed patient requests.",
     },
   ],
   testimonita_data: [
     {
       id: 1,
       img: testi_img_1,
-      sm_des: "Lorem ipsum dolor sit amet, coning ctetur adipisicing elit, sed do it on eiusmod tempor incididunt me ut labore et dolore.",
+      sm_des: "The demo shows exactly how a clinic can capture calls and messages after hours without losing the human review step.",
       name: "Mr. Halim Dawn",
-      job_title: "Founder, TrashTheme",
+      job_title: "Clinic Owner",
     },
     {
       id: 2,
       img: testi_img_2,
-      sm_des: "Lorem ipsum dolor sit amet, coning ctetur adipisicing elit, sed do it on eiusmod tempor incididunt me ut labore et dolore.",
+      sm_des: "AI intake made appointment requests easier to review because every message arrived with suggested urgency and next steps.",
       name: "Hiliam D. Pawlu",
-      job_title: "Founder, TrashTheme",
+      job_title: "Operations Manager",
     },
     {
       id: 3,
       img: testi_img_3,
-      sm_des: "Lorem ipsum dolor sit amet, coning ctetur adipisicing elit, sed do it on eiusmod tempor incididunt me ut labore et dolore.",
+      sm_des: "The WhatsApp and voice workflow gives buyers a clear picture of how patient engagement automation can work.",
       name: "Eric Z. Piedie",
-      job_title: "Founder, TrashTheme",
+      job_title: "Care Coordinator",
     }, 
   ],
 }

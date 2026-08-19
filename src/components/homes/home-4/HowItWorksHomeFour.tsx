@@ -13,27 +13,27 @@ import shape from "@/assets/img/home4/how/move-icon.png";
 
 const hiw_content = {
   sub_title: "How It Works",
-  title: "You Will Be Able To Access Our Services Following 3 Steps",
+  title: "Patients reach the right team in three simple steps",
   hiw_data: [
     {
       id: 1,
       icon: icon_1,
-      title: "Have A Coffee",
-      sm_des: "incididunt lorem ipsum dolor sit amet, consecte turadipisicing elit, sed do eiusmod tempor ut lab.",
+      title: "Share the Request",
+      sm_des: "Patients use the appointment form, assistant, WhatsApp, or voice receptionist to explain what they need.",
       shape: shape,
     },
     {
       id: 2,
       icon: icon_2,
-      title: "Choose Doctor",
-      sm_des: "turadipisicing incididunt lorem ipsum dolor sit amet, consecte elit, sed do eiusmod tempor ut lab.",
+      title: "AI Routes Safely",
+      sm_des: "The system suggests a department, urgency level, and admin note without making diagnosis claims.",
       shape: shape,
     },
     {
       id: 3,
       icon: icon_3,
-      title: "Admission Now",
-      sm_des: "consecte incididunt lorem ipsum dolor sit amet, turadipisicing elit, sed do eiusmod tempor ut lab.",
+      title: "Staff Follow Up",
+      sm_des: "The admin team confirms appointments, queues reminders, and handles callbacks from one dashboard.",
     },
   ]
 }
