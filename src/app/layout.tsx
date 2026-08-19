@@ -22,19 +22,19 @@ const rubik = Rubik({
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "MediDove AI Clinic Platform",
+    default: "MediDove Online Clinic",
     template: "%s | MediDove",
   },
   description:
-    "AI-powered clinic receptionist, smart appointment intake, Supabase admin dashboard, WhatsApp engagement, and patient workflow automation.",
+    "Online clinic appointments, reception support, patient reminders, service guidance, and follow-up communication.",
   applicationName: "MediDove",
   keywords: [
-    "AI medical receptionist",
-    "clinic appointment system",
-    "Supabase healthcare app",
-    "ElevenLabs receptionist",
-    "Twilio WhatsApp clinic",
-    "patient engagement platform",
+    "online medical appointment",
+    "clinic reception",
+    "patient reminders",
+    "doctor booking",
+    "medical services",
+    "patient support",
   ],
   authors: [{ name: "MediDove" }],
   creator: "MediDove",
@@ -46,23 +46,23 @@ export const metadata: Metadata = {
     type: "website",
     url: "/",
     siteName: "MediDove",
-    title: "MediDove AI Clinic Platform",
+    title: "MediDove Online Clinic",
     description:
-      "AI clinic receptionist, smart booking, patient reminders, lead triage, and admin workflows for modern healthcare teams.",
+      "Book appointments, reach reception, receive reminders, and get safe service guidance from MediDove.",
     images: [
       {
         url: "/assets/img/slider/slider-bg-1.jpg",
         width: 1200,
         height: 630,
-        alt: "MediDove AI Clinic Platform",
+        alt: "MediDove Online Clinic",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "MediDove AI Clinic Platform",
+    title: "MediDove Online Clinic",
     description:
-      "AI-powered appointment intake, receptionist workflows, patient engagement, and clinic admin automation.",
+      "Online appointments, reception support, patient reminders, and clinic follow-up communication.",
     images: ["/assets/img/slider/slider-bg-1.jpg"],
   },
   robots: {

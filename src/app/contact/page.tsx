@@ -2,9 +2,9 @@ import ContactPage from "@/components/contact/ContactPage";
 import { getClinicSettings } from "@/lib/clinic/settings";
 
 export const metadata = {
-  title: "Contact | MediDove AI Clinic",
+  title: "Contact | MediDove",
   description:
-    "Send a message to MediDove AI Clinic. Contact leads are stored in Supabase for admin and AI follow-up workflows.",
+    "Contact the MediDove clinic team for appointment help, service questions, reminders, and patient support.",
 };
 
 const getSingleParam = (value: string | string[] | undefined) =>

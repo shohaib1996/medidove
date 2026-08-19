@@ -153,15 +153,15 @@ const ContactPage = ({
           <div className="relative mx-auto max-w-7xl">
             <Badge className="mb-5 bg-white/10 text-white hover:bg-white/15">
               <Headphones className="size-3.5" />
-              AI-ready lead capture
+              Clinic support
             </Badge>
             <h1 className="max-w-4xl text-4xl font-bold leading-tight tracking-normal md:text-6xl">
               Contact {settings.clinicName}
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-200">
-              Send a message to the clinic team. Every submission is stored in
-              Supabase and prepared for AI triage, admin follow-up, and future
-              WhatsApp or voice workflows.
+              Send a message to the clinic team for appointment help, service
+              questions, callback requests, billing questions, or follow-up
+              support.
             </p>
             {inquiryContext && inquiryContext.type !== "general" ? (
               <div className="mt-6 inline-flex rounded-lg border border-white/15 bg-white/10 px-4 py-3 text-sm text-slate-100">
@@ -175,7 +175,7 @@ const ContactPage = ({
           <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_380px]">
             <Card>
               <CardHeader>
-                <CardDescription>Contact Lead</CardDescription>
+                <CardDescription>Contact request</CardDescription>
                 <CardTitle className="text-2xl">Send a message</CardTitle>
               </CardHeader>
               <CardContent>
@@ -286,10 +286,10 @@ const ContactPage = ({
 
               <Card>
                 <CardHeader>
-                  <CardDescription>Response workflow</CardDescription>
+                  <CardDescription>Response time</CardDescription>
                   <CardTitle className="flex items-center gap-2">
                     <Clock className="size-5 text-primary" />
-                    Admin follow-up
+                    Clinic follow-up
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm leading-6 text-slate-600">
@@ -300,11 +300,11 @@ const ContactPage = ({
               <Card className="bg-slate-950 text-white">
                 <CardHeader>
                   <CardDescription className="text-slate-300">
-                    Next AI layer
+                    Patient safety
                   </CardDescription>
                   <CardTitle className="flex items-center gap-2">
                     <ShieldCheck className="size-5 text-primary" />
-                    AI lead triage
+                    Safe support
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm leading-6 text-slate-300">

@@ -2,9 +2,9 @@ import AppointmentBookingPage from "@/components/appointments/AppointmentBooking
 import { getBookingOptions } from "@/lib/clinic/content";
 
 export const metadata = {
-  title: "Book Appointment | MediDove AI Clinic",
+  title: "Book Appointment | MediDove",
   description:
-    "Submit a Supabase-backed appointment request for the MediDove AI clinic platform.",
+    "Request an appointment with MediDove and let the clinic team review the right care option for you.",
 };
 
 const AppointmentPage = async () => {

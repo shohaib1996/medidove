@@ -1,9 +1,9 @@
 import HomePage from "@/components/marketing/HomePage";
 
 export const metadata = {
-  title: "MediDove AI Clinic Platform",
+  title: "MediDove Online Clinic",
   description:
-    "AI-powered clinic website with Supabase appointments, admin dashboard, voice receptionist, and patient engagement workflows.",
+    "Book appointments, contact reception, receive reminders, and get safe service guidance from MediDove Online Clinic.",
 };
 
 const HomeMain = () => {

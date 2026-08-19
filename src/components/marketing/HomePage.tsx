@@ -26,36 +26,36 @@ import {
 import PublicHeader from "./PublicHeader";
 
 const platformStats = [
-  { label: "AI intake channels", value: "4" },
-  { label: "Patient workflows", value: "12+" },
-  { label: "Admin response time", value: "24/7" },
+  { label: "Ways to reach care", value: "4" },
+  { label: "Patient support flows", value: "12+" },
+  { label: "Reception availability", value: "24/7" },
 ];
 
 const features = [
   {
     icon: Bot,
-    title: "AI Website Assistant",
+    title: "Online Care Assistant",
     description:
-      "Answers service, doctor, pricing, and booking questions using clinic knowledge stored in Supabase.",
+      "Helps patients understand available services, choose the right department, and start an appointment request.",
   },
   {
     icon: Headphones,
-    title: "AI Receptionist",
+    title: "Virtual Reception Desk",
     description:
-      "ElevenLabs voice agent captures calls, summarizes conversations, and creates appointment requests.",
+      "Answers common clinic questions, captures callback requests, and prepares appointment details for staff review.",
   },
   {
     icon: MessageCircle,
-    title: "WhatsApp Engagement",
+    title: "Appointment Reminders",
     description:
-      "Send opt-in reminders, confirmations, follow-ups, and patient support messages through WhatsApp.",
+      "Patients can receive confirmations, visit reminders, follow-up messages, and support updates through preferred channels.",
     href: "/engagement",
   },
   {
     icon: Search,
-    title: "Smart Doctor Matching",
+    title: "Doctor And Department Guidance",
     description:
-      "Patients describe what they need, and AI routes them to the right department or doctor type.",
+      "Patients describe what they need and receive safe guidance toward the most relevant service or doctor type.",
   },
 ];
 
@@ -69,10 +69,10 @@ const services = [
 ];
 
 const workflow = [
-  "Patient asks for help on web, WhatsApp, or phone.",
-  "AI captures intent, urgency, consent, and appointment details.",
-  "Supabase stores structured appointment, lead, call, and chat records.",
-  "Admin reviews requests and follows up from the dashboard.",
+  "Patient asks for help online, by message, or by phone.",
+  "The system collects the reason for visit, urgency, consent, and preferred time.",
+  "Clinic staff review the request and confirm the best next step.",
+  "Patients receive reminders, updates, and follow-up support when needed.",
 ];
 
 const HomePage = () => {
@@ -96,15 +96,15 @@ const HomePage = () => {
             <div>
               <Badge className="mb-6 bg-white/10 text-white hover:bg-white/15">
                 <Sparkles className="size-3.5" />
-                AI-powered meditech demo
+                Modern patient care platform
               </Badge>
               <h1 className="max-w-4xl text-4xl font-bold leading-tight tracking-normal md:text-6xl">
-                MediDove AI Clinic Reception and Patient Engagement System
+                MediDove Online Clinic Reception And Patient Support
               </h1>
               <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-200">
-                A modern medical platform with Supabase appointments, AI intake,
-                ElevenLabs voice reception, WhatsApp reminders, and an admin
-                dashboard for clinic teams.
+                Book appointments, reach the reception team, get service
+                guidance, receive visit reminders, and stay connected with your
+                clinic before and after care.
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -122,7 +122,7 @@ const HomePage = () => {
                 >
                   <Link href="/receptionist">
                     <Headphones />
-                    Try receptionist
+                    Talk to reception
                   </Link>
                 </Button>
               </div>
@@ -144,17 +144,17 @@ const HomePage = () => {
 
             <Card className="border-white/10 bg-white/95 text-slate-900 shadow-2xl">
               <CardHeader>
-                <CardDescription>Live system modules</CardDescription>
+                <CardDescription>Patient services</CardDescription>
                 <CardTitle className="text-2xl">
-                  Built for real clinic operations
+                  Care support from first question to follow-up
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {[
-                  "Supabase Auth, appointments, profiles, and leads",
-                  "AI triage for department and doctor routing",
-                  "ElevenLabs receptionist call workflow",
-                  "WhatsApp and phone reminder-ready data model",
+                  "Book appointments with the right department",
+                  "Ask reception questions any time",
+                  "Get reminders before your visit",
+                  "Receive follow-up support after care",
                 ].map((item) => (
                   <div key={item} className="flex gap-3">
                     <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-teal-600" />
@@ -170,14 +170,15 @@ const HomePage = () => {
           <div className="mx-auto max-w-7xl">
             <div className="max-w-3xl">
               <p className="text-sm font-bold uppercase text-primary">
-                Platform features
+                Patient services
               </p>
               <h2 className="mt-3 text-3xl font-bold tracking-normal md:text-4xl">
-                AI features that healthcare buyers actually understand
+                Simple digital support for everyday clinic care
               </h2>
               <p className="mt-4 text-slate-600">
-                The system focuses on scheduling, communication, lead triage,
-                and admin support instead of risky diagnosis claims.
+                MediDove helps patients find services, request appointments,
+                talk with reception, and receive timely communication without
+                replacing professional medical advice.
               </p>
             </div>
 
@@ -214,16 +215,16 @@ const HomePage = () => {
             <div>
               <Badge variant="secondary" className="mb-4">
                 <HeartPulse className="size-3.5" />
-                Patient routing
+                Care guidance
               </Badge>
               <h2 className="text-3xl font-bold tracking-normal md:text-4xl">
-                Convert old static medical pages into a live Supabase-backed
-                clinic platform
+                Find the right service before booking your visit
               </h2>
               <p className="mt-5 leading-8 text-slate-600">
-                Doctors, departments, appointments, leads, call logs, WhatsApp
-                conversations, and AI chat records can live in Supabase while
-                Next.js renders a polished patient-facing experience.
+                Patients can describe their concern in plain language and get
+                directed toward the right department, doctor type, or next
+                appointment step. Urgent symptoms are handled with clear safety
+                guidance.
               </p>
 
               <div className="mt-8 grid gap-3 sm:grid-cols-2">
@@ -245,32 +246,32 @@ const HomePage = () => {
           <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2 lg:items-center">
             <div>
               <p className="text-sm font-bold uppercase text-primary">
-                Reception automation
+                Reception and reminders
               </p>
               <h2 className="mt-3 text-3xl font-bold tracking-normal md:text-4xl">
-                ElevenLabs voice receptionist plus real phone and WhatsApp
-                workflows
+                A clinic reception experience that is available beyond office
+                hours
               </h2>
               <p className="mt-5 leading-8 text-slate-300">
-                The voice layer can answer inbound clinic calls, collect booking
-                details, save transcripts, and prepare follow-up tasks. Outbound
-                calls and WhatsApp reminders should be opt-in patient engagement
-                flows with consent and opt-out handling.
+                Patients can request appointments, ask common questions, leave
+                callback details, and receive reminder messages. Staff review
+                every request before appointments or follow-up actions are
+                confirmed.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <Badge className="bg-white/10 text-white">ElevenLabs</Badge>
-                <Badge className="bg-white/10 text-white">Twilio Voice</Badge>
-                <Badge className="bg-white/10 text-white">WhatsApp Business</Badge>
-                <Badge className="bg-white/10 text-white">Supabase Logs</Badge>
+                <Badge className="bg-white/10 text-white">Phone support</Badge>
+                <Badge className="bg-white/10 text-white">Online booking</Badge>
+                <Badge className="bg-white/10 text-white">Visit reminders</Badge>
+                <Badge className="bg-white/10 text-white">Follow-up care</Badge>
               </div>
             </div>
 
             <Card className="border-white/10 bg-white/10 text-white">
               <CardHeader>
                 <CardDescription className="text-slate-300">
-                  Example workflow
+                  How it works
                 </CardDescription>
-                <CardTitle>From patient request to admin action</CardTitle>
+                <CardTitle>From patient request to confirmed care</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {workflow.map((step, index) => (
@@ -290,22 +291,21 @@ const HomePage = () => {
           <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 rounded-lg border border-slate-200 bg-slate-50 p-8 md:flex-row md:items-center">
             <div>
               <p className="text-sm font-bold uppercase text-primary">
-                Ready for the next phase
+                Start your visit
               </p>
               <h2 className="mt-2 text-3xl font-bold tracking-normal">
-                Add the AI assistant and smart intake next
+                Request care online or contact reception
               </h2>
               <p className="mt-3 max-w-2xl text-slate-600">
-                The public home now presents the product clearly. The next build
-                step can add a real AI chat widget and semantic search backed by
-                Supabase.
+                Share your reason for visit, choose a service, and let the
+                clinic team review the best appointment option for you.
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
               <Button asChild variant="outline">
                 <Link href="/receptionist">
                   <PhoneCall />
-                  Try receptionist
+                  Contact reception
                 </Link>
               </Button>
               <Button asChild>
@@ -321,7 +321,7 @@ const HomePage = () => {
 
       <footer className="border-t border-slate-200 px-4 py-8 md:px-8">
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 text-sm text-slate-500 md:flex-row">
-          <p>MediDove AI Clinic Platform</p>
+          <p>MediDove Online Clinic</p>
           <div className="flex flex-wrap gap-4">
             <Link href="/privacy" className="hover:text-primary">
               Privacy
@@ -332,7 +332,7 @@ const HomePage = () => {
             <Link href="/unsubscribe" className="hover:text-primary">
               Unsubscribe
             </Link>
-            <span>Next.js 16, Supabase, shadcn/ui, ElevenLabs-ready</span>
+            <span>Appointments, reminders, reception, and patient support</span>
           </div>
         </div>
       </footer>
