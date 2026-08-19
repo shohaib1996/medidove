@@ -1,6 +1,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import about_thumb_1 from "@/assets/img/home4/about/about__thumb.jpg";
 import phone_icon from "@/assets/img/home4/icon/about__phone__icon.png";
@@ -26,12 +27,12 @@ const AboutAreaHomeFour = () => {
           <div className="row">
             <div className="col-xl-6 col-lg-5">
               <div className="h4about-thumb pos-rel">
-                <Image src={about_thumb_1} alt="theme-pure" />
-                <a href="#" className="call-btn f-700 white-color green-bg">
+                <Image src={about_thumb_1} alt="AI clinic workflow" />
+                <Link href="/contact" className="call-btn f-700 white-color green-bg">
                   <i className="call-icon" >
-                    <Image src={phone_icon} alt="theme-pure" />
+                    <Image src={phone_icon} alt="" />
                 </i><span>Call : {phone}</span>
-                </a>
+                </Link>
                 <Image src={overlap} alt="" className="about-overlap__thumb" />
               </div>
             </div>
@@ -51,7 +52,7 @@ const AboutAreaHomeFour = () => {
                 </div>
                 <div className="about-author d-flex align-items-center">
                   <div className="author-ava h4author-ava">
-                    <Image src={avatar_img} alt="theme-pure"  />
+                    <Image src={avatar_img} alt={avatar_name}  />
                   </div>
                   <div className="author-desination h4author-destination">
                     <p>{avatar_info}</p>

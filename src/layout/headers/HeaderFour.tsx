@@ -39,9 +39,9 @@ const HeaderFour = () => {
                 <div className="top4-right d-flex justify-content-end">
                   <div className="top4-menu">
                     <ul className="list-inline">
-                      <li><a className="need-help" href="#">{help}</a></li>
-                      <li><a href="#">{setting}</a></li>
-                      <li><a href="#">{media}</a></li>
+                      <li><Link className="need-help" href="/contact">{help}</Link></li>
+                      <li><Link href="/admin/settings">{setting}</Link></li>
+                      <li><Link href="/blog">{media}</Link></li>
                     </ul>
                   </div>
                   <div className="header-social-icons top4-social d-none d-xl-block">

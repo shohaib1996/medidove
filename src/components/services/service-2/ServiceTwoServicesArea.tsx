@@ -13,7 +13,7 @@ type DataType = {
 }
 const servcies_content: DataType = {
   sub_title: "Departments",
-  title: "Managed Your Heathcare Services",
+  title: "Manage clinic services with AI support",
 }
 const {sub_title, title}  = servcies_content
 
@@ -39,33 +39,29 @@ const ServiceTwoServicesArea = () => {
             </div>
             <div className="col-xl-5 col-lg-4">
               <div className="section-button text-right d-none d-lg-block pt-80">
-                <a data-animation="fadeInLeft" data-delay=".6s" href="services.html"
-                  className="btn btn-icon ml-0"><span>+</span>more services</a>
+                <Link data-animation="fadeInLeft" data-delay=".6s" href="/service"
+                  className="btn btn-icon ml-0"><span>+</span>more services</Link>
               </div>
             </div>
           </div>
           <div className="row">
-            {blog_data.map((item, i) =>
-              <>
-                {item.home_3_serive_2 &&
-                  <div key={i} className="col-xl-4 col-lg-4 col-md-6">
+            {blog_data.filter((item) => item.home_3_serive_2).map((item) =>
+                  <div key={item.id} className="col-xl-4 col-lg-4 col-md-6">
                     <div className="service-box-3 mb-30 text-center">
                       <div className="service-thumb">
                         <Link href="/service-details">
-                          <Image src={item.img} style={{width: "100%", height: "auto"}} alt="theme-pure" />
+                          <Image src={item.img} style={{width: "100%", height: "auto"}} alt={item.title} />
                         </Link>
                       </div>
                       <div className="service-content-box">
                         <div className="service-content">
-                          <h3><Link href="/news-details">{item.title}</Link></h3>
+                          <h3><Link href="/service-details">{item.title}</Link></h3>
                           <p>{item.sm_des}</p>
                         </div>
-                        <Link href="#" className="service-link">Read More</Link>
+                        <Link href="/service-details" className="service-link">Read More</Link>
                       </div>
                     </div>
                   </div>
-                }
-              </>
             )}
           </div>
         </div>

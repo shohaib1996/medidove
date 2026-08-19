@@ -35,21 +35,21 @@ interface DataType {
 }
 
 const footer_content: DataType = {
-  sm_des: "adipisicing lorem ipsum dolor sit amet, consectetur elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut.",
-  email: "info@examplemedical.com",
-  website: "examplemedical.com",
+  sm_des: "MediDove is a Next.js and Supabase clinic platform demo with AI reception, smart intake, reminders, and admin operations.",
+  email: "hello@medidove.ai",
+  website: "medidove.ai",
   address: "227 Marion Street, Columbia",
   
   link_data: [
     {
       title: "Departments",
       links: [
-        { title: "Surgery and Radiology", link: "#" },
-        { title: "Family Medicine", link: "#" },
-        { title: "Women's Health", link: "#" },
-        { title: "Optician", link: "#" },
-        { title: "Pediatrics", link: "#" },
-        { title: "Dermatology", link: "#" },
+        { title: "Surgery and Radiology", link: "/service" },
+        { title: "Family Medicine", link: "/service" },
+        { title: "Women's Health", link: "/service" },
+        { title: "Optician", link: "/service" },
+        { title: "Pediatrics", link: "/service" },
+        { title: "Dermatology", link: "/service" },
       ]
     }
   ],
@@ -57,20 +57,20 @@ const footer_content: DataType = {
     {
       id: 1,
       img: blog_thumb_1,
-      title: "Consectetur ipsum dolor sit am et, lorem .",
-      time: "14 August 2023"
+      title: "AI receptionist handoffs for busy clinics",
+      time: "12 August 2026"
     },
     {
       id: 2,
       img: blog_thumb_2,
-      title: "Consectetur ipsum dolor sit am et, lorem .",
-      time: "14 August 2023"
+      title: "Consent-aware WhatsApp reminder workflows",
+      time: "14 August 2026"
     },
     {
       id: 3,
       img: blog_thumb_3,
-      title: "Consectetur ipsum dolor sit am et, lorem .",
-      time: "14 August 2023"
+      title: "Smart intake without diagnosis claims",
+      time: "18 August 2026"
     },
   ],
   news_title: "Recent News",
@@ -92,8 +92,8 @@ const FooterFour = () => {
               <div className="col-xl-3 col-lg-6 col-md-6">
                 <div className="footer-contact-info footer-contact-info-3 mb-40">
                   <div className="footer-logo mb-35">
-                    <Link href="#">
-                      <Image src={footer_logo_three} alt="" />
+                    <Link href="/">
+                      <Image src={footer_logo_three} alt="MediDove" />
                     </Link>
                   </div>
                   <div className="footer-contact-content mb-25">
@@ -140,11 +140,11 @@ const FooterFour = () => {
                     {footer_blog_data.map((b_item, b_i) =>
                       <div key={b_i} className="signle-blog-feeds mb-20">
                         <div className="blog-feeds-thumb">
-                          <Link href="/news-details" ><Image src={b_item.img} alt={b_item.title} /></Link>
+                          <Link href="/blog" ><Image src={b_item.img} alt={b_item.title} /></Link>
                         </div>
                         <div className="blog-feeds-text">
                           <h5>
-                            <Link href="/news-details">{b_item.title}</Link>
+                            <Link href="/blog">{b_item.title}</Link>
                           </h5>
                           <span className="feeds-date">{b_item.time}</span>
                         </div>
@@ -164,20 +164,20 @@ const FooterFour = () => {
                         <i className="fal fa-clock"></i><span>{office_open_day} <span>{office_open_time}</span></span>
                       </li>
                       <li>
-                        <i className="fal fa-times-square"></i ><span className="close-days">Satarday Closed</span>
+                        <i className="fal fa-times-square"></i ><span className="close-days">Saturday Closed</span>
                       </li>
                     </ul>
                   </div>
                   <div className="h4footer-social">
                     <ul className="list-inline">
                       <li>
-                        <a href="#"><i className="fab fa-facebook-f"></i></a>
+                        <Link href="https://facebook.com" target="_blank" rel="noreferrer"><i className="fab fa-facebook-f"></i></Link>
                       </li>
                       <li>
-                        <a href="#"><i className="fab fa-twitter"></i></a>
+                        <Link href="https://twitter.com" target="_blank" rel="noreferrer"><i className="fab fa-twitter"></i></Link>
                       </li>
                       <li>
-                        <a href="#"><i className="fab fa-google"></i></a>
+                        <Link href="https://google.com" target="_blank" rel="noreferrer"><i className="fab fa-google"></i></Link>
                       </li>
                     </ul>
                   </div>

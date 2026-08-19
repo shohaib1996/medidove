@@ -18,7 +18,7 @@ const HeaderTwo = () => {
             <div className="row d-flex justify-content-between align-items-center">
               <div className="col-xl-2 col-lg-2 col-md-6 col-sm-6">
                 <div className="logo pos-rel">
-                  <Link href="/"><Image src={LogoTwo}  style={{height: 'auto'}} alt="theme-pure" /></Link>
+                  <Link href="/"><Image src={LogoTwo}  style={{height: 'auto'}} alt="MediDove" /></Link>
                 </div>
               </div>
               <div className="col-xl-6 col-lg-8 col-md-6 col-sm-6">
@@ -37,7 +37,7 @@ const HeaderTwo = () => {
                   <Link href="/contact" data-animation="fadeInLeft" data-delay=".6s" className="btn btn-icon btn-icon-green">
                     <span>+</span>contact us
                   </Link>
-                  <Link href="#" data-animation="fadeInLeft" data-delay=".6s" className="btn btn-icon btn-icon-white">
+                  <Link href="/contact" data-animation="fadeInLeft" data-delay=".6s" className="btn btn-icon btn-icon-white">
                     <i className="fas fa-phone"></i>Make A Call
                   </Link>
                 </div>

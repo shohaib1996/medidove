@@ -1,11 +1,12 @@
 'use client'
 import React from 'react';
+import Link from 'next/link';
 import NiceSelect, { NiceSelectOption } from '@/ui/NiceSelect';
 
 const calculate_content = {
-  sub_title: "make a call",
-  title: "Quote Calculator",
-  sm_des: "If you require services on a public holiday, overnight services or live-in services, please call (+00)888.666.88 so we can discuss prices with you.",
+  sub_title: "make an appointment",
+  title: "Care Request Planner",
+  sm_des: "Select a care path, preferred arrival time, and contact number so staff can review the request before confirming the appointment.",
 
 }
 const {sub_title, title, sm_des}  = calculate_content
@@ -28,9 +29,9 @@ const ServiceCalculateArea = () => {
                 </div>
               </div>
               <div className="section-button section-button-left mb-30">
-                <a data-animation="fadeInLeft" data-delay=".6s" href="#" className="btn btn-icon btn-icon-green ml-0">
+                <Link data-animation="fadeInLeft" data-delay=".6s" href="/appointment" className="btn btn-icon btn-icon-green ml-0">
                   <span>+</span>Make Appointment
-                </a>
+                </Link>
               </div>
             </div>
             <div className="col-xl-5 col-lg-6">

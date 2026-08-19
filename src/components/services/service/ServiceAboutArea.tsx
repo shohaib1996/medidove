@@ -52,10 +52,10 @@ const ServiceAboutArea = ({ service_2 }: ServiceAboutAreaProps) => {
                     <div key={i} className="col-xl-4 col-lg-6 col-md-6">
                       <div className="service-box service-box-border text-center mb-30">
                         <div className="service-thumb">
-                          <Image src={item.img} alt="theme-pure" />
+                          <Image src={item.img} alt={item.title} />
                         </div>
                         <div className="service-content">
-                          <h3><a href="#">{item.title}</a></h3>
+                          <h3><Link href="/service-details">{item.title}</Link></h3>
                           <p>{item.sm_des}</p>
                           <Link className="service-link" href="/service-details">Read More</Link>
                         </div>

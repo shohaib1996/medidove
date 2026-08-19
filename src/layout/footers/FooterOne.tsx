@@ -27,9 +27,9 @@ interface FooterContentDatatype {
 const footer_content:FooterContentDatatype = {
   number_text: "Emergency number",
   number: "202-555-0104",
-  sm_info: "incididunt lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut.",
-  email: "info@examplemedical.com",
-  website: "examplemedical.com",
+  sm_info: "MediDove is an AI-powered clinic operations demo for smart booking, patient communication, voice reception, and admin workflows.",
+  email: "hello@medidove.ai",
+  website: "medidove.ai",
   address: "227 Marion Street, Columbia",
   footer_links: [
     {
@@ -37,12 +37,12 @@ const footer_content:FooterContentDatatype = {
       cls: "col-md-4",
       title: "Departments",
       links: [
-        {link: "#", title: "Surgery and Radiology"},
-        {link: "#", title: "Family Medicine"},
-        {link: "#", title: "Women's Health"},
-        {link: "#", title: "Optician"},
-        {link: "#", title: "Pediatrics"},
-        {link: "#", title: "Dermatology"},
+        {link: "/service", title: "Surgery and Radiology"},
+        {link: "/service", title: "Family Medicine"},
+        {link: "/service", title: "Women's Health"},
+        {link: "/service", title: "Optician"},
+        {link: "/service", title: "Pediatrics"},
+        {link: "/service", title: "Dermatology"},
       ]
     },
     {
@@ -50,12 +50,12 @@ const footer_content:FooterContentDatatype = {
       cls: "d-md-none d-lg-block",
       title: "Quick Links",
       links: [
-        {link: "#", title: "Departments"},
-        {link: "#", title: "Our Doctors"},
-        {link: "#", title: "News"},
-        {link: "#", title: "Shop"},
-        {link: "#", title: "Contact Us"},
-        {link: "#", title: "Book an Appointment"},
+        {link: "/service", title: "Departments"},
+        {link: "/doctor", title: "Our Doctors"},
+        {link: "/blog", title: "News"},
+        {link: "/shop", title: "Shop"},
+        {link: "/contact", title: "Contact Us"},
+        {link: "/appointment", title: "Book an Appointment"},
       ]
     },
   ]
@@ -81,7 +81,7 @@ const FooterOne = () => {
                     </div>
                   </div>
                   <div className="footer-logo mb-35">
-                    <Link href="#"><Image src={footer_logo} alt="theme-pure" /></Link>
+                    <Link href="/"><Image src={footer_logo} alt="MediDove" /></Link>
                   </div>
                   <div className="footer-contact-content mb-25">
                     <p>{sm_info}</p>
@@ -104,7 +104,7 @@ const FooterOne = () => {
                     <div className="footer-menu">
                       <ul>
                         {item.links.map((link, index) =>
-                          <li key={index}><Link href="#">{link.title}</Link></li>
+                          <li key={index}><Link href={link.link}>{link.title}</Link></li>
                         )} 
                       </ul>
                     </div>

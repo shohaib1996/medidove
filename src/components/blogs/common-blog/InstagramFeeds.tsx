@@ -1,5 +1,6 @@
 import React from 'react';
 import Image, { StaticImageData } from 'next/image';
+import Link from 'next/link';
 
 import instagram_img_1 from "@/assets/img/instagram/ins1.jpg";
 import instagram_img_2 from "@/assets/img/instagram/ins2.jpg";
@@ -36,7 +37,7 @@ const InstagramFeeds = () => {
           <h3 className="widget-title">Instagram Feeds</h3>
         </div>
         <ul id="Instafeed">
-          {instagram_data.map((item, i) => <li key={i}><a href="#"><Image src={item} style={{width: "100%", height: "auto"}} alt="theme-pure" /></a></li>)}
+          {instagram_data.map((item, i) => <li key={i}><Link href="/blog"><Image src={item} style={{width: "100%", height: "auto"}} alt={`Clinic gallery ${i + 1}`} /></Link></li>)}
         </ul>
       </div>
 

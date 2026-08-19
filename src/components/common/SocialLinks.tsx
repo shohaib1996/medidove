@@ -9,23 +9,23 @@ interface SocialLinksDataType {
 
 const social_links: SocialLinksDataType[] = [
   {
-    link: "http://facebook.com",
+    link: "https://facebook.com",
     icon: "fab fa-facebook-f",
   },
   {
-    link: "http://behance.com",
+    link: "https://behance.com",
     icon: "fab fa-behance",
   },
   {
-    link: "http://www.youtube.com",
+    link: "https://www.youtube.com",
     icon: "fab fa-youtube",
   },
   {
-    link: "http://www.linkedin.com",
+    link: "https://www.linkedin.com",
     icon: "fab fa-linkedin",
   },
   {
-    link: "http://www.pinterest.com",
+    link: "https://www.pinterest.com",
     icon: "fab fa-pinterest",
   },
 ];
@@ -37,7 +37,8 @@ const SocialLinks = () => {
         <Link
           key={i}
           href={l.link}
-          target="_blank">
+          target="_blank"
+          rel="noreferrer">
           <i className={l.icon} ></i> {' '}
         </Link>
       ))}
@@ -59,12 +60,12 @@ interface SocialLinksTwoDataType {
 
 const social_links_2: SocialLinksTwoDataType[] = [
   {
-    link: "http://facebook.com",
+    link: "https://facebook.com",
     color: "footer-facebook",
     icon: "fa-brands fa-facebook-f",
   },
   {
-    link: "http://twitter.com",
+    link: "https://twitter.com",
     color: "",
     icon: "fa-brands fa-twitter",
   },
@@ -88,7 +89,8 @@ export const SocialLinksTwo = () => {
           key={index}
           href={link.link}
           className={link.color}
-          target="_blank">
+          target="_blank"
+          rel="noreferrer">
           <i className={link.icon}></i>{" "}
         </Link>
       ))}
@@ -108,27 +110,27 @@ interface TeamSocialLinksDataType {
 const team_social_data: TeamSocialLinksDataType[] = [
   {
     id: 1,
-    link: "http://facebook.com",
+    link: "https://facebook.com",
     icon: "fab fa-facebook-f",
   },
   {
     id: 2,
-    link: "http://twitter.com",
+    link: "https://twitter.com",
     icon: "fab fa-twitter",
   },
   {
     id: 3,
-    link: "http://behance.com",
+    link: "https://behance.com",
     icon: "fab fa-behance",
   },
   {
     id: 4,
-    link: "http://pinterest.com",
+    link: "https://pinterest.com",
     icon: "fab fa-pinterest",
   },
   {
     id: 5,
-    link: "http://linkedin.com",
+    link: "https://linkedin.com",
     icon: "fab fa-linkedin",
   },
 ]
@@ -140,7 +142,8 @@ export const TeamSocialLinks = () => {
         <li key={t_index}>
           <Link 
             href={t_item.link}
-            target="_blank">
+            target="_blank"
+            rel="noreferrer">
             <i className={t_item.icon}></i>{" "}
           </Link>
         </li>
@@ -156,8 +159,7 @@ type CopyRightDataType = {
 }
 
 const copy_right_text: CopyRightDataType = {
-  copy_right: <> ©{new Date().getFullYear()} Copyrights by company. All Rights Reserved. Designed by
-    <Link target="_blank" href="https://themeforest.net/user/theme_pure/portfolio" style={{ color: "#fff" }}> Theme_Pure. </Link>
+  copy_right: <> ©{new Date().getFullYear()} MediDove AI Clinic Platform. All rights reserved.
   </>,
 }
 

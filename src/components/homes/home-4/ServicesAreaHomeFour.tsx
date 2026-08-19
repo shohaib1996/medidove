@@ -68,7 +68,7 @@ const ServicesAreaHomeFour = ({ style }: ServicesAreaHomeFourProps) => {
       <section className={`services-area ${style ? "gray-bg" : "services-border"} pos-rel pt-185 pb-160`}>
         {style ? <></> :
           <span className="h4services-bg">
-            <Image src={service_overlay} alt="theme-pure" />
+            <Image src={service_overlay} alt="" />
           </span>
         }
         <div className="container">
@@ -80,7 +80,7 @@ const ServicesAreaHomeFour = ({ style }: ServicesAreaHomeFourProps) => {
                 </div>
                 <div className="section-text pos-rel">
                   <h5>Departments</h5>
-                  <h1>Managed Your Heathcare Services</h1>
+                  <h1>Manage clinic services with AI support</h1>
                 </div>
                 <div className="section-line pos-rel">
                   <Image src={title_line} alt="" />
@@ -101,11 +101,11 @@ const ServicesAreaHomeFour = ({ style }: ServicesAreaHomeFourProps) => {
                 <div key={i} className="h4service-item">
                   <div className="h4service-box white-bg mb-30">
                     <div className="service-thumb pos-rel mb-0">
-                      <Image src={item.img} alt="theme-pure" />
-                      <Link className="h4services-tag green-bg white-color text-uppercase f-700" href="#" >{item.sub_title}</Link>
+                      <Image src={item.img} alt={item.title} />
+                      <Link className="h4services-tag green-bg white-color text-uppercase f-700" href="/service" >{item.sub_title}</Link>
                     </div>
                     <div className={`service-content ${style ? "h4services-content h6services-content" : "h4services-content"}`}>
-                      <h3><a href="#">{item.title}</a></h3>
+                      <h3><Link href="/service-details">{item.title}</Link></h3>
                       <p className="mb-20"> {item.sm_des} </p>
                       {style ?
                         <div className="h5services-bottom">

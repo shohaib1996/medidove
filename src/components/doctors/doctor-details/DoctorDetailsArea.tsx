@@ -17,55 +17,55 @@ import degree_2 from "@/assets/img/services/more-ser-5.png";
 import ServiceContactForm from '@/components/forms/ServiceContactForm';
 
 const doctor_details_content = {
-  sub_title: "introducing my self",
-  title: "There Is Nothing To Show Something.",
-  des_1: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna  aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde  omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.",
-  skills_text: "Here Is Skills",
-  des_2: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste  natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
+  sub_title: "doctor profile",
+  title: "AI-assisted care coordination for every visit.",
+  des_1: "This profile page shows how MediDove can present doctors inside a modern clinic workflow. Patients can review specialties, care coverage, languages, and contact options before requesting an appointment through the connected booking system.",
+  skills_text: "Clinical Workflow Support",
+  des_2: "The platform does not diagnose patients. It helps capture appointment reasons, organize intake notes, suggest the most relevant department, and keep staff informed before a doctor reviews the request.",
   features: [
     {
       id: 1,
       img: icon_1,
-      title: "Personal care",
+      title: "Patient intake",
       lists: [
-        "Cillum dolore eu fugiat nulla.",
-        "Lorem ipsum dolor sit amet.",
-        "Consectetur adipisicing elit,",
-        "Sed do eiusmod tempor inci.",
+        "Structured appointment reason.",
+        "Urgency-aware routing hints.",
+        "Preferred date and channel.",
+        "Staff handoff notes.",
       ],
     },
     {
       id: 2,
       img: icon_2,
-      title: "Lifestyle support",
+      title: "Care operations",
       lists: [
-        "Didunt ut labore et dolore magna.",
-        "Aliqua. Ut enim ad minim veniam.",
-        "Quis nostrud exercitation ullamco.",
-        "Laboris nisi ut aliquip ex ea.",
+        "Call summary review.",
+        "Reminder task creation.",
+        "Consent-aware outreach.",
+        "Audit log visibility.",
       ],
     },
   ],
   care_text: "Care Coverage",
-  des_3: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde  omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
-  name: "Halim D. Keliano",
-  job_title: "Dentist & Neurologist",
+  des_3: "Doctors and staff can use the dashboard to review appointment requests, contact leads, AI conversation history, call logs, and campaign activity. The demo is designed for safe clinic operations and buyer presentations, not for storing real medical records.",
+  name: "Dr. Halim Keliano",
+  job_title: "Dentist & Neurology Consultant",
   qualifications: "Qualifications",
   qualifications_data: [
     {
       id: 1,
       img: degree_1,
-      education: "Master of Science",
-      versity_name: "Oxford Univercity (2015 - 2018)",
+      education: "Clinical Operations Review",
+      versity_name: "AI-assisted intake and routing",
     },
     {
       id: 2,
       img: degree_2,
-      education: "Neurology Test",
-      versity_name: "Stanford Versity (2019 - 2023)",
+      education: "Patient Communication",
+      versity_name: "Voice, WhatsApp, and callback workflows",
     },
   ],
-  advice: "Get Some Advice?",
+  advice: "Request An Appointment",
 
 }
 const { sub_title, title, des_1, skills_text, des_2, features, care_text, des_3, name, job_title, qualifications, qualifications_data, advice } = doctor_details_content
@@ -81,14 +81,14 @@ const DoctorDetailsArea = () => {
               <article className="doctor-details-box">
                 <div className="section-title pos-rel mb-25">
                   <div className="section-icon">
-                    <Image className="section-back-icon back-icon-left" src={back_icon_sky} alt="theme-pure" />
+                    <Image className="section-back-icon back-icon-left" src={back_icon_sky} alt="" />
                   </div>
                   <div className="section-text pos-rel">
                     <h5 className="green-color text-up-case">{sub_title}</h5>
                     <h1>{title}</h1>
                   </div>
                   <div className="section-line pos-rel">
-                    <Image src={title_line} alt="theme-pure" />
+                    <Image src={title_line} alt="" />
                   </div>
                 </div>
                 <div className="service-details-text mb-40">
@@ -99,7 +99,7 @@ const DoctorDetailsArea = () => {
                     <h2>{skills_text}</h2>
                   </div>
                   <div className="section-line pos-rel">
-                    <Image src={title_line} alt="theme-pure" />
+                    <Image src={title_line} alt="" />
                   </div>
                 </div>
                 <div className="service-details-text mb-35">
@@ -109,7 +109,7 @@ const DoctorDetailsArea = () => {
                   {features.map((item, i) =>
                     <div key={i} className={`ser-fea-box f-left ${i === 0 ? "mr-0" : ""}`}>
                       <div className="ser-fea-icon f-left">
-                        <Image src={item.img} alt="theme-pure" />
+                        <Image src={item.img} alt="" />
                       </div>
                       <div className="ser-fea-list fix">
                         <h3>{item.title}</h3>
@@ -127,7 +127,7 @@ const DoctorDetailsArea = () => {
                     <h2>{care_text}</h2>
                   </div>
                   <div className="section-line pos-rel">
-                    <Image src={title_line} alt="theme-pure" />
+                    <Image src={title_line} alt="" />
                   </div>
                 </div>
                 <div className="service-details-text mb-30">
@@ -152,7 +152,7 @@ const DoctorDetailsArea = () => {
               <div className="service-widget mb-50">
                 <div className="team-wrapper team-box-2 team-box-3 text-center mb-30">
                   <div className="team-thumb">
-                    <Image src={member_img} alt="theme-pure" />
+                    <Image src={member_img} alt={name} />
                   </div>
                   <div className="team-member-info mt-35 mb-35">
                     <h3><Link href="/doctor-details">{name}</Link></h3>
@@ -173,9 +173,9 @@ const DoctorDetailsArea = () => {
                   <ul>
                     {qualifications_data.map((quali_item, quali_index) =>
                       <li key={quali_index}>
-                        <Link href="#">
+                        <Link href="/doctor-details">
                           <div className="more-service-icon">
-                            <Image src={quali_item.img} alt="theme-pure" /></div>
+                            <Image src={quali_item.img} alt="" /></div>
                           <div className="more-service-title doctor-details-title">
                             {quali_item.education} <span>{quali_item.versity_name}</span>
                           </div>
@@ -197,10 +197,10 @@ const DoctorDetailsArea = () => {
                 </div>
                 <div className="doctor-detials-lan">
                   <ul>
-                    <li><a href="#">en</a></li>
-                    <li><a href="#">es</a></li>
-                    <li><a href="#">bd</a></li>
-                    <li><a href="#">la</a></li>
+                    <li>en</li>
+                    <li>es</li>
+                    <li>bd</li>
+                    <li>la</li>
                   </ul>
                 </div>
               </div>

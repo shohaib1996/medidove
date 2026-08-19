@@ -1,5 +1,6 @@
 'use client'
 import Image from 'next/image';
+import Link from 'next/link';
 import React, { useRef, useState } from 'react';
 
 import blog_img_thumb from "@/assets/img/blog/b2.jpg";
@@ -59,43 +60,43 @@ const setting = {
 
 
 const blog_details_content = {
-  time: "September 15, 2023",
-  post_writer: "Diboli B. Joly",
-  comments: 24,
-  title_1: "If you find yourself constantly bookmarking health sections on news.",
-  title_2: "A cleansing hot shower or bath",
-  title_3: "Setting the mood with incense",
-  description_1: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut  aliquip ex ea commodo.",
-  description_2: "Bccaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab  illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi  nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.",
-  description_3: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt.",
-  description_4: "consectetur adipisicing elit, sed do eiusmod  lorem ipsum dolor sit amet, tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.",
-  description_5: "eiusmod tempor incididunt ut labore et dolore  lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.",
-  description_6: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequa aute irure dolor.",
-  qoute_text: "This health blog from NPR takes a fairly broad look at the medical world,.",
-  qoute_writer: "Rosalina Pong",
+  time: "August 18, 2026",
+  post_writer: "MediDove Team",
+  comments: 3,
+  title_1: "Smart appointment intake without unsafe diagnosis claims",
+  title_2: "Route patients without pretending to diagnose",
+  title_3: "Keep every automation reviewable",
+  description_1: "A strong healthcare AI demo should help clinics collect better information without making medical decisions. MediDove uses AI to structure appointment reasons, suggest departments, identify urgent language, and prepare staff handoff notes.",
+  description_2: "The safest positioning is operational support: scheduling, intake, reminders, lead handling, and patient communication. The assistant can explain services and recommend booking paths, but clinical advice remains with qualified professionals.",
+  description_3: "For urgent symptoms, the system uses clear safety language and routes the patient toward emergency care instead of continuing a normal marketing or booking flow.",
+  description_4: "Patients describe their reason for visit in natural language. The intake endpoint returns a suggested department, urgency level, and a concise appointment note that staff can review before confirming the visit.",
+  description_5: "Call summaries, WhatsApp replies, campaign drafts, and AI chat messages are stored with enough context for a clinic team to understand what happened and what should happen next.",
+  description_6: "The MediDove demo is built for portfolio presentations with sample data only. Production healthcare deployments require vendor agreements, consent handling, privacy review, and local compliance checks.",
+  qoute_text: "Healthcare AI is strongest when it saves staff time and leaves clinical judgment with licensed professionals.",
+  qoute_writer: "MediDove Safety Note",
   comments_data: [
     {
       id: 1,
       img: comment_avatar_1,
-      name: "Karon Balina",
-      time: "19th May 2023",
-      comment_text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      name: "Alicia Morgan",
+      time: "12th August 2026",
+      comment_text: "The consent and audit language makes the workflow easier to explain to healthcare buyers.",
 
     },
     {
       id: 2,
       img: comment_avatar_2,
-      name: "Julias Roy",
-      time: "19th May 2023",
-      comment_text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      name: "David Rahman",
+      time: "14th August 2026",
+      comment_text: "Voice call summaries and callback queues are the kind of concrete AI features clinic clients understand quickly.",
 
     },
     {
       id: 3,
       img: comment_avatar_1,
-      name: "Arista Williamson",
-      time: "19th May 2023",
-      comment_text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      name: "Sarah Mitchell",
+      time: "18th August 2026",
+      comment_text: "Separating patient routing from diagnosis is the right boundary for a portfolio healthcare AI system.",
 
     },
 
@@ -166,6 +167,7 @@ const BlogDetailsInnerArea = ({
           {style_audio &&
             <div className="postbox__audio embed-responsive embed-responsive-16by9 mb-35">
               <iframe style={{ width: '100%', height: "500px" }}
+                title="Blog audio player"
                 src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/469608615&color=%23ff0000&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
             </div>
           }
@@ -204,8 +206,8 @@ const BlogDetailsInnerArea = ({
           <div className="postbox__text bg-none">
             <div className="post-meta mb-15">
               <span><i className="far fa-calendar-check"></i> {time} </span>
-              <span><a href="#"><i className="far fa-user"></i>{post_writer}</a></span>
-              <span><a href="#"><i className="far fa-comments"></i> {comments} Comments</a></span>
+              <span><Link href="/blog"><i className="far fa-user"></i>{post_writer}</Link></span>
+              <span><Link href="/blog"><i className="far fa-comments"></i> {comments} Comments</Link></span>
             </div>
             <h3 className="blog-title">{title_1}</h3>
             <div className="post-text mb-20">
@@ -233,10 +235,10 @@ const BlogDetailsInnerArea = ({
             <div className="row mt-50">
               <div className="col-xl-8 col-lg-8 col-md-8 mb-15">
                 <div className="blog-post-tag">
-                  <span>Releted Tags</span>
-                  <a href="#">organic</a>
-                  <a href="#">Foods</a>
-                  <a href="#">tasty</a>
+                  <span>Related Tags</span>
+                  <Link href="/blog">AI Receptionist</Link>
+                  <Link href="/blog">Patient Intake</Link>
+                  <Link href="/blog">Clinic Automation</Link>
                 </div>
               </div>
               <div className="col-xl-4 col-lg-4 col-md-4 mb-15">
@@ -252,19 +254,19 @@ const BlogDetailsInnerArea = ({
               </div>
               <div className="col-xl-5 col-lg-5 col-md-5">
                 <div className="bakix-navigation b-next-post text-left mb-30">
-                  <span><a href="#">Prev Post</a></span>
-                  <h4><a href="#">Tips on Minimalist</a></h4>
+                  <span><Link href="/blog">Prev Post</Link></span>
+                  <h4><Link href="/blog">Consent-aware WhatsApp reminders</Link></h4>
                 </div>
               </div>
               <div className="col-xl-2 col-lg-2 col-md-2 ">
                 <div className="bakix-filter text-left text-md-center mb-30">
-                  <a href="#"><Image src={filter_img} alt="image-title" /></a>
+                  <Link href="/blog"><Image src={filter_img} alt="Blog index" /></Link>
                 </div>
               </div>
               <div className="col-xl-5 col-lg-5 col-md-5">
                 <div className="bakix-navigation b-next-post text-left text-md-end  mb-30">
-                  <span><a href="#">Next Post</a></span>
-                  <h4><a href="#">Tips on Minimalist</a></h4>
+                  <span><Link href="/blog">Next Post</Link></span>
+                  <h4><Link href="/blog">AI receptionist missed-call workflows</Link></h4>
                 </div>
               </div>
             </div>
@@ -274,7 +276,7 @@ const BlogDetailsInnerArea = ({
               <Image src={avatar_img} alt="image-title" />
             </div>
             <div className="author-text text-center">
-              <h3>MD. Salim Rana</h3>
+              <h3>MediDove Product Team</h3>
               <div className="author-icon">
                 <SocialLinks />
               </div>
@@ -297,7 +299,7 @@ const BlogDetailsInnerArea = ({
                         <div className="avatar-name">
                           <h5>{comment.name}</h5>
                           <span>{comment.time}</span>
-                          <a className="reply" href="#"><i className="fas fa-reply"></i>Reply</a>
+                          <Link className="reply" href="/contact"><i className="fas fa-reply"></i>Reply</Link>
                         </div>
                         <p>{comment.comment_text}</p>
                       </div>

@@ -1,16 +1,18 @@
 import React from 'react';
-interface DataType {
+import Link from 'next/link';
+
+type CategoryItem = {
   id: number;
   title: string;
   items: number;
-}[]
+};
 
-const categories_data: DataType[] = [
-  { id: 1, title: 'Lifestyle', items: 78 },
-  { id: 2, title: 'Travel', items: 42 },
-  { id: 3, title: 'Fashion', items: 32 },
-  { id: 4, title: 'Music', items: 85 },
-  { id: 5, title: 'Branding', items: 221 },
+const categories_data: CategoryItem[] = [
+  { id: 1, title: 'AI Receptionist', items: 18 },
+  { id: 2, title: 'Smart Intake', items: 14 },
+  { id: 3, title: 'Patient Outreach', items: 21 },
+  { id: 4, title: 'Clinic Admin', items: 16 },
+  { id: 5, title: 'Compliance', items: 9 },
 ]
 
 const CategoriesArea = () => {
@@ -24,7 +26,7 @@ const CategoriesArea = () => {
         <ul className="cat">
           {categories_data.map((item, i) =>
             <li key={i}>
-              <a href="#">{item.title} <span className="f-right">{item.items}</span></a>
+              <Link href="/blog">{item.title} <span className="f-right">{item.items}</span></Link>
             </li>
           )} 
         </ul>

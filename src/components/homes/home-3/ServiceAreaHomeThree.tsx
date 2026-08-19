@@ -7,7 +7,7 @@ import line_icon from "@/assets/img/shape/section-title-line.png";
 
 const service_content = {
   sub_title: "Departments",
-  title: "Managed Your Heathcare Services",
+  title: "Manage clinic services with AI support",
 }
 const {title, sub_title} = service_content
 
@@ -33,24 +33,24 @@ const ServiceAreaHomeThree = () => {
             </div>
             <div className="col-xl-5 col-lg-4">
               <div className="section-button text-right d-none d-lg-block pt-80">
-                <Link data-animation="fadeInLeft" data-delay=".6s" href="/services" className="btn btn-icon ml-0">
+                <Link data-animation="fadeInLeft" data-delay=".6s" href="/service" className="btn btn-icon ml-0">
                   <span>+</span>more services
                 </Link>
               </div>
             </div>
           </div>
           <div className="row">
-            {blog_data.slice(3, 6).map((item, i) =>
-              <div key={i} className="col-xl-4 col-lg-4 col-md-6">
+            {blog_data.slice(3, 6).map((item) =>
+              <div key={item.id} className="col-xl-4 col-lg-4 col-md-6">
                 <div className="service-box-3 mb-30 text-center">
                   <div className="service-thumb">
                     <Link href="/service-details">
-                      <Image src={item.img} style={{width: '100%', height: "auto"}} alt="theme-pure" />
+                      <Image src={item.img} style={{width: '100%', height: "auto"}} alt={item.title} />
                     </Link>
                   </div>
                   <div className="service-content-box">
                     <div className="service-content">
-                      <h3><Link href="/news-details">{item.title}</Link></h3>
+                      <h3><Link href="/service-details">{item.title}</Link></h3>
                       <p>{item.sm_des}</p>
                     </div>
                     <button className="service-link">Read More</button>

@@ -65,9 +65,9 @@ const BlogInnerArea = ({style}: BlogInnerAreaProps) => {
           <article key={i} className={`postbox post ${item.cls} mb-40`}>
             {item.caragory === "blog" &&
               <div className="postbox__thumb">
-                <a href="#">
+                <Link href="/blog">
                   {item.img ? <Image src={item.img} style={{ width: "100%", height: "auto" }} alt="blog image" /> : <></>}
-                </a>
+                </Link>
               </div>
             }
             {item.caragory === "video" &&
@@ -102,7 +102,7 @@ const BlogInnerArea = ({style}: BlogInnerAreaProps) => {
             }
             {item.caragory === "audio" &&
               <div className="postbox__audio embed-responsive embed-responsive-16by9">
-                <iframe src={item.audio} style={{ width: "100%", height: "450px" }}></iframe>
+                <iframe title={item.title} src={item.audio} style={{ width: "100%", height: "450px" }}></iframe>
               </div>
             }
 
@@ -110,17 +110,17 @@ const BlogInnerArea = ({style}: BlogInnerAreaProps) => {
             <div className="postbox__text p-50">
               <div className="post-meta mb-15">
                 <span><i className="far fa-calendar-check"></i> {item.time} </span>
-                <span><a href="#"><i className="far fa-user"></i>{item.post_writer}</a></span>
-                <span><a href="#"><i className="far fa-comments"></i> {item.comments} Comments</a></span>
+                <span><Link href="/blog"><i className="far fa-user"></i>{item.post_writer}</Link></span>
+                <span><Link href="/blog"><i className="far fa-comments"></i> {item.comments} Comments</Link></span>
               </div>
               <h3 className="blog-title">
-                <a href="#">{item.title}</a>
+                <Link href="/blog">{item.title}</Link>
               </h3>
               <div className="post-text mb-20">
                 <p>{item.sm_des}</p>
               </div>
               <div className="read-more mt-30">
-                <Link href="#" className="primary_btn btn theme-btn">read more</Link>
+                <Link href="/blog" className="primary_btn btn theme-btn">read more</Link>
               </div>
             </div>
           </article>
@@ -128,20 +128,20 @@ const BlogInnerArea = ({style}: BlogInnerAreaProps) => {
         <article className="postbox post format-quote mb-40">
           <div className="post-text">
             <blockquote>
-              <p>This health blog from NPR takes a fairly broad look at the medical world,.</p>
-              <footer>- Rosalina Pong</footer>
+              <p>Healthcare AI should save staff time, respect patient consent, and avoid replacing licensed clinical judgment.</p>
+              <footer>- MediDove Safety Note</footer>
             </blockquote>
           </div>
         </article>
 
         <div className="basic-pagination basic-pagination-2 mb-40">
           <ul>
-            <li><a href="#"><i className="fas fa-angle-double-left"></i></a></li>
-            <li><a href="#">01</a></li>
-            <li><a href="#">02</a></li>
-            <li><a href="#">03</a></li>
-            <li><a href="#"><i className="fas fa-ellipsis-h"></i></a></li>
-            <li><a href="#"><i className="fas fa-angle-double-right"></i></a></li>
+            <li><Link href="/blog"><i className="fas fa-angle-double-left"></i></Link></li>
+            <li><Link href="/blog">01</Link></li>
+            <li><Link href="/blog">02</Link></li>
+            <li><Link href="/blog">03</Link></li>
+            <li><Link href="/blog"><i className="fas fa-ellipsis-h"></i></Link></li>
+            <li><Link href="/blog"><i className="fas fa-angle-double-right"></i></Link></li>
           </ul>
         </div>
 

@@ -111,7 +111,7 @@ const PhotoGalleryHomeFive = () => {
                     <h4 className="white-color">
                       <Link href="/portfolio-details">{item.title}</Link>
                     </h4>
-                    <span><Link href="#">{item.tag_1}</Link> . <Link href="#">{item.tag_2}</Link></span>
+                    <span><Link href="/service">{item.tag_1}</Link> . <Link href="/service">{item.tag_2}</Link></span>
                   </div>
                 </div>
               </div>

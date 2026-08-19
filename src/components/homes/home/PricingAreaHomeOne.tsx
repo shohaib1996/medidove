@@ -1,5 +1,6 @@
 'use client' 
 import Image, { StaticImageData } from 'next/image'; 
+import Link from 'next/link';
 import pricing_icon_1 from "@/assets/img/pricing/pricing-thumb-1.png";
 import pricing_icon_2 from "@/assets/img/pricing/pricing-thumb-2.png";
 import pricing_icon_3 from "@/assets/img/pricing/pricing-thumb-3.png";
@@ -7,7 +8,7 @@ import pricing_icon_3 from "@/assets/img/pricing/pricing-thumb-3.png";
 import back_icon from "@/assets/img/section/section-back-icon.png";
 import title_line from "@/assets/img/shape/section-title-line.png";
 
-interface PriceingDataType {
+type PricingItem = {
   id: number;
   monthly_img: StaticImageData;
   yearly_img: StaticImageData;
@@ -15,15 +16,15 @@ interface PriceingDataType {
   sm_des: string;
   monthly_price: number;
   yearly_price: number;
-}[]
+};
 
-const priceing_data: PriceingDataType[] = [
+const priceing_data: PricingItem[] = [
   {
     id: 1,
     monthly_img: pricing_icon_1,
     yearly_img: pricing_icon_1,
     title: "Professional",
-    sm_des: "Ut enim ad minim veniam, quis istomw nostrud exercitation ullamco laboris nisi ut aliquip ex eacommodo.",
+    sm_des: "Website, Supabase appointment capture, contact leads, and a focused admin dashboard for small clinics.",
     monthly_price: 489.00,
     yearly_price: 589.00,
   },
@@ -32,7 +33,7 @@ const priceing_data: PriceingDataType[] = [
     monthly_img: pricing_icon_2,
     yearly_img: pricing_icon_2,
     title: "Advanced",
-    sm_des: "Ut enim ad minim veniam, quis istomw nostrud exercitation ullamco laboris nisi ut aliquip ex eacommodo.",
+    sm_des: "Adds AI website assistant, smart intake routing, semantic search, and WhatsApp reminder workflows.",
     monthly_price: 599.00,
     yearly_price: 699.00,
   },
@@ -40,8 +41,8 @@ const priceing_data: PriceingDataType[] = [
     id: 3,
     monthly_img: pricing_icon_3,
     yearly_img: pricing_icon_3,
-    title: "Advantage",
-    sm_des: "Ut enim ad minim veniam, quis istomw nostrud exercitation ullamco laboris nisi ut aliquip ex eacommodo.",
+    title: "Premium",
+    sm_des: "Includes ElevenLabs receptionist, Twilio calling, campaign automation, analytics, and deployment support.",
     monthly_price: 999.00,
     yearly_price: 1500.00,
   },
@@ -89,14 +90,14 @@ const PricingAreaHomeOne = () => {
                       <div key={i} className="col-xl-4 col-lg-4 col-md-6">
                         <div className="pricing-box mb-30">
                           <div className="pricing-thumb mb-45">
-                            <Image src={m_item.monthly_img} alt="theme-pure" />
+                            <Image src={m_item.monthly_img} alt="" />
                           </div>
                           <div className="pricing-content">
                             <h1>{m_item.title}</h1>
                             <p>{m_item.sm_des}</p>
-                            <a data-animation="fadeInLeft" data-delay=".6s" href="#" className="btn btn-icon ml-0">
+                            <Link data-animation="fadeInLeft" data-delay=".6s" href="/contact" className="btn btn-icon ml-0">
                               <span>+</span>Price: $ {m_item.monthly_price}.00
-                            </a>
+                            </Link>
                           </div>
                         </div>
                       </div>
@@ -109,13 +110,13 @@ const PricingAreaHomeOne = () => {
                       <div key={i} className="col-xl-4 col-lg-4 col-md-6">
                         <div className="pricing-box mb-30">
                           <div className="pricing-thumb mb-45">
-                            <Image src={y_item.yearly_img} alt="theme-pure" />
+                            <Image src={y_item.yearly_img} alt="" />
                           </div>
                           <div className="pricing-content">
                             <h1>{y_item.title}</h1>
                             <p>{y_item.sm_des}</p>
-                            <a data-animation="fadeInLeft" data-delay=".6s" href="#" className="btn btn-icon ml-0"><span>+</span>Price:
-                              $ {y_item.yearly_price}.00</a>
+                            <Link data-animation="fadeInLeft" data-delay=".6s" href="/contact" className="btn btn-icon ml-0"><span>+</span>Price:
+                              $ {y_item.yearly_price}.00</Link>
                           </div>
                         </div>
                       </div>

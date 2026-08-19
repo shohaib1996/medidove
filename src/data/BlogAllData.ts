@@ -34,10 +34,10 @@ const blog_all_data = [
     img_2m: blog_thumb_m2_1,
     img_3col: blog_thumb_3col_1,
     img_3m: blog_thumb_m3_1,
-    post_writer: "Diboli",
-    comments: 23,
-    title: "Consectetur adipisic lorem ipsum dolor sit amet elit, sed do eiusmod tempor incididunt",
-    sm_des: "There's a good chance Everyday Health is the most appropriately named blog on this list because it focuses on the health topics that consistently affect a wide range of people. They also get kudos.",
+    post_writer: "MediDove Team",
+    comments: 12,
+    title: "How AI receptionists reduce missed clinic calls",
+    sm_des: "Voice intake, call summaries, and callback queues help clinics capture appointment requests even when the front desk is busy.",
     
   },
   {
@@ -46,10 +46,10 @@ const blog_all_data = [
     img_2m: blog_thumb_m2_2,
     img_3col: blog_thumb_3col_2,
     img_3m: blog_thumb_m3_2,
-    post_writer: "Diboli",
-    comments: 23,
-    title: "Consectetur adipisic lorem ipsum dolor sit amet elit, sed do eiusmod tempor incididunt",
-    sm_des: "There's a good chance Everyday Health is the most appropriately named blog on this list because it focuses on the health topics that consistently affect a wide range of people. They also get kudos.",
+    post_writer: "MediDove Team",
+    comments: 9,
+    title: "Building consent-aware WhatsApp reminder workflows",
+    sm_des: "Appointment reminders and recall campaigns need clear opt-in status, unsubscribe handling, and staff visibility before messages are sent.",
     
   },
   {
@@ -58,10 +58,10 @@ const blog_all_data = [
     img_2m: blog_thumb_m2_3,
     img_3col: blog_thumb_3col_3,
     img_3m: blog_thumb_m3_3,
-    post_writer: "Diboli",
-    comments: 23,
-    title: "Consectetur adipisic lorem ipsum dolor sit amet elit, sed do eiusmod tempor incididunt",
-    sm_des: "There's a good chance Everyday Health is the most appropriately named blog on this list because it focuses on the health topics that consistently affect a wide range of people. They also get kudos.",
+    post_writer: "MediDove Team",
+    comments: 15,
+    title: "Smart appointment intake without diagnosis claims",
+    sm_des: "AI can collect symptoms, suggest the right department, and flag urgent language while leaving diagnosis and care decisions to clinicians.",
     
   },
   {
@@ -70,10 +70,10 @@ const blog_all_data = [
     img_2m: blog_thumb_m2_4,
     img_3col: blog_thumb_3col_4,
     img_3m: blog_thumb_m3_4,
-    post_writer: "Diboli",
-    comments: 23,
-    title: "Consectetur adipisic lorem ipsum dolor sit amet elit, sed do eiusmod tempor incididunt",
-    sm_des: "There's a good chance Everyday Health is the most appropriately named blog on this list because it focuses on the health topics that consistently affect a wide range of people. They also get kudos.",
+    post_writer: "MediDove Team",
+    comments: 7,
+    title: "Why clinics benefit from a single operations dashboard",
+    sm_des: "Appointments, leads, call logs, campaigns, and staff tasks are easier to manage when every workflow writes into one workspace.",
     
   },
   {
@@ -82,10 +82,10 @@ const blog_all_data = [
     img_2m: blog_thumb_m2_5,
     img_3col: blog_thumb_3col_5,
     img_3m: blog_thumb_m3_1,
-    post_writer: "Diboli",
-    comments: 23,
-    title: "Consectetur adipisic lorem ipsum dolor sit amet elit, sed do eiusmod tempor incididunt",
-    sm_des: "There's a good chance Everyday Health is the most appropriately named blog on this list because it focuses on the health topics that consistently affect a wide range of people. They also get kudos.",
+    post_writer: "MediDove Team",
+    comments: 11,
+    title: "Turning patient calls into structured follow-up tasks",
+    sm_des: "Transcripts become more useful when the system extracts the caller, reason, urgency, and next staff action automatically.",
     
   },
   {
@@ -94,10 +94,10 @@ const blog_all_data = [
     img_2m: blog_thumb_m2_6,
     img_3col: blog_thumb_3col_6,
     img_3m: blog_thumb_m3_5,
-    post_writer: "Diboli",
-    comments: 23,
-    title: "Consectetur adipisic lorem ipsum dolor sit amet elit, sed do eiusmod tempor incididunt",
-    sm_des: "There's a good chance Everyday Health is the most appropriately named blog on this list because it focuses on the health topics that consistently affect a wide range of people. They also get kudos.",
+    post_writer: "MediDove Team",
+    comments: 8,
+    title: "Using audit logs to explain healthcare automations",
+    sm_des: "A portfolio-ready AI system should show what was generated, what was sent, and which staff member reviewed the workflow.",
     
   },
 ]

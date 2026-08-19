@@ -39,22 +39,22 @@ const setting = {
 const hero_slider_data = [
   {
     id: 1,
-    title: "Health & Doctor",
-    sm_des: "Avoids pleasure itself, because it is pleasure, but because those who do not know how rationally encounter consequences that extremely system weathe.",
+    title: "AI Clinic Reception",
+    sm_des: "Capture patient calls, summarize appointment needs, and route follow-up tasks to staff from one connected workspace.",
     feature_list: [
-      "Digital Laboratory & Computerized System",
-      "Digital Laboratory & Computerized System",
-      "Digital Laboratory & Computerized System",
+      "ElevenLabs voice assistant",
+      "Twilio call logging",
+      "Supabase admin inbox",
     ],
   },
   {
     id: 2,
-    title: "Doctor & Health",
-    sm_des: "Rationally encounter consequences Avoids pleasure itself, because it is pleasure, but because those who do not know how that extremely system weathe.",
+    title: "Patient Engagement Automation",
+    sm_des: "Send consent-aware reminders, review AI-generated campaign copy, and track outreach activity before staff follows up.",
     feature_list: [
-      "Digital Laboratory & Computerized System",
-      "Digital Laboratory & Computerized System",
-      "Digital Laboratory & Computerized System",
+      "WhatsApp reminder flows",
+      "AI campaign drafts",
+      "Audit-ready activity history",
     ],
   },
 ]
@@ -107,10 +107,10 @@ const HeroAreaHomeFour = ({ style }: HeroAreaHomeFourProps) => {
                         </div>
                         <div className="hero-slider-btn h4hero-btn">
                           <Link data-animation="fadeInLeft" data-delay=".9s"
-                            href="/appointment" className="btn btn-icon ml-0"><span>+</span>learn more
+                            href="/receptionist" className="btn btn-icon ml-0"><span>+</span>learn more
                           </Link>
                           <Link data-animation="fadeInLeft" data-delay="1s"
-                            href="/appointment" className="btn btn-icon btn-icon-green ml-0"><span>+</span>Our services
+                            href="/service" className="btn btn-icon btn-icon-green ml-0"><span>+</span>Our services
                           </Link>
                         </div>
                       </div>

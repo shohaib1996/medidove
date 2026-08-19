@@ -34,25 +34,25 @@ interface DataType {
 
 
 const about_content: DataType = {
-  sub_title: "MediDove help increase your readers.",
-  title: "25+ Years Of Since We Provide Medical Serving",
+  sub_title: "AI clinic operations",
+  title: "A connected demo for patient intake, calls, and follow-up",
   about_data: [
     {
       id: 1,
       color_bg: "theme-bg",
       bg_img: bg_icon_1,
       img: icon_1,
-      title: "Energercy Case",
-      sm_des: "Must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and will give complete",
-      btn_text: "conatct us",
+      title: "Urgent Routing",
+      sm_des: "Emergency-like messages are routed to urgent care guidance instead of normal marketing or booking copy.",
+      btn_text: "contact us",
     },
     {
       id: 1,
       color_bg: "theme-bg2",
       bg_img: bg_icon_2,
       img: icon_2,
-      title: "Medical Care",
-      sm_des: "Must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and will give complete",
+      title: "AI Care Intake",
+      sm_des: "Patients can describe symptoms in plain language while staff receives structured appointment context.",
       btn_text: "read more",
     },
     {
@@ -93,7 +93,7 @@ const AboutAreaHomeFive = () => {
                 <div className={`h5services-wrapper ${item.color_bg}`}>
                   <i className="h5sicon-bg"><Image src={item.bg_img} alt="icon" /></i>
                   <div className="h5services-content">
-                    <i className="h5services-icon"><Image src={item.img} alt="theme-pure" /></i>
+                    <i className="h5services-icon"><Image src={item.img} alt="" /></i>
                     <h3 className="white-color h5services-title">{item.title}</h3>
                     {i === 2 ?
                       <>
@@ -108,7 +108,7 @@ const AboutAreaHomeFive = () => {
                       :
                       <>
                         <p>{item.sm_des}</p>
-                        <Link href="#" className="green-color text-uppercase f-500"><span className="plus">
+                        <Link href={i === 0 ? "/contact" : "/service"} className="green-color text-uppercase f-500"><span className="plus">
                           +</span><span className="link">{item.btn_text}</span>
                         </Link>
                       </>

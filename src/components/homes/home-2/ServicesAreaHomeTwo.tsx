@@ -20,7 +20,7 @@ const ServicesAreaHomeTwo = () => {
                 </div>
                 <div className="section-text pos-rel">
                   <h5>Services</h5>
-                  <h1>What We Do For You?</h1>
+                  <h1>AI-supported clinic workflows</h1>
                 </div>
                 <div className="section-line pos-rel">
                   <Image src={line_icon} alt="theme-pure" />
@@ -33,11 +33,11 @@ const ServicesAreaHomeTwo = () => {
               <div key={i} className="col-xl-6 col-lg-6 col-md-12">
                 <div className="service-box service-box-2 mb-30 pos-rel">
                   <div className="service-thumb">
-                    <Image src={item.img} alt="theme-pure" />
+                    <Image src={item.img} alt={item.title} />
                   </div>
                   <div className="service-content service-content-2">
                     <h6 className="green-color text-up-case letter-spacing mb-20">{item.sub_title}</h6>
-                    <h3><Link href="#">{item.title}</Link></h3>
+                    <h3><Link href="/service-details">{item.title}</Link></h3>
                     <p>{item.sm_des}</p>
                     <Link className="service-link" href="/service-details">
                       <i className="fas fa-arrow-right"></i>Read More

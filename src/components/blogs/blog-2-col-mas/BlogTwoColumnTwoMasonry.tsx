@@ -12,27 +12,27 @@ const BlogTwoColumnTwoMasonry = () => {
         <div className="container">
           <ResponsiveMasonry className="row blog-masonry" columnsCountBreakPoints={{ 0: 1, 750: 2, 992: 2 }}>
             <Masonry gutter="20px">
-              {blog_all_data.map((item, i) =>
-                <div key={i} className="grid-item">
+              {blog_all_data.map((item) =>
+                <div key={item.id} className="grid-item">
                   <article className="postbox post format-image mb-40">
                     <div className="postbox__thumb">
-                      <a href="#">
-                        <Image src={item.img_2m} style={{ width: '100%', height: 'auto' }} alt="title-image" />
-                      </a>
+                      <Link href="/blog">
+                        <Image src={item.img_2m} style={{ width: '100%', height: 'auto' }} alt={item.title} />
+                      </Link>
                     </div>
                     <div className="postbox__text p-30">
                       <div className="post-meta mb-15">
-                        <span><Link href="#"><i className="far fa-user"></i> {item.post_writer} </Link></span>
-                        <span><Link href="#"><i className="far fa-comments"></i> {item.comments} Comments</Link></span>
+                        <span><Link href="/blog"><i className="far fa-user"></i> {item.post_writer} </Link></span>
+                        <span><Link href="/blog"><i className="far fa-comments"></i> {item.comments} Comments</Link></span>
                       </div>
                       <h3 className="blog-title blog-title-sm">
-                        <Link href="#">{item.title}</Link>
+                        <Link href="/blog">{item.title}</Link>
                       </h3>
                       <div className="post-text">
                         <p>{item.sm_des}</p>
                       </div>
                       <div className="read-more">
-                        <Link href="#" className="read-more">read more <i className="fas fa-long-arrow-alt-right"></i></Link>
+                        <Link href="/blog" className="read-more">read more <i className="fas fa-long-arrow-alt-right"></i></Link>
                       </div>
                     </div>
                   </article>
@@ -45,12 +45,12 @@ const BlogTwoColumnTwoMasonry = () => {
             <div className="col-12">
               <div className="basic-pagination basic-pagination-2 text-center">
                 <ul>
-                  <li><a href="#"><i className="fas fa-angle-double-left"></i></a></li>
-                  <li><a href="#">01</a></li>
-                  <li className="active"><a href="#">02</a></li>
-                  <li><a href="#">03</a></li>
-                  <li><a href="#"><i className="fas fa-ellipsis-h"></i></a></li>
-                  <li><a href="#"><i className="fas fa-angle-double-right"></i></a></li>
+                  <li><Link href="/blog"><i className="fas fa-angle-double-left"></i></Link></li>
+                  <li><Link href="/blog">01</Link></li>
+                  <li className="active"><Link href="/blog">02</Link></li>
+                  <li><Link href="/blog">03</Link></li>
+                  <li><Link href="/blog"><i className="fas fa-ellipsis-h"></i></Link></li>
+                  <li><Link href="/blog"><i className="fas fa-angle-double-right"></i></Link></li>
                 </ul>
               </div>
             </div>

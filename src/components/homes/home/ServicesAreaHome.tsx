@@ -23,43 +23,43 @@ interface service_content_type {
 }
 const service_content: service_content_type = {
   sub_title: "Departments",
-  title: "Managed Your Heathcare Services",
+  title: "Manage clinic services with AI support",
   service_data: [
     {
       id: 1,
       img: service_icon_1,
-      title: "Body Surgery",
-      sm_des: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.",
+      title: "Smart Surgery Intake",
+      sm_des: "Collect appointment reasons, urgency signals, and staff notes before a surgical consultation is reviewed.",
     },
     {
       id: 2,
       img: service_icon_2,
       title: "Dental Care",
-      sm_des: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.",
+      sm_des: "Route tooth pain, swelling, and routine cleaning requests into the right booking workflow.",
     },
     {
       id: 3,
       img: service_icon_3,
       title: "Eye Care",
-      sm_des: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.",
+      sm_des: "Help patients find optician services, appointment options, and follow-up reminders from one site.",
     },
     {
       id: 4,
       img: service_icon_4,
-      title: "Blood Cancer",
-      sm_des: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.",
+      title: "Lab Review Follow-up",
+      sm_des: "Create staff tasks for report pickup reminders, callbacks, and care team handoffs.",
     },
     {
       id: 5,
       img: service_icon_5,
-      title: "Neurology Sargery",
-      sm_des: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.",
+      title: "Neurology Routing",
+      sm_des: "Guide patients toward the right specialist while flagging urgent symptoms for immediate care.",
     },
     {
       id: 6,
       img: service_icon_6,
-      title: "Allergic Issue",
-      sm_des: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.",
+      title: "General Care Requests",
+      sm_des: "Handle routine questions, appointment preferences, and follow-up reminders across channels.",
     },
   ],
 }
@@ -91,10 +91,10 @@ const ServicesAreaHome = () => {
               <div key={i} className="col-xl-4 col-lg-6 col-md-6">
                 <div className="service-box text-center mb-30">
                   <div className="service-thumb">
-                    <Image src={item.img} alt="theme-pure" />
+                    <Image src={item.img} alt={item.title} />
                   </div>
                   <div className="service-content">
-                    <h3><Link href="#">{item.title}</Link></h3>
+                    <h3><Link href="/service">{item.title}</Link></h3>
                     <p>{item.sm_des}</p>
                     <Link className="service-link" href="/service-details">Read More</Link>
                   </div>

@@ -213,9 +213,9 @@ const ServiceDetailsArea = () => {
                 </div>
                 <div className="download-area">
                   {download_data.map((d_item, d_index) =>
-                    <Link key={d_index} className="download-box mb-20" href="#">
+                    <Link key={d_index} className="download-box mb-20" href="/contact">
                       <div className="single-download-inner">
-                        <Image src={d_item.img} alt="theme-pure" />
+                        <Image src={d_item.img} alt="" />
                         <span>{d_item.title}</span>
                         <span className="download-size">{d_item.file_size}</span>
                       </div>
@@ -249,12 +249,12 @@ const ServiceDetailsArea = () => {
                   <ul>
                     {service_data.map((s_item, s_index) =>
                       <li key={s_index}>
-                        <a href="#">
+                        <Link href="/service-details">
                           <div className="more-service-icon">
-                            <Image src={s_item.img} alt="theme-pure" />
+                            <Image src={s_item.img} alt="" />
                           </div>
                           <div className="more-service-title">{s_item.title}</div>
-                        </a>
+                        </Link>
                       </li>
                     )}
                   </ul>
@@ -268,9 +268,9 @@ const ServiceDetailsArea = () => {
               </div>
               <div className="service-widget mb-50 border-0 p-0">
                 <div className="banner-widget">
-                  <a href="#">
-                    <Image src={Servicebanner} alt="theme-pure" />
-                  </a>
+                  <Link href="/appointment">
+                    <Image src={Servicebanner} alt="Book an appointment" />
+                  </Link>
                 </div>
               </div>
             </div>

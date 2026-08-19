@@ -6,18 +6,18 @@ type DataType = string[]
 
 
 const tags: DataType = [
-  "Popular",
-  "desgin",
-  "usability",
-  "develop",
-  "consult",
-  "icon",
-  "HTML",
-  "ux",
-  "business",
-  "kit",
-  "keyboard",
-  "tech",
+  "AI Receptionist",
+  "Supabase",
+  "Twilio",
+  "ElevenLabs",
+  "WhatsApp",
+  "Patient Intake",
+  "Clinic CRM",
+  "Automation",
+  "Consent",
+  "Healthcare SaaS",
+  "RAG Search",
+  "Admin Dashboard",
 ]
 const InstagramTags = () => {
   return (
@@ -25,10 +25,10 @@ const InstagramTags = () => {
       <div className="widget mb-40">
         <div className="widget-title-box mb-30">
           <span className="animate-border"></span>
-          <h3 className="widget-title">Instagram Feeds</h3>
+          <h3 className="widget-title">Topic Tags</h3>
         </div>
         <div className="tag">
-          {tags.map((item, i) => <Link key={i} href="#">{item}</Link>)}
+          {tags.map((item) => <Link key={item} href="/blog">{item}</Link>)}
         </div>
       </div>
     </>

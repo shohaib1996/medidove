@@ -1,6 +1,7 @@
 'use client' 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import WriterPortfolio from './WriterPortfolio';
 import PopularFeeds from './PopularFeeds';
 import CategoriesArea from './CategoriesArea';
@@ -18,10 +19,10 @@ const BlogSidebarArea = () => {
         <div className="widget mb-40">
           <div className="widget-title-box mb-30">
             <span className="animate-border"></span>
-            <h3 className="widget-title">Search Objects</h3>
+            <h3 className="widget-title">Search Insights</h3>
           </div>
           <form className="search-form" onSubmit={e => e.preventDefault()}>
-            <input type="text" placeholder="Search your keyword..." />
+            <input type="text" placeholder="Search clinic AI topics..." />
             <button type="submit"><i className="fas fa-search"></i></button>
           </form>
         </div>
@@ -35,7 +36,7 @@ const BlogSidebarArea = () => {
 
         <div className="widget mb-40 p-0 b-0">
           <div className="banner-widget">
-            <a href="#"><Image src={blog_banner} style={{ width: "100%", height: "auto" }} alt="theme-pure" /></a>
+            <Link href="/appointment"><Image src={blog_banner} style={{ width: "100%", height: "auto" }} alt="Book an AI-assisted appointment" /></Link>
           </div>
         </div>
       </div>
