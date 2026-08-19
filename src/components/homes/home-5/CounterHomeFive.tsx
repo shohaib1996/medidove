@@ -2,42 +2,42 @@
 import React from 'react';
 import Count from '@/components/common/Count';
 
-interface DataType {
+type CounterItem = {
   id: number;
   icon: string;
   counter_number: number;
   title: string;
   sm_des: string;
-}[]
+};
 
-const counter_data: DataType[] = [
+const counter_data: CounterItem[] = [
   {
     id: 1,
     icon: "fal fa-clinic-medical",
-    counter_number: 3625,
-    title: "World Wide Medical Branch",
-    sm_des: "Avoids pleasure itself but who do not know how pursue pleasure rationally encounter cons",
+    counter_number: 24,
+    title: "AI Intake Channels",
+    sm_des: "Web, WhatsApp, voice, and admin intake flows route patients into one Supabase-backed workspace.",
   },
   {
     id: 2,
     icon: "fal fa-user-nurse",
-    counter_number: 5236,
-    title: "Trusted & Friendly Nurse",
-    sm_des: "Avoids pleasure itself but who do not know how pursue pleasure rationally encounter cons",
+    counter_number: 12,
+    title: "Receptionist Workflows",
+    sm_des: "Voice summaries, handoff notes, and callback queues help staff respond faster without losing context.",
   },
   {
     id: 3,
     icon: "fal fa-trophy-alt",
-    counter_number: 8950,
-    title: "We Wins Many Int Awards",
-    sm_des: "Avoids pleasure itself but who do not know how pursue pleasure rationally encounter cons",
+    counter_number: 18,
+    title: "Marketing Automations",
+    sm_des: "Consent-based reminder, recall, and campaign tools keep patient outreach measurable and compliant.",
   },
   {
     id: 4,
     icon: "fal fa-ambulance",
-    counter_number: 4562,
-    title: "Emergency Ambulance",
-    sm_des: "Avoids pleasure itself but who do not know how pursue pleasure rationally encounter cons",
+    counter_number: 30,
+    title: "Admin Insights",
+    sm_des: "Dashboards surface bookings, conversations, call logs, and follow-up tasks for daily clinic operations.",
   },
 ]
 

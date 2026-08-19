@@ -62,8 +62,8 @@ const PhotoGalleryHomeFive = () => {
                   <Image className="section-back-icon" src={back_icon} alt="theme-pure" />
                 </div>
                 <div className="section-text pos-rel">
-                  <h5>Photo Gallery</h5>
-                  <h1>Relationship We Have With You Special</h1>
+                  <h5>Workflow Gallery</h5>
+                  <h1>AI clinic journeys built for modern patient care</h1>
                 </div>
                 <div className="section-line pos-rel">
                   <Image src={title_line} alt="theme-pure" />
@@ -73,8 +73,8 @@ const PhotoGalleryHomeFive = () => {
             <div className="col-sm-12">
               <div className="gallery-button mb-50">
                 <div className="gallery-filter">
-                  {categories.map((cate, i) => (
-                    <React.Fragment key={i}>
+                  {categories.map((cate) => (
+                    <React.Fragment key={cate}>
                       <button
                         onClick={() => filterItems(cate)}
                         className={`${cate === activeCategory ? "active" : ""}`}
@@ -92,7 +92,7 @@ const PhotoGalleryHomeFive = () => {
               <div key={i} className="col-lg-4 col-md-6 grid-gallery">
                 <div className="h5gallery__wrapper pos-rel text-center mb-30">
                   <div className="h5gallery-thumb">
-                    <Image className="img" src={item?.img} alt="theme-pure" />
+                    <Image className="img" src={item.img} alt={item.title} />
                   </div>
                   <div className="h5gallery-content">
                     <a className="popup-image" 
