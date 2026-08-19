@@ -46,10 +46,15 @@ const AppointmentAboutArea = () => {
                 </div>
                 <div className="about-front-img pos-rel">
                   <Image src={about_avatar} alt="theme-pure" />
-                  <a className="popup-video about-video-btn white-video-btn"
+                  <button
+                    type="button"
+                    aria-label="Play appointment overview video"
+                    className="popup-video about-video-btn white-video-btn"
                     onClick={() => setIsVideoOpen(true)}
-                    style={{ cursor: "pointer" }}
-                  ><i className="fas fa-play"></i></a>
+                    style={{ background: "transparent", border: 0, cursor: "pointer" }}
+                  >
+                    <i className="fas fa-play"></i>
+                  </button>
                 </div>
                 <div className="about-shape">
                   <Image src={about_shape} alt="theme-pure" />

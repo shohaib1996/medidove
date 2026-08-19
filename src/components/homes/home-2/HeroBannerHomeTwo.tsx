@@ -26,10 +26,17 @@ const HeroBannerHomeTwo = () => {
                       </div>
                       <div className="hero-slider-btn">
                         <Link data-animation="fadeInLeft" data-delay=".6s" href="/about" className="btn btn-icon btn-icon-blue ml-0"><span>+</span>about us</Link>
-                        <a data-animation="fadeInRight" data-delay="1.0s" 
+                        <button
+                          type="button"
+                          aria-label="Play intro video"
+                          data-animation="fadeInRight"
+                          data-delay="1.0s"
                           onClick={() => setIsVideoOpen(true)}
-                          style={{ cursor: "pointer" }}
-                          className="play-btn popup-video"><i className="fas fa-play"></i></a>
+                          style={{ background: "transparent", border: 0, cursor: "pointer" }}
+                          className="play-btn popup-video"
+                        >
+                          <i className="fas fa-play"></i>
+                        </button>
                       </div>
                     </div>
                   </div>

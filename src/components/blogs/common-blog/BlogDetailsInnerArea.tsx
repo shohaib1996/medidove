@@ -158,10 +158,15 @@ const BlogDetailsInnerArea = ({ style_details, style_left, style_audio, style_vi
           {style_video &&
             <div className="postbox__video mb-35">
               <Image src={video_thumb} alt="blog image" />
-              <a className="popup-video video-btn"
+              <button
+                type="button"
+                aria-label="Play blog video"
+                className="popup-video video-btn"
                 onClick={() => setIsVideoOpen(true)}
-                style={{ cursor: "pointer" }}
-              ><i className="fas fa-play"></i></a>
+                style={{ background: "transparent", border: 0, cursor: "pointer" }}
+              >
+                <i className="fas fa-play"></i>
+              </button>
             </div>
           }
           {style_gallery &&

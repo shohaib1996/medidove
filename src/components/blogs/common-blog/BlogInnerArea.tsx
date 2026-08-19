@@ -69,10 +69,15 @@ const BlogInnerArea = ({style}: any) => {
             {item.caragory === "video" &&
               <div className="postbox__video">
                 {item.img ? <Image src={item.img} style={{ width: "100%", height: "auto" }} alt="blog image" /> : <></>}
-                <a className="popup-video video-btn"
+                <button
+                  type="button"
+                  aria-label="Play blog video"
+                  className="popup-video video-btn"
                   onClick={() => setIsVideoOpen(true)}
-                  style={{ cursor: "pointer" }}><i
-                    className="fas fa-play"></i></a>
+                  style={{ background: "transparent", border: 0, cursor: "pointer" }}
+                >
+                  <i className="fas fa-play"></i>
+                </button>
               </div>
             }
             {item.caragory === "slider" &&

@@ -76,13 +76,16 @@ const CounterAreaHomeFour = () => {
               <div className="h4facts-thumbbox pos-rel text-right">
                 <div className="h4facts-thumb">
                   <Image src={right_thumb} alt="" />
-                  <a 
+                  <button
+                    type="button"
+                    aria-label="Play clinic statistics video"
                     onClick={() => setIsVideoOpen(true)}
-                    style={{ cursor: "pointer" }}
-                    className="h4facts-playicon popup-video">
+                    style={{ background: "transparent", border: 0, cursor: "pointer" }}
+                    className="h4facts-playicon popup-video"
+                  >
                     <i> <Image src={play_icon} alt="" /> 
                     </i>
-                  </a>
+                  </button>
                   <i className="h4facts-brandicon">
                     <Image src={brand_logo} alt="" />
                   </i>

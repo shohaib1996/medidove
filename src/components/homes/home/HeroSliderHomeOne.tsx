@@ -102,11 +102,17 @@ const HeroSliderHomeOne = () => {
 													<div className="hero-slider-btn">
 														<Link data-animation="fadeInLeft"
 															data-delay=".6s" href="/appointment" className="btn btn-icon ml-0"><span>+</span>Make Appointment</Link>
-														<a data-animation="fadeInRight"
+														<button
+															type="button"
+															aria-label="Play intro video"
+															data-animation="fadeInRight"
 															data-delay="1.0s"
 															onClick={() => setIsVideoOpen(true)}
-															style={{ cursor: "pointer" }}
-															className="play-btn popup-video"><i className="fas fa-play"></i></a>
+															style={{ background: "transparent", border: 0, cursor: "pointer" }}
+															className="play-btn popup-video"
+														>
+															<i className="fas fa-play"></i>
+														</button>
 													</div>
 												</div>
 											</div>

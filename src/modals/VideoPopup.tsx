@@ -1,28 +1,22 @@
-import React from "react";
 import ModalVideo from "react-modal-video";
 
-interface VideoPopupProps {
+type VideoPopupProps = {
   isVideoOpen: boolean;
   setIsVideoOpen: (isOpen: boolean) => void;
   videoId?: string;
-}
+};
 
-const VideoPopup: React.FC<VideoPopupProps> = ({
+const VideoPopup = ({
   isVideoOpen,
   setIsVideoOpen,
   videoId = "bgMEvrd2E",
-}) => {
-  return (
-    <>
-      <ModalVideo
-        channel="youtube"
-        // autoplay
-        isOpen={isVideoOpen}
-        videoId={videoId}
-        onClose={() => setIsVideoOpen(false)}
-      />
-    </>
-  );
-};
+}: VideoPopupProps) => (
+  <ModalVideo
+    channel="youtube"
+    isOpen={isVideoOpen}
+    videoId={videoId}
+    onClose={() => setIsVideoOpen(false)}
+  />
+);
 
 export default VideoPopup;
