@@ -1,9 +1,9 @@
 'use client'
-import NiceSelect from '@/ui/NiceSelect';
+import NiceSelect, { NiceSelectOption } from '@/ui/NiceSelect';
 import React from 'react';
 
 const ServiceContactForm = () => {
-  const selectHandler = (e: any) => { };
+  const selectHandler = (_item: NiceSelectOption) => {};
   return (
     <>
       <form className="service-contact-form" onSubmit={e => e.preventDefault()}>

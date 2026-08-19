@@ -1,5 +1,5 @@
-'use client'
-import NiceSelect from '@/ui/NiceSelect';
+"use client";
+
 import Image from 'next/image';
 import React from 'react';
 
@@ -72,7 +72,6 @@ const { sub_title, title, des_1, skills_text, des_2, features, care_text, des_3,
 
 
 const DoctorDetailsArea = () => {
-  const selectHandler = (e: any) => { };
   return (
     <>
       <div className="doctor-details-area pt-115 pb-70">

@@ -1,6 +1,6 @@
 'use client'
 import React from 'react';
-import NiceSelect from '@/ui/NiceSelect';
+import NiceSelect, { NiceSelectOption } from '@/ui/NiceSelect';
 
 const calculate_content = {
   sub_title: "make a call",
@@ -12,7 +12,7 @@ const {sub_title, title, sm_des}  = calculate_content
 
 
 const ServiceCalculateArea = () => {
-  const selectHandler = (e: any) => { };
+  const selectHandler = (_item: NiceSelectOption) => {};
   return (
     <>
       <section className="calculate-area position-relative pt-115 pb-120" 

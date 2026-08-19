@@ -3,11 +3,11 @@ import Link from 'next/link';
 import Image from "next/image";
 import React, { useState } from 'react';
 import VideoPopup from '@/modals/VideoPopup';
-import NiceSelect from '@/ui/NiceSelect'; 
+import NiceSelect, { NiceSelectOption } from '@/ui/NiceSelect';
 import option_icon2 from "@/assets/img/icon/caregive-option-icon-2.png"
 
 const HeroBannerHomeTwo = () => {
-  const selectHandler = (e: any) => { };
+  const selectHandler = (_item: NiceSelectOption) => {};
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   return (
     <>

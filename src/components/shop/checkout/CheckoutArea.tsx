@@ -1,5 +1,5 @@
 "use client";
-import NiceSelect from "@/ui/NiceSelect";
+import NiceSelect, { NiceSelectOption } from "@/ui/NiceSelect";
 import React, { useState } from "react";
 
 const CheckoutArea = () => {
@@ -7,7 +7,7 @@ const CheckoutArea = () => {
   const [isCodeOpen, setIsCodeOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isShipOpen, setIsShipOpen] = useState(false);
-  const selectHandler = (e: any) => {};
+  const selectHandler = (_item: NiceSelectOption) => {};
 
   return (
     <>

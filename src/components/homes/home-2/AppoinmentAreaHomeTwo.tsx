@@ -1,7 +1,7 @@
 'use client'
 import React from 'react';
 import Image from 'next/image'; 
-import NiceSelect from '@/ui/NiceSelect';
+import NiceSelect, { NiceSelectOption } from '@/ui/NiceSelect';
 import appointment_img from "@/assets/img/appoinment/appoinment-right-img.jpg";
 import appoint_ment_icon_1 from "@/assets/img/icon/caregive-option-icon-3.png";
 import appoint_ment_icon_2 from "@/assets/img/icon/caregive-option-icon-4.png";
@@ -9,7 +9,7 @@ import appoint_ment_icon_3 from "@/assets/img/icon/caregive-option-icon-2.png";
 import appoint_ment_icon_4 from "@/assets/img/icon/caregive-option-icon-5.png";
 
 const AppointmentAreaHomeTwo = () => {
-  const selectHandler = (e: any) => {  };
+  const selectHandler = (_item: NiceSelectOption) => {};
   return (
     <>
       <section className="appointment-area gray-bg pb-15">

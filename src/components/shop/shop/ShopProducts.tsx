@@ -1,6 +1,6 @@
 'use client'
 import shop_data from '@/data/ShopData';
-import NiceSelect from '@/ui/NiceSelect';
+import NiceSelect, { NiceSelectOption } from '@/ui/NiceSelect';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';
@@ -9,7 +9,7 @@ import ReactPaginate from 'react-paginate';
 
 
 const ShopProducts = () => {
-  const selectHandler = (e: any) => { };
+  const selectHandler = (_item: NiceSelectOption) => {};
 
   const itemsPerPage = 9;
   const [itemOffset, setItemOffset] = useState(0);
@@ -17,7 +17,7 @@ const ShopProducts = () => {
   const currentItems = shop_data.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(shop_data.length / itemsPerPage);
   // click to request another page.
-  const handlePageClick = (event: any) => {
+  const handlePageClick = (event: { selected: number }) => {
     const newOffset = (event.selected * itemsPerPage) % shop_data.length;
     setItemOffset(newOffset);
   };
