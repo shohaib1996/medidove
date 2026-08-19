@@ -53,6 +53,8 @@ type IntakeResult = {
   adminNote: string;
   safetyMessage: string | null;
   matchedSignals: string[];
+  provider?: "rules" | "openai";
+  model?: string;
 };
 
 const initialForm: AppointmentForm = {
@@ -72,7 +74,7 @@ const supportCards = [
   {
     icon: Bot,
     title: "AI intake ready",
-    text: "This form structure is ready for symptom-based routing in the next AI phase.",
+    text: "OpenAI can structure patient requests while safe rules stay available as fallback.",
   },
   {
     icon: Headphones,
@@ -463,7 +465,7 @@ const AppointmentBookingPage = ({
                       <CardDescription>Smart Intake</CardDescription>
                       <CardTitle className="flex items-center gap-2 text-xl">
                         <Sparkles className="size-5 text-primary" />
-                        AI-style routing suggestion
+                        AI routing suggestion
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -489,6 +491,18 @@ const AppointmentBookingPage = ({
                               {intakeResult.safetyMessage}
                             </div>
                           )}
+                          <div className="flex flex-wrap items-center gap-2">
+                            <Badge variant="secondary">
+                              {intakeResult.provider === "openai"
+                                ? "OpenAI assisted"
+                                : "Rules fallback"}
+                            </Badge>
+                            {intakeResult.model && (
+                              <span className="text-xs text-slate-500">
+                                {intakeResult.model}
+                              </span>
+                            )}
+                          </div>
                           <div className="grid gap-3 sm:grid-cols-3">
                             <div>
                               <p className="text-xs font-semibold uppercase text-slate-400">
@@ -596,7 +610,7 @@ const AppointmentBookingPage = ({
               <Card className="bg-slate-950 text-white">
                 <CardHeader>
                   <CardDescription className="text-slate-300">
-                    Upcoming AI phase
+                    AI intake
                   </CardDescription>
                   <CardTitle className="flex items-center gap-2">
                     <Stethoscope className="size-5 text-primary" />
@@ -604,8 +618,9 @@ const AppointmentBookingPage = ({
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm leading-6 text-slate-300">
-                  Next we can add AI that reads the reason for visit and
-                  suggests department, doctor type, urgency, and admin notes.
+                  OpenAI reads the reason for visit and suggests department,
+                  doctor type, urgency, and admin notes without diagnosis
+                  claims.
                 </CardContent>
               </Card>
             </aside>

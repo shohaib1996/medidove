@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { generateOpenAIText } from "@/lib/ai/openai";
 
 type IntakeRequest = {
   reason?: string;
@@ -12,6 +13,8 @@ type IntakeResult = {
   adminNote: string;
   safetyMessage: string | null;
   matchedSignals: string[];
+  provider: "rules" | "openai";
+  model?: string;
 };
 
 const cleanText = (value: unknown) =>
@@ -54,7 +57,9 @@ const urgentSignals = [
 
 const highSignals = ["severe", "swelling", "high fever", "bleeding", "accident"];
 
-const getIntakeResult = (reason: string): IntakeResult => {
+const urgencyLevels = ["low", "medium", "high", "urgent"] as const;
+
+const getRuleBasedIntakeResult = (reason: string): IntakeResult => {
   const normalized = reason.toLowerCase();
   const urgentMatches = urgentSignals.filter((signal) =>
     normalized.includes(signal),
@@ -71,6 +76,7 @@ const getIntakeResult = (reason: string): IntakeResult => {
       safetyMessage:
         "This may require urgent medical attention. Please contact emergency services or visit the nearest emergency department immediately.",
       matchedSignals: urgentMatches,
+      provider: "rules",
     };
   }
 
@@ -95,7 +101,101 @@ const getIntakeResult = (reason: string): IntakeResult => {
         : "Routine appointment request. Confirm availability and patient contact details.",
     safetyMessage: null,
     matchedSignals: [...matchedSignals, ...highMatches],
+    provider: "rules",
   };
+};
+
+const cleanString = (value: unknown, fallback: string) =>
+  typeof value === "string" && value.trim() ? value.trim() : fallback;
+
+const cleanStringArray = (value: unknown, fallback: string[]) =>
+  Array.isArray(value)
+    ? value
+        .filter((item): item is string => typeof item === "string")
+        .map((item) => item.trim())
+        .filter(Boolean)
+        .slice(0, 8)
+    : fallback;
+
+const parseOpenAIIntake = (
+  text: string,
+  fallback: IntakeResult,
+  model: string,
+): IntakeResult | null => {
+  try {
+    const jsonText = text.match(/\{[\s\S]*\}/)?.[0] || text;
+    const parsed = JSON.parse(jsonText) as Partial<IntakeResult>;
+    const urgency = urgencyLevels.includes(parsed.urgency as IntakeResult["urgency"])
+      ? (parsed.urgency as IntakeResult["urgency"])
+      : fallback.urgency;
+
+    return {
+      suggestedDepartment: cleanString(
+        parsed.suggestedDepartment,
+        fallback.suggestedDepartment,
+      ),
+      suggestedDoctor: cleanString(parsed.suggestedDoctor, fallback.suggestedDoctor),
+      urgency,
+      summary: cleanString(parsed.summary, fallback.summary),
+      adminNote: cleanString(parsed.adminNote, fallback.adminNote),
+      safetyMessage:
+        typeof parsed.safetyMessage === "string"
+          ? parsed.safetyMessage.trim() || null
+          : fallback.safetyMessage,
+      matchedSignals: cleanStringArray(parsed.matchedSignals, fallback.matchedSignals),
+      provider: "openai",
+      model,
+    };
+  } catch (error) {
+    console.error("OpenAI intake parse failed:", error);
+    return null;
+  }
+};
+
+const getOpenAIIntakeResult = async (
+  reason: string,
+  fallback: IntakeResult,
+): Promise<IntakeResult | null> => {
+  const instructions = [
+    "You are MediDove's smart appointment intake router.",
+    "Classify the appointment request for routing only. Do not diagnose, prescribe, or offer treatment instructions.",
+    "Use these departments when possible: General Medicine, Dental Care, Pediatrics, Neurology, Surgery, Radiology, Emergency Care.",
+    "If urgent symptoms appear, set urgency to urgent and include the emergency safety message.",
+    "Return only valid JSON matching this schema: {\"suggestedDepartment\":\"string\",\"suggestedDoctor\":\"string\",\"urgency\":\"low|medium|high|urgent\",\"summary\":\"string\",\"adminNote\":\"string\",\"safetyMessage\":\"string|null\",\"matchedSignals\":[\"string\"]}.",
+  ].join("\n");
+
+  const result = await generateOpenAIText({
+    instructions,
+    input: [
+      `Patient appointment reason: ${reason}`,
+      "",
+      "Rule-based fallback suggestion:",
+      JSON.stringify(fallback),
+    ].join("\n"),
+    metadata: {
+      feature: "smart_intake",
+      fallback_urgency: fallback.urgency,
+    },
+  });
+
+  if (!result.ok) {
+    console.error("OpenAI intake failed:", result.error);
+    return null;
+  }
+
+  return parseOpenAIIntake(result.text, fallback, result.model);
+};
+
+const getIntakeResult = async (reason: string): Promise<IntakeResult> => {
+  const fallback = getRuleBasedIntakeResult(reason);
+
+  if (fallback.urgency === "urgent") {
+    return fallback;
+  }
+
+  const openAIResult = await getOpenAIIntakeResult(reason, fallback);
+
+  return openAIResult || fallback;
 };
 
 export async function POST(request: Request) {
@@ -119,5 +219,5 @@ export async function POST(request: Request) {
     );
   }
 
-  return NextResponse.json(getIntakeResult(reason));
+  return NextResponse.json(await getIntakeResult(reason));
 }
