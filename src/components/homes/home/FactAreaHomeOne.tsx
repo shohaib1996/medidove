@@ -2,22 +2,22 @@ import Link from 'next/link';
 import React from 'react';
 
 const fact_content = {
-  sub_title: "We are available 24/7",
-  title: "We Always Ready For A Challenge.",
+  sub_title: "Always-on patient intake",
+  title: "Capture Requests Across Every Channel.",
   fact_data: [
     {
       id: 1,
-      count_number: "1M",
+      count_number: "4",
       icon: "fas fa-user",
-      title: "Satisfied Patients",
-      sm_des: "Consectetur Lorem ipsum dolor sit amet, adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      title: "AI Intake Channels",
+      sm_des: "Website chat, appointment forms, WhatsApp replies, and voice receptionist calls feed the clinic admin dashboard."
     },
     {
-      id: 1,
-      count_number: "100",
+      id: 2,
+      count_number: "24",
       icon: "far fa-thumbs-up",
-      title: "World Awards",
-      sm_des: "adipisicing Lorem ipsum dolor sit amet, consectetur elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua "
+      title: "Hour Follow-Up",
+      sm_des: "Automations can queue reminders, callbacks, feedback requests, and staff tasks while checking patient consent."
     },
 
   ],

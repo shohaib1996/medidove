@@ -15,11 +15,11 @@ interface about_content_type {
 }
 const about_content: about_content_type = {
   sub_title: "About Us",
-  title: "Short Story About MediDove Clinic.",
-  sm_des_1: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.",
-  sm_des_2: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  title: "A clinic website connected to real AI workflows.",
+  sm_des_1: "MediDove is positioned as a modern meditech demo for appointment automation, patient engagement, AI receptionist handoff, and clinic admin operations.",
+  sm_des_2: "The system uses Supabase records for appointments, leads, conversations, calls, campaigns, consent logs, and staff review. AI assists with routing and summaries while avoiding diagnosis claims.",
   name: "Rosalina D. Williamson",
-  job_title: "founder",
+  job_title: "Clinic Operations Lead",
 };
 const { sub_title, title, sm_des_1, sm_des_2, name, job_title } = about_content;
 

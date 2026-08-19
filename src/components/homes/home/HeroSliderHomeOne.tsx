@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link';
 import Slider from "react-slick";
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import VideoPopup from '@/modals/VideoPopup';
 
 const setting = {
@@ -37,27 +37,27 @@ const setting = {
 		}
 	]
 }  
-interface SliderDataType {
+type SliderDataType = {
 	id: number;
 	bg_img: string;
 	sub_title: string;
 	title: string;
 	sm_info: string;
-}[]
+};
 const hero_slider_data: SliderDataType[] = [
 	{
 		id: 1,
 		bg_img: "slider_bg_1",
-		sub_title: "We are here for your care.",
-		title: "Best Care & Better Doctor.",
-		sm_info: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+		sub_title: "AI-powered clinic operations.",
+		title: "Smart Intake & Voice Reception.",
+		sm_info: "MediDove helps clinics capture appointment requests, route patients safely, and follow up through consent-aware communication workflows.",
 	},
 	{
 		id: 2,
 		bg_img: "slider_bg_2",
-		sub_title: "We are here for your care.",
-		title: "Best Care && Better Doctor.",
-		sm_info: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+		sub_title: "Built for modern care teams.",
+		title: "Supabase Admin, Calls & WhatsApp.",
+		sm_info: "Show buyers a real meditech workflow with bookings, AI assistant chats, receptionist logs, reminders, campaigns, and audit-ready admin tools.",
 	},
 ]
 
