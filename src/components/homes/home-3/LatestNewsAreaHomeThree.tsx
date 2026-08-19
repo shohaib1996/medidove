@@ -19,8 +19,8 @@ const LatestNewsAreaHomeThree = () => {
                   <Image className="section-back-icon back-icon-left" src={back_icon} alt="theme-pure" />
                 </div>
                 <div className="section-text pos-rel">
-                  <h5>News</h5>
-                  <h1>Get Every Single Updates Here.</h1>
+                  <h5>Insights</h5>
+                  <h1>Clinic AI operations worth showing.</h1>
                 </div>
                 <div className="section-line pos-rel">
                   <Image src={line_icon} alt="theme-pure" />
@@ -40,17 +40,17 @@ const LatestNewsAreaHomeThree = () => {
               <div key={i} className="col-xl-4 col-lg-4 col-md-6">
                 <div className="latest-news-box latest-news-box-2 latest-news-box-3 mb-30">
                   <div className="latest-news-thumb">
-                    <Link href="/news-details">
-                      <Image src={item.img} alt="theme-pure" />
+                    <Link href="/blog">
+                      <Image src={item.img} alt={item.title} />
                     </Link>
                   </div>
                   <div className="latest-news-content-box pl-0 pr-0">
                     <div className="latest-news-content">
                       <div className="news-meta mb-10">
-                        <span><a href="#" className="news-tag">{item.tag_1},</a></span>
-                        <span><a href="#" className="news-tag">{item.tag_2}</a></span>
+                        <span><Link href="/blog" className="news-tag">{item.tag_1},</Link></span>
+                        <span><Link href="/blog" className="news-tag">{item.tag_2}</Link></span>
                       </div>
-                      <h3><Link href="/news-details">{item.title}</Link></h3>
+                      <h3><Link href="/blog">{item.title}</Link></h3>
                       <p>{item.sm_des}</p>
                     </div>
                   </div>

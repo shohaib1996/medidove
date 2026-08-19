@@ -23,8 +23,8 @@ const LatestNewsAreaHomeFour = () => {
                   />
                 </div>
                 <div className="section-text pos-rel">
-                  <h5>News</h5>
-                  <h1>Get Every Single Updates Here.</h1>
+                  <h5>Insights</h5>
+                  <h1>Healthcare automation notes for clinics.</h1>
                 </div>
                 <div className="section-line pos-rel">
                   <Image src={title_line} alt="" />
@@ -37,12 +37,12 @@ const LatestNewsAreaHomeFour = () => {
               <div key={i} className="col-xl-4 col-lg-6 col-md-6">
                 <div className="h4latestnews-box pos-rel fix mb-30">
                   <div className="h4latestnews-bg">
-                    <Image src={item.img} alt="theme-pure"  style={{width: "100%", height: "auto"}} />
+                    <Image src={item.img} alt={item.title}  style={{width: "100%", height: "auto"}} />
                   </div>
                   <div className="h4latestnews-wrapper pos-rel">
                     <div className="h4news-tag mb-10">
-                      <span><a href="#" className="f-500 green-color">{item.tag_1},</a></span>
-                      <span><a href="#" className="f-500 green-color">{item.tag_2}</a></span>
+                      <span><Link href="/blog" className="f-500 green-color">{item.tag_1},</Link></span>
+                      <span><Link href="/blog" className="f-500 green-color">{item.tag_2}</Link></span>
                     </div>
                     <div className="h4news-content">
                       <h4 className="theme-color f-600">

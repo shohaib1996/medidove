@@ -30,51 +30,51 @@ interface LatestContentDataType {
 }
 // latest content 
 const latest_content: LatestContentDataType = {
-  sub_title: "News",
-  title: "Get Every Single Updates Here.",
+  sub_title: "Insights",
+  title: "Practical AI updates for modern clinics.",
   latest_news_data: [
     {
       id: 1,
       img: blog_thumb_1,
-      tag_1: "Medical",
-      tag_2: "Medicine",
-      title: "incididunt lorem ipsum dolor sit amet, cons adidis dicolo wiran.",
-      sm_des: "consectetur adipisicing elit, lorem ipsum dolor sit amet, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+      tag_1: "AI",
+      tag_2: "Receptionist",
+      title: "How AI receptionists reduce missed clinic calls",
+      sm_des: "Voice intake, call summaries, and task handoffs help staff respond faster when patient demand is high.",
     },
     {
       id: 2,
       img: blog_thumb_2,
-      tag_1: "Medical",
-      tag_2: "Medicine",
-      title: "ectetur lorem ipsum dolor sit amet, cons adidis dicolo wiran.",
-      sm_des: "incididunt consectetur adipisicing elit, lorem ipsum dolor sit amet, sed do eiusmod tempor ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+      tag_1: "WhatsApp",
+      tag_2: "Campaigns",
+      title: "Building consent-aware patient reminder flows",
+      sm_des: "Opt-in tracking, unsubscribe handling, and scheduled outreach make clinic marketing safer to operate.",
     },
   ],
 
   singl_news: [
     {
       id: 1,
-      title: "consectetur lorem ipsum dolor sit amet, adidis.",
-      time: "25 August 2023",
-      comments: 22,
+      title: "Smart intake without unsafe diagnosis claims",
+      time: "10 August 2026",
+      comments: 6,
     },
     {
       id: 2,
-      title: "adidis consectetur lorem ipsum dolor sit amet.",
-      time: "26 August 2023",
-      comments: 33,
+      title: "What a Supabase admin workspace gives clinic teams",
+      time: "12 August 2026",
+      comments: 9,
     },
     {
       id: 3,
-      title: "consectetur lorem ipsum dolor sit amet, adidis.",
-      time: "27 August 2023",
-      comments: 44,
+      title: "Turning call transcripts into follow-up queues",
+      time: "15 August 2026",
+      comments: 12,
     },
     {
-      id: 3,
-      title: "consectetur lorem ipsum dolor sit amet, adidis.",
-      time: "27 August 2023",
-      comments: 4422,
+      id: 4,
+      title: "Using audit logs to explain AI automation activity",
+      time: "18 August 2026",
+      comments: 5,
     },
   ]
 }
@@ -120,14 +120,14 @@ const LatestNewsAreaHomeOne = ({style}: DataType) => {
               <div key={i} className="col-xl-4 col-lg-6 col-md-6">
                 <div className="latest-news-box mb-30">
                   <div className="latest-news-thumb mb-35">
-                    <Image src={item.img} style={{ width: "100%" }} alt="theme-pure" />
+                    <Image src={item.img} style={{ width: "100%" }} alt={item.title} />
                   </div>
                   <div className="latest-news-content">
                     <div className="news-meta mb-10">
-                      <span><a href="#" className="news-tag">{item.tag_1},</a></span>
-                      <span><a href="#" className="news-tag">{item.tag_2}</a></span>
+                      <span><Link href="/blog" className="news-tag">{item.tag_1},</Link></span>
+                      <span><Link href="/blog" className="news-tag">{item.tag_2}</Link></span>
                     </div>
-                    <h3><Link href="/news-details">{item.title}</Link></h3>
+                    <h3><Link href="/blog">{item.title}</Link></h3>
                     <p>{item.sm_des}</p>
                   </div>
                 </div>
@@ -137,9 +137,9 @@ const LatestNewsAreaHomeOne = ({style}: DataType) => {
               <div className="recent-news-list mb-120">
                 {singl_news.map((news, index) =>
                   <div key={index} className={`latest-news-content singl-news  ${index === 0 || index === 1 || index === 2 ? "news-border-bottom" : ""}`}>
-                    <h3><Link href="/news-details">{news.title}</Link></h3>
+                    <h3><Link href="/blog">{news.title}</Link></h3>
                     <span className="meta-date"><i className="far fa-calendar"></i>{news.time}</span>
-                    <span className="meta-date"><Link href="#"><i className="far fa-comments"></i>{news.comments} Comments</Link></span>
+                    <span className="meta-date"><Link href="/blog"><i className="far fa-comments"></i>{news.comments} Comments</Link></span>
                   </div>
                 )}
               </div>
