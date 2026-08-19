@@ -1,5 +1,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { writeAuditLog } from "@/lib/audit/log";
+import { sendSmtpEmail } from "@/lib/communications/email";
+import { sendMetaWhatsAppMessage } from "@/lib/communications/meta-whatsapp";
 import type { Channel, Json } from "@/lib/supabase/database.types";
 
 type OutboxRecord = {
@@ -30,6 +32,12 @@ type ConsentResult = {
 
 const optionalEnv = (key: string) => process.env[key]?.trim() || "";
 
+const getMessagingProvider = (provider: string | null) =>
+  provider || optionalEnv("OUTBOUND_MESSAGING_PROVIDER") || "disabled";
+
+const getEmailProvider = (provider: string | null) =>
+  provider || optionalEnv("OUTBOUND_EMAIL_PROVIDER") || "smtp";
+
 const getProvider = (channel: Channel, provider: string | null) => {
   if (provider) {
     return provider;
@@ -40,10 +48,10 @@ const getProvider = (channel: Channel, provider: string | null) => {
   }
 
   if (channel === "sms" || channel === "whatsapp") {
-    return "twilio";
+    return getMessagingProvider(provider);
   }
 
-  return "email_webhook";
+  return getEmailProvider(provider);
 };
 
 const metadataObject = (metadata: Json) =>
@@ -263,7 +271,34 @@ const sendWebhook = async (
 
 const deliverRecord = async (record: OutboxRecord): Promise<DeliveryResult> => {
   if (record.channel === "sms" || record.channel === "whatsapp") {
-    return sendTwilioMessage(record);
+    const provider = getMessagingProvider(record.provider);
+
+    if (provider === "twilio") {
+      return sendTwilioMessage(record);
+    }
+
+    if (provider === "meta_whatsapp" && record.channel === "whatsapp") {
+      return sendMetaWhatsAppMessage({
+        recipientPhone: record.recipient_phone,
+        message: record.message,
+        metadata: record.metadata,
+      });
+    }
+
+    if (provider === "webhook") {
+      return sendWebhook(
+        record,
+        "messaging_webhook",
+        optionalEnv("MESSAGE_DELIVERY_WEBHOOK_URL"),
+      );
+    }
+
+    return {
+      ok: false,
+      provider,
+      error:
+        "Message delivery is disabled. Set OUTBOUND_MESSAGING_PROVIDER to meta_whatsapp, twilio, or webhook to enable it.",
+    };
   }
 
   if (record.channel === "voice") {
@@ -274,11 +309,30 @@ const deliverRecord = async (record: OutboxRecord): Promise<DeliveryResult> => {
     );
   }
 
-  return sendWebhook(
-    record,
-    getProvider(record.channel, record.provider),
-    optionalEnv("EMAIL_DELIVERY_WEBHOOK_URL"),
-  );
+  const emailProvider = getEmailProvider(record.provider);
+
+  if (emailProvider === "smtp") {
+    return sendSmtpEmail({
+      to: record.recipient_email,
+      subject: record.subject,
+      message: record.message,
+    });
+  }
+
+  if (emailProvider === "webhook") {
+    return sendWebhook(
+      record,
+      "email_webhook",
+      optionalEnv("EMAIL_DELIVERY_WEBHOOK_URL"),
+    );
+  }
+
+  return {
+    ok: false,
+    provider: emailProvider,
+    error:
+      "Email delivery is disabled. Set OUTBOUND_EMAIL_PROVIDER to smtp or webhook to enable it.",
+  };
 };
 
 export const dispatchQueuedOutbox = async (limit = 20) => {

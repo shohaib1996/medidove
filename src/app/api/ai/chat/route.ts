@@ -52,7 +52,7 @@ const knowledge = [
   {
     signals: ["call", "phone", "receptionist", "elevenlabs", "voice"],
     answer:
-      "The planned voice receptionist uses ElevenLabs with Twilio. It can answer inbound calls, capture appointment details, create Supabase records, and store call summaries for staff review.",
+      "The voice receptionist can answer patient calls, capture appointment details, create clinic records, and store call summaries for staff review.",
     cta: "/contact",
   },
   {
@@ -64,7 +64,7 @@ const knowledge = [
   {
     signals: ["admin", "dashboard", "lead", "supabase"],
     answer:
-      "The admin dashboard is protected by Supabase Auth and shows recent appointment requests plus contact leads captured from the website.",
+      "The admin dashboard is protected and shows recent appointment requests plus contact leads captured from the website.",
     cta: "/admin",
   },
 ];

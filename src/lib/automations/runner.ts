@@ -67,16 +67,18 @@ type QueueResult = {
   skipped: number;
 };
 
+const optionalEnv = (key: string) => process.env[key]?.trim() || "";
+
 const providerForChannel = (channel: Channel) => {
   if (channel === "voice") {
     return "elevenlabs";
   }
 
   if (channel === "whatsapp" || channel === "sms") {
-    return "twilio";
+    return optionalEnv("OUTBOUND_MESSAGING_PROVIDER") || "disabled";
   }
 
-  return "manual_email";
+  return optionalEnv("OUTBOUND_EMAIL_PROVIDER") || "smtp";
 };
 
 const addMinutes = (date: Date, minutes: number) =>

@@ -332,7 +332,7 @@ create table public.call_logs (
   appointment_id uuid references public.appointments(id) on delete set null,
   phone_number text not null,
   direction text not null check (direction in ('inbound', 'outbound')),
-  provider text not null default 'twilio',
+  provider text not null default 'voice_provider',
   provider_call_id text,
   transcript text,
   ai_summary text,

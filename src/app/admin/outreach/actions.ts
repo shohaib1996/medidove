@@ -9,6 +9,20 @@ const channels = ["email", "sms", "whatsapp", "voice"] as const;
 const text = (value: FormDataEntryValue | null) =>
   typeof value === "string" ? value.trim() : "";
 
+const optionalEnv = (key: string) => process.env[key]?.trim() || "";
+
+const providerForChannel = (channel: string) => {
+  if (channel === "voice") {
+    return "elevenlabs";
+  }
+
+  if (channel === "whatsapp" || channel === "sms") {
+    return optionalEnv("OUTBOUND_MESSAGING_PROVIDER") || "disabled";
+  }
+
+  return optionalEnv("OUTBOUND_EMAIL_PROVIDER") || "smtp";
+};
+
 const assertAdmin = async () => {
   const supabase = await createClient();
   const {
@@ -72,12 +86,7 @@ export const queueOutreachMessage = async (formData: FormData) => {
     subject: subject || null,
     message,
     status: "queued",
-    provider:
-      channel === "voice"
-        ? "elevenlabs"
-        : channel === "whatsapp" || channel === "sms"
-          ? "twilio"
-          : "manual_email",
+    provider: providerForChannel(channel),
     metadata: {
       consent_confirmed: true,
       queued_from: "admin_outreach",

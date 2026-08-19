@@ -45,8 +45,9 @@ export default async function AdminIntegrationsPage() {
   }
 
   const integrations = getIntegrationStatuses();
-  const configured = integrations.filter((item) => item.configured).length;
-  const missing = integrations.length - configured;
+  const requiredIntegrations = integrations.filter((item) => !item.optional);
+  const configured = requiredIntegrations.filter((item) => item.configured).length;
+  const missing = requiredIntegrations.length - configured;
   const categories = new Set(integrations.map((item) => item.category)).size;
 
   return (
@@ -113,8 +114,20 @@ export default async function AdminIntegrationsPage() {
                       {integration.name}
                     </CardTitle>
                   </div>
-                  <Badge variant={integration.configured ? "default" : "destructive"}>
-                    {integration.configured ? "Ready" : "Missing keys"}
+                  <Badge
+                    variant={
+                      integration.configured
+                        ? "default"
+                        : integration.optional
+                          ? "secondary"
+                          : "destructive"
+                    }
+                  >
+                    {integration.configured
+                      ? "Ready"
+                      : integration.optional
+                        ? "Optional"
+                        : "Missing keys"}
                   </Badge>
                 </div>
               </CardHeader>

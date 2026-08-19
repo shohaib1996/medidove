@@ -2,6 +2,7 @@ type IntegrationStatus = {
   name: string;
   category: string;
   configured: boolean;
+  optional: boolean;
   requiredKeys: string[];
   missingKeys: string[];
   workflow: string;
@@ -45,27 +46,48 @@ const integrationDefinitions = [
   },
   {
     name: "Twilio SMS",
-    category: "Patient messaging",
+    category: "Optional messaging fallback",
+    optional: true,
     requiredKeys: ["TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN", "TWILIO_FROM_PHONE"],
-    workflow: "SMS outreach delivery",
+    workflow: "Fallback SMS outreach delivery",
     href: "/admin/outreach",
   },
   {
-    name: "Twilio WhatsApp",
+    name: "Meta WhatsApp Cloud API",
     category: "Patient messaging",
     requiredKeys: [
-      "TWILIO_ACCOUNT_SID",
-      "TWILIO_AUTH_TOKEN",
-      "TWILIO_WHATSAPP_FROM",
+      "META_WHATSAPP_ACCESS_TOKEN",
+      "META_WHATSAPP_PHONE_NUMBER_ID",
+      "META_WHATSAPP_VERIFY_TOKEN",
     ],
     workflow: "WhatsApp reminders and follow-up delivery",
     href: "/engagement",
   },
   {
-    name: "Email Webhook",
+    name: "Twilio WhatsApp",
+    category: "Optional messaging fallback",
+    optional: true,
+    requiredKeys: [
+      "TWILIO_ACCOUNT_SID",
+      "TWILIO_AUTH_TOKEN",
+      "TWILIO_WHATSAPP_FROM",
+    ],
+    workflow: "Fallback WhatsApp reminders and follow-up delivery",
+    href: "/engagement",
+  },
+  {
+    name: "SMTP Email",
     category: "Email delivery",
+    requiredKeys: ["SMTP_HOST", "SMTP_PORT", "SMTP_USER", "SMTP_PASSWORD", "SMTP_FROM_EMAIL"],
+    workflow: "Email outreach delivery through Nodemailer SMTP",
+    href: "/admin/outreach",
+  },
+  {
+    name: "Email Webhook",
+    category: "Optional email fallback",
+    optional: true,
     requiredKeys: ["EMAIL_DELIVERY_WEBHOOK_URL"],
-    workflow: "Email outreach dispatch",
+    workflow: "Fallback email outreach dispatch",
     href: "/admin/outreach",
   },
   {
@@ -96,6 +118,7 @@ export const getIntegrationStatuses = (): IntegrationStatus[] =>
     const missingKeys = integration.requiredKeys.filter((key) => !hasEnv(key));
 
     return {
+      optional: false,
       ...integration,
       configured: missingKeys.length === 0,
       missingKeys,

@@ -25,6 +25,20 @@ const audiences = [
 const text = (value: FormDataEntryValue | null) =>
   typeof value === "string" ? value.trim() : "";
 
+const optionalEnv = (key: string) => process.env[key]?.trim() || "";
+
+const providerForChannel = (channel: string) => {
+  if (channel === "voice") {
+    return "elevenlabs";
+  }
+
+  if (channel === "sms" || channel === "whatsapp") {
+    return optionalEnv("OUTBOUND_MESSAGING_PROVIDER") || "disabled";
+  }
+
+  return optionalEnv("OUTBOUND_EMAIL_PROVIDER") || "smtp";
+};
+
 const assertAdmin = async () => {
   const supabase = await createClient();
   const {
@@ -173,12 +187,7 @@ export const queueCampaign = async (formData: FormData) => {
         recipient.name || "there",
       ),
       status: "queued",
-      provider:
-        campaign.channel === "voice"
-          ? "elevenlabs"
-          : campaign.channel === "sms" || campaign.channel === "whatsapp"
-            ? "twilio"
-            : "manual_email",
+      provider: providerForChannel(campaign.channel),
       metadata: {
         campaign_id: campaign.id,
         campaign_name: campaign.name,
