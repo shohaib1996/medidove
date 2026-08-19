@@ -5,6 +5,7 @@ import about_icon_2 from "@/assets/img/icon/s-fea-icon-2.png";
 import about_icon_3 from "@/assets/img/icon/s-fea-icon-3.png";
 import about_icon_4 from "@/assets/img/icon/s-fea-icon-4.png";
 import Image, { StaticImageData } from "next/image";
+import Link from "next/link";
 
 interface AboutContentDatatype {
   about_data: {
@@ -25,38 +26,38 @@ const about_content: AboutContentDatatype = {
       id: 1,
       cls: "mb-40",
       img: about_icon_1,
-      title: "Advanced Care",
-      sm_info: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor.",
+      title: "AI Intake",
+      sm_info: "Routes patient requests into department, urgency, and admin-note fields.",
     },
     {
       id: 2,
       cls: "mt-40",
       img: about_icon_2,
-      title: "Respite Care",
-      sm_info: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor.",
+      title: "Voice Reception",
+      sm_info: "Captures caller intent and saves receptionist summaries for follow-up.",
     },
     {
       id: 3,
       cls: "mb-30",
       img: about_icon_3,
-      title: "Daily Care",
-      sm_info: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor.",
+      title: "Patient Messaging",
+      sm_info: "Queues WhatsApp, SMS, email, and voice outreach with consent checks.",
     },
     {
       id: 4,
       cls: "mt-40 mb-30",
       img: about_icon_4,
-      title: "Neuorology Care",
-      sm_info: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor.",
+      title: "Admin Review",
+      sm_info: "Keeps appointment, lead, campaign, and call records visible to staff.",
     },
   ],
   sub_title: "About Us",
-  title: "Short Story About MediDove Clinic.",
-  sm_des: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.",
+  title: "MediDove turns a clinic website into an AI workflow hub.",
+  sm_des: "Patients can book appointments, ask the assistant, request callbacks, and receive reminder messages. Staff manage every record from Supabase-backed admin screens.",
   features: [
-    "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do.",
-    "Eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    "Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea co.",
+    "AI supports routing and summaries, not diagnosis or treatment decisions.",
+    "Consent-aware messaging protects reminder and campaign workflows.",
+    "Admin teams can review appointments, conversations, calls, and tasks.",
   ]
 }
 const { about_data, sub_title, title, sm_des, features } = about_content
@@ -102,7 +103,7 @@ const AboutAreaHomeTwo = () => {
                   </ul>
                 </div>
                 <div className="button-area">
-                  <a data-animation="fadeInLeft" data-delay=".6s" href="#" className="btn btn-icon ml-0"><span>+</span>learn more</a>
+                  <Link data-animation="fadeInLeft" data-delay=".6s" href="/about" className="btn btn-icon ml-0"><span>+</span>learn more</Link>
                 </div>
               </div>
             </div>

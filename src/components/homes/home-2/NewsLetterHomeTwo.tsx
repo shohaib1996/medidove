@@ -8,9 +8,9 @@ type DataType = {
   sm_info: string;
 }
 const news_content: DataType = {
-  sub_title: "Subscribe For Get Update",
-  title: "Let's Find An Office Near You.",
-  sm_info: "incididunt ipsum dolor sit amet, consectetur adipisicing elit, sed do eius mod tempor  ut labore et lorem dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.",
+  sub_title: "Patient engagement",
+  title: "Stay connected with clinic updates.",
+  sm_info: "Capture opt-in interest for appointment reminders, wellness campaigns, feedback requests, and AI receptionist callback workflows.",
 
 }
 const {sub_title, title, sm_info}  = news_content

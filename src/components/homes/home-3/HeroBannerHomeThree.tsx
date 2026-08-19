@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link';
 import VideoPopup from '@/modals/VideoPopup';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 type DataType = {
   sub_title: string;
@@ -10,9 +10,9 @@ type DataType = {
   btn_text: string;
 }
 const hero_content: DataType = {
-  sub_title: "We are here for your care.",
-  title: "Best Care & Better Doctor.",
-  sm_info: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  sub_title: "AI clinic workflows.",
+  title: "Reception, Intake & Follow-Up.",
+  sm_info: "MediDove connects appointment booking, AI receptionist calls, WhatsApp reminders, and admin review into one modern meditech demo.",
   btn_text: "Make Appointment",
 }
 const { sub_title, title, sm_info, btn_text } = hero_content
