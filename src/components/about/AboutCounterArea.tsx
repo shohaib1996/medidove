@@ -19,22 +19,22 @@ const counter_data: DataType[] = [
     id: 1,
     count_number: 358,
     icon: counter_icon_1,
-    title: "Worldwide Branches",
-    sm_des: "Incididunt ut labore et dolore lorem ipsum dolor sit amet, consectetur adipisi cing elit, sed do eiusmod tempor magna aliqua.",
+    title: "AI-Assisted Requests",
+    sm_des: "Appointment, callback, WhatsApp, and website assistant requests can be captured in one Supabase-backed workflow.",
   },
   {
     id: 2,
     count_number: 558,
     icon: counter_icon_2,
-    title: "Hospital Formed",
-    sm_des: "Consectetur adipisi cing  Incididunt ut labore et dolore lorem ipsum dolor sit amet, elit, sed do eiusmod tempor magna aliqua.",
+    title: "Patient Messages",
+    sm_des: "Consent-aware outreach keeps reminders, follow-ups, feedback, and receptionist handoffs visible for clinic staff.",
   },
   {
     id: 3,
     count_number: 450,
     icon: counter_icon_3,
-    title: "Hospital Formed",
-    sm_des: "Adipisi consectetur cing  Incididunt ut labore et dolore lorem ipsum dolor sit amet, elit, sed do eiusmod tempor magna aliqua.",
+    title: "Admin Actions",
+    sm_des: "Teams can review leads, update appointments, queue campaigns, and audit important workflow changes.",
   },
 ]
 

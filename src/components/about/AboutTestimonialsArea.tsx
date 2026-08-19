@@ -17,10 +17,10 @@ type DataType = {
 }
 const about_testi: DataType = {
   sub_title: "Testimonials",
-  title: "Our Clients Says About Us",
-  sm_info: "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem. accusantium doloremque laudantium, totam rem aperiam.",
+  title: "Clinic Teams Need Faster Patient Follow-Up",
+  sm_info: "MediDove shows how an AI receptionist, smart intake form, and consent-based messaging can help a clinic reduce missed requests while keeping staff in control of patient decisions.",
   name: "Rosalina D. Williamson",
-  job_title: "founder, uithemes",
+  job_title: "Clinic Operations Manager",
 }
 const {sub_title, title, sm_info, name, job_title} = about_testi
 

@@ -28,37 +28,37 @@ const about_analysis_content: DataType = {
     {
       id: "home",
       img: tab_icon_1,
-      title: "Industry analysis",
+      title: "AI intake",
     },
     {
       id: "profile",
       img: tab_icon_2,
-      title: "Our comitment",
+      title: "Consent workflows",
     },
     {
       id: "contact",
       img: tab_icon_3,
-      title: "how we start care?",
+      title: "Reception handoff",
     }
   ],
   tab_inner_data: [
     {
       id: "home",
-      sub_title: "01. Improve your experience.",
-      title: "01. Professionals We Care About You.",
-      sm_des: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip  ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      sub_title: "01. Smart request routing.",
+      title: "AI prepares the intake summary before staff review.",
+      sm_des: "Patients describe what they need in plain language. MediDove can suggest a department, doctor type, urgency level, and admin note while avoiding diagnosis claims.",
     },
     {
       id: "profile",
-      sub_title: "02. Improve your experience.",
-      title: "02. Professionals We Care About You.",
-      sm_des: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip  ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      sub_title: "02. Consent-aware engagement.",
+      title: "Every outreach workflow starts with patient permission.",
+      sm_des: "WhatsApp, SMS, email, and voice reminders are queued through consent-aware records so clinics can show responsible patient communication in the demo.",
     },
     {
       id: "contact",
-      sub_title: "03. Improve your experience.",
-      title: "03. Professionals We Care About You.",
-      sm_des: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip  ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      sub_title: "03. AI receptionist handoff.",
+      title: "Calls, chats, and forms become admin-ready tasks.",
+      sm_des: "The receptionist flow captures the caller's intent, stores summaries, and gives staff a clear inbox for callbacks, appointment requests, and follow-up actions.",
     },
   ]
 }
@@ -110,7 +110,7 @@ const AboutAnalysisArea = () => {
                           </div>
                         </div>
                         <div className="section-button section-button-left mb-30">
-                          <Link data-animation="fadeInLeft" data-delay=".6s" href="#"
+                          <Link data-animation="fadeInLeft" data-delay=".6s" href="/appointment"
                             className="btn btn-icon ml-0"><span>+</span>
                             Make Appointment</Link>
                         </div>
