@@ -1,12 +1,14 @@
 "use client";
-import React, { useState } from "react";
 import Collapsible from 'react-collapsible';
 import MenuData from "./MenuData";
 import Link from "next/link";
 
+type MobileMenusProps = {
+  isOpenMenu: boolean;
+  setIsOpenMenu: (isOpen: boolean) => void;
+};
 
-const MobileMenus = ({ isOpenMenu, setIsOpenMenu }: any) => {
-
+const MobileMenus = ({ isOpenMenu, setIsOpenMenu }: MobileMenusProps) => {
   return (
     <>
       <div className={`fade offcanvas-backdrop ${isOpenMenu ? "show" : ""}`} onClick={() => setIsOpenMenu(false)}></div>

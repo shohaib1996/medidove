@@ -94,7 +94,7 @@ const ShopProducts = () => {
                             <div className="product-action text-center">
                               <a href="#"><i className="fas fa-shopping-cart"></i></a>
                               <a href="#"><i className="fas fa-heart"></i></a>
-                              <Link href="/porduct-details">
+                              <Link href="/product-details">
                                 <i className="fas fa-expand"></i>
                               </Link>
                             </div>
@@ -140,7 +140,9 @@ const ShopProducts = () => {
                           </div>
                           <p>{list_item.sm_des}</p>
                           <div className="product-action-list">
-                            <a className="primary_btn btn-theme">add to cart</a>
+                            <button type="button" className="primary_btn btn-theme">
+                              add to cart
+                            </button>
                             <a className="action-btn" href="#"><i className="fas fa-heart"></i></a>
                             <Link className="action-btn" href="/product-details">
                               <i className="fas fa-expand"></i></Link>

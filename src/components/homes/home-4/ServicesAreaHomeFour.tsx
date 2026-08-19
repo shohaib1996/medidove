@@ -47,7 +47,11 @@ const setting = {
   ]
 }
 
-const ServicesAreaHomeFour = ({ style }: any) => {
+type ServicesAreaHomeFourProps = {
+  style?: boolean;
+};
+
+const ServicesAreaHomeFour = ({ style }: ServicesAreaHomeFourProps) => {
   const sliderRef = useRef<Slider | null>(null);
   const handlePrev = () => {
     if (sliderRef.current) {

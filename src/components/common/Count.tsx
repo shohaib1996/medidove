@@ -1,5 +1,5 @@
+"use client";
 
-"use client"
 import { useState } from "react";
 import CountUp from "react-countup";
 import { InView } from "react-intersection-observer";
@@ -11,7 +11,7 @@ interface CountType {
 }
 
 const Count = ({ number, text, add_style }: CountType) => {
-  const [focus, setFocus] = useState<boolean>(false);
+  const [focus, setFocus] = useState(false);
   const visibleChangeHandler = (isVisible: boolean) => {
     if (isVisible) {
       if (!focus) {
@@ -28,7 +28,7 @@ const Count = ({ number, text, add_style }: CountType) => {
             <span ref={countUpRef} />
             <InView
               as="span"
-              onChange={(inView: any) => visibleChangeHandler(inView)}>
+              onChange={(inView) => visibleChangeHandler(inView)}>
               {text && <span>{text}</span>} <span>+</span>
             </InView>
           </div>

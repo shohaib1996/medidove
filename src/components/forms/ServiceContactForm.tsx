@@ -36,9 +36,9 @@ const ServiceContactForm = () => {
           </div>
         </div>
         <div className="ser-form-btn text-center mt-40">
-          <a data-animation="fadeInLeft" data-delay=".6s" href="#" className="btn btn-icon ml-0"
+          <button type="submit" data-animation="fadeInLeft" data-delay=".6s" className="btn btn-icon ml-0"
             style={{ animationDelay: "0.6s" }}
-            tab-index="0"><span>+</span>Request for call</a>
+            tabIndex={0}><span>+</span>Request for call</button>
         </div>
       </form>
     </>

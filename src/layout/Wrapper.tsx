@@ -1,10 +1,15 @@
-"use client"
+"use client";
 
-import React, { useEffect } from "react";
+import type { ReactNode } from "react";
+import { useEffect } from "react";
 import { animationCreate } from "@/utils/utils";
 import ScrollTop from "@/components/common/ScrollTop";
 
-const Wrapper = ({ children }: any) => {
+type WrapperProps = {
+	children: ReactNode;
+};
+
+const Wrapper = ({ children }: WrapperProps) => {
 	useEffect(() => {
 		// animation
 		const timer = setTimeout(() => {

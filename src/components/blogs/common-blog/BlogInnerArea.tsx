@@ -40,7 +40,11 @@ const setting = {
   ]
 }
 
-const BlogInnerArea = ({style}: any) => {
+type BlogInnerAreaProps = {
+  style?: boolean;
+};
+
+const BlogInnerArea = ({style}: BlogInnerAreaProps) => {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const sliderRef = useRef<Slider | null>(null);
 

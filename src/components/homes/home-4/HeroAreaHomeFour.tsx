@@ -59,7 +59,11 @@ const hero_slider_data = [
   },
 ]
 
-const HeroAreaHomeFour = ({ style }: any) => {
+type HeroAreaHomeFourProps = {
+  style?: boolean;
+};
+
+const HeroAreaHomeFour = ({ style }: HeroAreaHomeFourProps) => {
   const sliderRef = useRef<Slider | null>(null);
   const handlePrev = () => {
     if (sliderRef.current) {

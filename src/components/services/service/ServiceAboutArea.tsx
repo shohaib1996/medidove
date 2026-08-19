@@ -18,7 +18,11 @@ const service_content: DataType = {
 }
 const { sub_title, title, sm_des } = service_content
 
-const ServiceAboutArea = ({ service_2 }: any) => {
+type ServiceAboutAreaProps = {
+  service_2?: boolean;
+};
+
+const ServiceAboutArea = ({ service_2 }: ServiceAboutAreaProps) => {
   return (
     <>
       <section className="about-area pt-120 pb-90">
@@ -44,8 +48,7 @@ const ServiceAboutArea = ({ service_2 }: any) => {
           {!service_2 &&
             <div className="row">
               {servcies_data.map((item, i) =>
-                <>
-                  {item.service &&
+                item.service ? (
                     <div key={i} className="col-xl-4 col-lg-6 col-md-6">
                       <div className="service-box service-box-border text-center mb-30">
                         <div className="service-thumb">
@@ -58,8 +61,7 @@ const ServiceAboutArea = ({ service_2 }: any) => {
                         </div>
                       </div>
                     </div>
-                  }
-                </>
+                ) : null
               )}
             </div>
           }

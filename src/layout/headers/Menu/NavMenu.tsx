@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import MenuData from "./MenuData";
 import FullscreenSearch from "@/components/common/FullscreenSearch";
 
-const NavMenu = ({home_4 } : any) => {
-  const [openSearch, setOpenSearch] = useState<boolean>(false);
+type NavMenuProps = {
+  home_4?: boolean;
+};
+
+const NavMenu = ({ home_4 }: NavMenuProps) => {
+  const [openSearch, setOpenSearch] = useState(false);
+
   return (
     <>
       <ul>
@@ -20,10 +25,19 @@ const NavMenu = ({home_4 } : any) => {
             </ul>
           </li>
         ))}
-        {home_4 && <li><button style={{marginLeft: "10px"}} className="nav-search-icon">
-          <i className="fal fa-search" onClick={() => setOpenSearch(true)}></i></button>
-        </li>
-        }
+        {home_4 && (
+          <li>
+            <button
+              type="button"
+              aria-label="Open site search"
+              style={{ marginLeft: "10px" }}
+              className="nav-search-icon"
+              onClick={() => setOpenSearch(true)}
+            >
+              <i className="fal fa-search"></i>
+            </button>
+          </li>
+        )}
       </ul>
       {openSearch && <FullscreenSearch openSearch={openSearch} setOpenSearch={setOpenSearch} />}
     </>

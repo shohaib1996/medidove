@@ -120,7 +120,21 @@ const {
   comments_data,
 } = blog_details_content
 
-const BlogDetailsInnerArea = ({ style_details, style_left, style_audio, style_video, style_gallery }: any) => {
+type BlogDetailsInnerAreaProps = {
+  style_details?: boolean;
+  style_left?: boolean;
+  style_audio?: boolean;
+  style_video?: boolean;
+  style_gallery?: boolean;
+};
+
+const BlogDetailsInnerArea = ({
+  style_details,
+  style_left,
+  style_audio,
+  style_video,
+  style_gallery,
+}: BlogDetailsInnerAreaProps) => {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
 
   const sliderRef = useRef<Slider | null>(null);

@@ -81,7 +81,7 @@ const latest_content: LatestContentDataType = {
 const { sub_title, title, latest_news_data, singl_news } = latest_content
 
 type DataType = {
-  style?: any;
+  style?: boolean;
 }
 const LatestNewsAreaHomeOne = ({style}: DataType) => {
   return (

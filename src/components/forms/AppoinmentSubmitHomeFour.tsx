@@ -74,7 +74,7 @@ const AppointmentSubmitHomeFour = () => {
             data-delay=".6s"
             className="btn btn-icon ml-0"
             style={{ animationDelay: "0.6s" }}
-            tab-index="0"><span>+</span>Make Appointment</button>
+            tabIndex={0}><span>+</span>Make Appointment</button>
         </div>
       </form>
     </>

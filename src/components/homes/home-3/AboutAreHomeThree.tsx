@@ -52,7 +52,11 @@ const about_content: about_content_typ = {
 }
 const { title, sub_title, sm_des } = about_content
 
-const AboutAreHomeThree = ({ style }: any) => {
+type AboutAreHomeThreeProps = {
+  style?: boolean;
+};
+
+const AboutAreHomeThree = ({ style }: AboutAreHomeThreeProps) => {
   return (
     <>
       <section className={`about-area ${style ? "pt-120" : "pt-15"} pb-80`}>
