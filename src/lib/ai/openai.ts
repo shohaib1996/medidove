@@ -25,6 +25,12 @@ type GenerateOpenAITextOptions = {
 
 type OpenAIResponsesPayload = {
   output_text?: string;
+  output?: {
+    content?: {
+      text?: string;
+      type?: string;
+    }[];
+  }[];
   error?: {
     message?: string;
   };
@@ -32,7 +38,7 @@ type OpenAIResponsesPayload = {
 
 const getEnv = (key: string) => process.env[key]?.trim() || "";
 
-const getOpenAIModel = () => getEnv("OPENAI_MODEL") || "gpt-5.6-terra";
+const getOpenAIModel = () => getEnv("OPENAI_MODEL") || "gpt-4.1-mini";
 
 const getMaxOutputTokens = () => {
   const configuredValue = Number.parseInt(
@@ -91,7 +97,14 @@ export const generateOpenAIText = async ({
       };
     }
 
-    const text = payload.output_text?.trim();
+    const text =
+      payload.output_text?.trim() ||
+      payload.output
+        ?.flatMap((item) => item.content || [])
+        .map((content) => content.text?.trim() || "")
+        .filter(Boolean)
+        .join("\n")
+        .trim();
 
     if (!text) {
       return {
