@@ -100,8 +100,8 @@ const UnsubscribePage = () => {
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
               Record an opt-out for WhatsApp, SMS, email, or voice calls.
-              MediDove stores the request in Supabase and blocks future queued
-              outreach for that channel.
+              MediDove uses your request to stop future outreach for that
+              channel.
             </p>
           </div>
         </section>

@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
 
 export const metadata = {
-  title: "Book Appointment | MediDove AI Clinic",
+  title: "Book Appointment | MediDove Clinic",
   description:
-    "Submit a Supabase-backed appointment request for the MediDove AI clinic platform.",
+    "Submit an appointment request for MediDove clinic services and staff review.",
 };
 
 const LegacyAppointmentPage = () => {

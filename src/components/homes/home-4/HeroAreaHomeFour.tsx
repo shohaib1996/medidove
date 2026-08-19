@@ -39,22 +39,22 @@ const setting = {
 const hero_slider_data = [
   {
     id: 1,
-    title: "AI Clinic Reception",
+    title: "Clinic Reception Support",
     sm_des: "Capture patient calls, summarize appointment needs, and route follow-up tasks to staff from one connected workspace.",
     feature_list: [
-      "ElevenLabs voice assistant",
-      "Twilio call logging",
-      "Supabase admin inbox",
+      "Voice reception support",
+      "Call summary review",
+      "Staff follow-up inbox",
     ],
   },
   {
     id: 2,
     title: "Patient Engagement Automation",
-    sm_des: "Send consent-aware reminders, review AI-generated campaign copy, and track outreach activity before staff follows up.",
+    sm_des: "Send consent-aware reminders, review outreach copy, and track communication activity before staff follows up.",
     feature_list: [
-      "WhatsApp reminder flows",
-      "AI campaign drafts",
-      "Audit-ready activity history",
+      "Reminder message flows",
+      "Staff-reviewed outreach",
+      "Review-ready activity history",
     ],
   },
 ]

@@ -31,14 +31,14 @@ interface LatestContentDataType {
 // latest content 
 const latest_content: LatestContentDataType = {
   sub_title: "Insights",
-  title: "Practical AI updates for modern clinics.",
+  title: "Practical care updates for modern clinics.",
   latest_news_data: [
     {
       id: 1,
       img: blog_thumb_1,
-      tag_1: "AI",
+      tag_1: "Care",
       tag_2: "Receptionist",
-      title: "How AI receptionists reduce missed clinic calls",
+      title: "How virtual reception reduces missed clinic calls",
       sm_des: "Voice intake, call summaries, and task handoffs help staff respond faster when patient demand is high.",
     },
     {
@@ -60,7 +60,7 @@ const latest_content: LatestContentDataType = {
     },
     {
       id: 2,
-      title: "What a Supabase admin workspace gives clinic teams",
+      title: "What a shared support workspace gives clinic teams",
       time: "12 August 2026",
       comments: 9,
     },
@@ -72,7 +72,7 @@ const latest_content: LatestContentDataType = {
     },
     {
       id: 4,
-      title: "Using audit logs to explain AI automation activity",
+      title: "Using audit logs to explain clinic automation activity",
       time: "18 August 2026",
       comments: 5,
     },

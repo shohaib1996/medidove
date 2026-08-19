@@ -11,10 +11,10 @@ import avatar_img from "@/assets/img/home4/about/ava.png";
 const about_content  = {
   phone: "012 (963) 15632",
   sub_title: "About Medidove",
-  title: "AI workflows for busy clinic teams",
-  sm_des_1: "MediDove turns appointment forms, website chat, phone calls, and WhatsApp messages into structured records that staff can review quickly.",
+  title: "Smart workflows for busy clinic teams",
+  sm_des_1: "MediDove turns appointment forms, website chat, phone calls, and patient messages into structured records that staff can review quickly.",
   sm_des_2: "The platform is designed for operational support: intake summaries, receptionist handoffs, reminder queues, campaign drafts, and consent tracking.",
-  avatar_info: "AI supports routing and summaries while clinicians and staff remain responsible for patient decisions.",
+  avatar_info: "Smart routing and summaries help staff move faster while clinicians remain responsible for patient decisions.",
   avatar_name: "Annie J. Fisher",
 }
 const {phone, sub_title, title, sm_des_1, sm_des_2, avatar_info, avatar_name} = about_content
@@ -27,7 +27,7 @@ const AboutAreaHomeFour = () => {
           <div className="row">
             <div className="col-xl-6 col-lg-5">
               <div className="h4about-thumb pos-rel">
-                <Image src={about_thumb_1} alt="AI clinic workflow" />
+                <Image src={about_thumb_1} alt="Clinic workflow" />
                 <Link href="/contact" className="call-btn f-700 white-color green-bg">
                   <i className="call-icon" >
                     <Image src={phone_icon} alt="" />

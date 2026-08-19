@@ -31,7 +31,7 @@ const servcies_data: ServciesDataType[] = [
     img: service_img_1,
     sub_title: "Primary care",
     title: "General Medicine",
-    sm_des: "Routine checkups, common illness visits, follow-up coordination, and AI-assisted intake routing for the right care team.",
+    sm_des: "Routine checkups, common illness visits, follow-up coordination, and smart intake routing for the right care team.",
   },
   {
     id: 2,
@@ -52,7 +52,7 @@ const servcies_data: ServciesDataType[] = [
     img: service_img_4,
     sub_title: "Dental",
     title: "Dental Care",
-    sm_des: "Dental consultation requests, cleaning reminders, tooth pain routing, and consent-based follow-up through WhatsApp or phone.",
+    sm_des: "Dental consultation requests, cleaning reminders, tooth pain routing, and consent-based follow-up through messaging or phone.",
   },
   // home 04 
   {
@@ -89,14 +89,14 @@ const servcies_data: ServciesDataType[] = [
     img: service_img_5_1,
     service: true,
     title: "General Medicine",
-    sm_des: "Primary care booking with AI-assisted intake summaries and staff-reviewed appointment routing.",
+    sm_des: "Primary care booking with smart intake summaries and staff-reviewed appointment routing.",
   },
   {
     id: 2,
     img: service_img_5_2,
     service: true,
     title: "Dental Care",
-    sm_des: "Dental appointment requests, cleaning recall reminders, and WhatsApp confirmation workflows.",
+    sm_des: "Dental appointment requests, cleaning recall reminders, and confirmation workflows.",
   },
   {
     id: 3,

@@ -80,7 +80,7 @@ const ServicesAreaHomeFour = ({ style }: ServicesAreaHomeFourProps) => {
                 </div>
                 <div className="section-text pos-rel">
                   <h5>Departments</h5>
-                  <h1>Manage clinic services with AI support</h1>
+                  <h1>Manage clinic services with smart support</h1>
                 </div>
                 <div className="section-line pos-rel">
                   <Image src={title_line} alt="" />

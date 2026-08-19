@@ -94,7 +94,7 @@ export default function FeedbackPage() {
               Share your MediDove care experience
             </h1>
             <p className="mt-5 max-w-2xl leading-8 text-slate-300">
-              Feedback is reviewed by the clinic team and AI-assisted triage helps
+              Feedback is reviewed by the clinic team and smart triage helps
               prioritize urgent service concerns.
             </p>
           </div>

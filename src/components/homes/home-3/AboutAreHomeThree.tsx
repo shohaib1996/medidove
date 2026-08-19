@@ -46,9 +46,9 @@ type about_content_typ = {
   sm_des: string;
 }
 const about_content: about_content_typ = {
-  title: "Built For AI Clinic Operations",
-  sub_title: "MediDove helps buyers see a complete patient engagement system.",
-  sm_des: "The demo brings together smart intake, appointment requests, voice receptionist logs, WhatsApp reminders, campaigns, and admin reporting so clinics can review the full workflow in one place.",
+  title: "Built For Modern Clinic Operations",
+  sub_title: "MediDove helps clinics support the full patient journey.",
+  sm_des: "The system brings together smart intake, appointment requests, voice reception notes, reminders, follow-up, and staff review so clinics can manage the full workflow in one place.",
 }
 const { title, sub_title, sm_des } = about_content
 

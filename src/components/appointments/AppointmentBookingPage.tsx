@@ -73,18 +73,18 @@ const initialForm: AppointmentForm = {
 const supportCards = [
   {
     icon: Bot,
-    title: "AI intake ready",
-    text: "OpenAI can structure patient requests while safe rules stay available as fallback.",
+    title: "Smart intake support",
+    text: "Patient requests can be organized into clear appointment notes while safety rules stay available as fallback.",
   },
   {
     icon: Headphones,
     title: "Receptionist handoff",
-    text: "Requests can be created from web forms today and ElevenLabs voice calls later.",
+    text: "Requests can be created from web forms or reception calls and reviewed by clinic staff.",
   },
   {
     icon: MessageCircle,
-    title: "WhatsApp consent",
-    text: "The consent field prepares the workflow for reminders and confirmations.",
+    title: "Reminder consent",
+    text: "The consent field helps the clinic send appointment confirmations and reminders responsibly.",
   },
 ];
 
@@ -264,17 +264,17 @@ const AppointmentBookingPage = ({
           />
           <div className="absolute inset-0 bg-slate-950/70" />
           <div className="relative mx-auto max-w-7xl">
-            <Badge className="mb-5 bg-white/10 text-white hover:bg-white/15">
-              <CalendarCheck className="size-3.5" />
-              Supabase booking flow
+              <Badge className="mb-5 bg-white/10 text-white hover:bg-white/15">
+                <CalendarCheck className="size-3.5" />
+              Online booking
             </Badge>
             <h1 className="max-w-4xl text-4xl font-bold leading-tight tracking-normal md:text-6xl">
               Book a smarter appointment with MediDove
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-200">
-              Submit a structured request for the clinic team. The same booking
-              data will power AI intake, voice receptionist calls, and WhatsApp
-              reminders in the next phases.
+              Submit a structured request for the clinic team. Your reason for
+              visit helps reception prepare the right department, doctor
+              preference, and follow-up details.
             </p>
           </div>
         </section>
@@ -465,7 +465,7 @@ const AppointmentBookingPage = ({
                       <CardDescription>Smart Intake</CardDescription>
                       <CardTitle className="flex items-center gap-2 text-xl">
                         <Sparkles className="size-5 text-primary" />
-                        AI routing suggestion
+                        Routing suggestion
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -494,7 +494,7 @@ const AppointmentBookingPage = ({
                           <div className="flex flex-wrap items-center gap-2">
                             <Badge variant="secondary">
                               {intakeResult.provider === "openai"
-                                ? "OpenAI assisted"
+                                ? "Smart suggestion"
                                 : "Rules fallback"}
                             </Badge>
                             {intakeResult.model && (
@@ -610,7 +610,7 @@ const AppointmentBookingPage = ({
               <Card className="bg-slate-950 text-white">
                 <CardHeader>
                   <CardDescription className="text-slate-300">
-                    AI intake
+                    Intake support
                   </CardDescription>
                   <CardTitle className="flex items-center gap-2">
                     <Stethoscope className="size-5 text-primary" />
@@ -618,9 +618,8 @@ const AppointmentBookingPage = ({
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm leading-6 text-slate-300">
-                  OpenAI reads the reason for visit and suggests department,
-                  doctor type, urgency, and admin notes without diagnosis
-                  claims.
+                  The care request is reviewed for department fit, doctor type,
+                  urgency, and staff notes without making diagnosis claims.
                 </CardContent>
               </Card>
             </aside>

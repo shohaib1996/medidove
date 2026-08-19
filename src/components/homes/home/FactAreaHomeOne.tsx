@@ -9,8 +9,8 @@ const fact_content = {
       id: 1,
       count_number: "4",
       icon: "fas fa-user",
-      title: "AI Intake Channels",
-      sm_des: "Website chat, appointment forms, WhatsApp replies, and voice receptionist calls feed the clinic admin dashboard."
+      title: "Intake Channels",
+      sm_des: "Website chat, appointment forms, patient messages, and voice reception calls feed the clinic admin dashboard."
     },
     {
       id: 2,

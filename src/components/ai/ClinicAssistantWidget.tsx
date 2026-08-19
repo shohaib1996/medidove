@@ -27,7 +27,7 @@ const starterMessages: ChatMessage[] = [
     id: "welcome",
     role: "assistant",
     content:
-      "Hi, I am the MediDove assistant. I can help with appointments, doctor matching, services, WhatsApp reminders, and the AI receptionist workflow.",
+      "Hi, I am the MediDove care assistant. I can help with appointments, doctor matching, services, reminders, and reception support.",
     cta: "/appointment",
   },
 ];
@@ -35,7 +35,7 @@ const starterMessages: ChatMessage[] = [
 const suggestions = [
   "I need to book an appointment",
   "Find me a dentist",
-  "How does the AI receptionist work?",
+  "How can reception help me?",
 ];
 
 const ClinicAssistantWidget = () => {
@@ -125,7 +125,7 @@ const ClinicAssistantWidget = () => {
       >
         <div className="flex items-center justify-between border-b border-slate-200 bg-slate-950 p-4 text-white">
           <div>
-            <Badge className="mb-2 bg-white/10 text-white">AI Assistant</Badge>
+            <Badge className="mb-2 bg-white/10 text-white">Care Assistant</Badge>
             <h2 className="font-semibold">MediDove Care Assistant</h2>
           </div>
           <button
@@ -202,7 +202,7 @@ const ClinicAssistantWidget = () => {
         className="h-14 rounded-full px-5 shadow-xl"
       >
         {isOpen ? <X /> : <MessageCircle />}
-        {isOpen ? "Close" : "Ask AI"}
+        {isOpen ? "Close" : "Ask MediDove"}
       </Button>
     </div>
   );

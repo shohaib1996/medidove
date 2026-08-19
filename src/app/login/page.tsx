@@ -1,9 +1,9 @@
 import LoginPage from "@/components/auth/LoginPage";
 
 export const metadata = {
-  title: "Login | MediDove AI Clinic",
+  title: "Login | MediDove",
   description:
-    "Login to the MediDove AI Clinic platform with Supabase authentication.",
+    "Login to your MediDove account to review appointments, messages, and patient support workflows.",
 };
 
 const LoginRoute = () => {

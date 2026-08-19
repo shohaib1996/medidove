@@ -32,7 +32,7 @@ interface DataType {
 }
 
 const footer_content: DataType = {
-  sm_des: "MediDove connects AI intake, voice reception, appointment workflows, patient outreach, and admin reporting in one meditech demo.",
+  sm_des: "MediDove connects appointment requests, voice reception, reminders, follow-up, and staff review in one patient support workflow.",
   email: "hello@medidove.ai",
   website: "medidove.ai",
   address: "227 Marion Street, Columbia",
@@ -60,13 +60,13 @@ const footer_content: DataType = {
     {
       id: 1,
       img: blog_thumb_1,
-      title: "AI receptionist handoffs for busy clinics",
+      title: "Reception handoffs for busy clinics",
       time: "12 August 2026"
     },
     {
       id: 2,
       img: blog_thumb_2,
-      title: "Consent-aware WhatsApp reminder workflows",
+      title: "Consent-aware reminder workflows",
       time: "14 August 2026"
     },
     {

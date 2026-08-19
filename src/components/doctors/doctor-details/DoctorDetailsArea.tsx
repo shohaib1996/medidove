@@ -18,7 +18,7 @@ import ServiceContactForm from '@/components/forms/ServiceContactForm';
 
 const doctor_details_content = {
   sub_title: "doctor profile",
-  title: "AI-assisted care coordination for every visit.",
+  title: "Smart care coordination for every visit.",
   des_1: "This profile page shows how MediDove can present doctors inside a modern clinic workflow. Patients can review specialties, care coverage, languages, and contact options before requesting an appointment through the connected booking system.",
   skills_text: "Clinical Workflow Support",
   des_2: "The platform does not diagnose patients. It helps capture appointment reasons, organize intake notes, suggest the most relevant department, and keep staff informed before a doctor reviews the request.",
@@ -47,7 +47,7 @@ const doctor_details_content = {
     },
   ],
   care_text: "Care Coverage",
-  des_3: "Doctors and staff can use the dashboard to review appointment requests, contact leads, AI conversation history, call logs, and campaign activity. The demo is designed for safe clinic operations and buyer presentations, not for storing real medical records.",
+  des_3: "Doctors and staff can review appointment requests, contact messages, patient conversations, call notes, and reminder activity. The system is designed for safe clinic operations and should not be used to store real medical records without the right compliance controls.",
   name: "Dr. Halim Keliano",
   job_title: "Dentist & Neurology Consultant",
   qualifications: "Qualifications",
@@ -56,13 +56,13 @@ const doctor_details_content = {
       id: 1,
       img: degree_1,
       education: "Clinical Operations Review",
-      versity_name: "AI-assisted intake and routing",
+      versity_name: "Smart intake and routing",
     },
     {
       id: 2,
       img: degree_2,
       education: "Patient Communication",
-      versity_name: "Voice, WhatsApp, and callback workflows",
+      versity_name: "Voice, messaging, and callback workflows",
     },
   ],
   advice: "Request An Appointment",

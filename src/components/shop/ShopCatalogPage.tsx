@@ -35,8 +35,7 @@ const ShopCatalogPage = ({ products }: { products: PublicProduct[] }) => (
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
             Present safe wellness products, monitoring tools, and dental care
-            bundles without turning the demo into regulated prescription
-            ecommerce.
+            bundles through a staff-reviewed inquiry process.
           </p>
         </div>
       </section>
@@ -46,9 +45,9 @@ const ShopCatalogPage = ({ products }: { products: PublicProduct[] }) => (
           <div className="mb-8 flex gap-3 rounded-lg border border-amber-200 bg-amber-50 p-5 text-sm leading-6 text-amber-900">
             <ShieldAlert className="mt-0.5 size-5 shrink-0" />
             <p>
-              Product requests are inquiry workflows for demo use. Prescription
-              items, regulated devices, and medical advice require real clinical
-              and compliance review before production launch.
+              Product requests are reviewed by staff before payment or
+              fulfillment. Prescription items, regulated devices, and medical
+              advice require clinical and compliance review.
             </p>
           </div>
 
@@ -92,7 +91,7 @@ const ShopCatalogPage = ({ products }: { products: PublicProduct[] }) => (
                     {item.requiresPrescription ? (
                       <Badge variant="outline">Prescription review</Badge>
                     ) : (
-                      <Badge variant="outline">No prescription in demo</Badge>
+                      <Badge variant="outline">No prescription required</Badge>
                     )}
                   </div>
                   <div className="flex gap-3 text-sm leading-6 text-slate-600">

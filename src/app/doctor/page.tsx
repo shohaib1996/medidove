@@ -3,9 +3,9 @@ import DoctorsPage from "@/components/doctors/DoctorsPage";
 import { getPublicDoctors } from "@/lib/clinic/content";
 
 export const metadata = {
-  title: "Doctors | MediDove AI Clinic",
+  title: "Doctors | MediDove Clinic",
   description:
-    "Explore MediDove doctors and AI-ready care matching workflows for appointment booking.",
+    "Explore MediDove doctors and care matching workflows for appointment booking.",
 };
 
 const index = async () => {

@@ -34,8 +34,8 @@ interface DataType {
 
 
 const about_content: DataType = {
-  sub_title: "AI clinic operations",
-  title: "A connected demo for patient intake, calls, and follow-up",
+  sub_title: "Clinic operations",
+  title: "Connected patient intake, calls, and follow-up",
   about_data: [
     {
       id: 1,
@@ -51,7 +51,7 @@ const about_content: DataType = {
       color_bg: "theme-bg2",
       bg_img: bg_icon_2,
       img: icon_2,
-      title: "AI Care Intake",
+      title: "Smart Care Intake",
       sm_des: "Patients can describe symptoms in plain language while staff receives structured appointment context.",
       btn_text: "read more",
     },

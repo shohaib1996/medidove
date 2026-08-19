@@ -10,9 +10,9 @@ type DataType = {
   btn_text: string;
 }
 const hero_content: DataType = {
-  sub_title: "AI clinic workflows.",
+  sub_title: "Clinic support workflows.",
   title: "Reception, Intake & Follow-Up.",
-  sm_info: "MediDove connects appointment booking, AI receptionist calls, WhatsApp reminders, and admin review into one modern meditech demo.",
+  sm_info: "MediDove connects appointment booking, reception calls, patient reminders, and staff review into one modern care experience.",
   btn_text: "Make Appointment",
 }
 const { sub_title, title, sm_info, btn_text } = hero_content

@@ -28,7 +28,7 @@ const about_analysis_content: DataType = {
     {
       id: "home",
       img: tab_icon_1,
-      title: "AI intake",
+      title: "Smart intake",
     },
     {
       id: "profile",
@@ -45,18 +45,18 @@ const about_analysis_content: DataType = {
     {
       id: "home",
       sub_title: "01. Smart request routing.",
-      title: "AI prepares the intake summary before staff review.",
-      sm_des: "Patients describe what they need in plain language. MediDove can suggest a department, doctor type, urgency level, and admin note while avoiding diagnosis claims.",
+      title: "The intake summary is prepared before staff review.",
+      sm_des: "Patients describe what they need in plain language. MediDove can suggest a department, doctor type, urgency level, and staff note while avoiding diagnosis claims.",
     },
     {
       id: "profile",
       sub_title: "02. Consent-aware engagement.",
       title: "Every outreach workflow starts with patient permission.",
-      sm_des: "WhatsApp, SMS, email, and voice reminders are queued through consent-aware records so clinics can show responsible patient communication in the demo.",
+      sm_des: "Reminder messages are handled through consent-aware records so clinics can keep patient communication responsible and reviewable.",
     },
     {
       id: "contact",
-      sub_title: "03. AI receptionist handoff.",
+      sub_title: "03. Receptionist handoff.",
       title: "Calls, chats, and forms become admin-ready tasks.",
       sm_des: "The receptionist flow captures the caller's intent, stores summaries, and gives staff a clear inbox for callbacks, appointment requests, and follow-up actions.",
     },

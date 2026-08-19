@@ -30,7 +30,7 @@ const PackagesPage = ({ packages }: { packages: HealthPackage[] }) => (
             Preventive care packages
           </Badge>
           <h1 className="max-w-4xl text-4xl font-bold tracking-normal md:text-6xl">
-            Book health packages with AI-assisted intake and follow-up
+            Book health packages with smart intake and follow-up
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
             Offer clear care packages for wellness, dental, screening, and

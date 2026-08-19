@@ -20,7 +20,7 @@ const LatestNewsAreaHomeThree = () => {
                 </div>
                 <div className="section-text pos-rel">
                   <h5>Insights</h5>
-                  <h1>Clinic AI operations worth showing.</h1>
+                  <h1>Clinic operations worth showing.</h1>
                 </div>
                 <div className="section-line pos-rel">
                   <Image src={line_icon} alt="theme-pure" />

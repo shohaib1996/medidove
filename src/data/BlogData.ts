@@ -23,15 +23,15 @@ const blog_data: BlogDataItem[] = [
   {
     id: 1,
     img: blog_thumb_1,
-    tag_1: "AI",
+    tag_1: "Care",
     tag_2: "Receptionist",
-    title: "How AI receptionists reduce missed clinic calls",
+    title: "How virtual reception reduces missed clinic calls",
     sm_des: "See how voice intake, call summaries, and staff handoffs help clinics recover more appointment opportunities.",    
   },
   {
     id: 2,
     img: blog_thumb_2,
-    tag_1: "WhatsApp",
+    tag_1: "Reminders",
     tag_2: "Outreach",
     title: "Building consent-aware patient reminder flows",
     sm_des: "A practical look at opt-ins, unsubscribe handling, and automated reminders for healthcare marketing teams.",    
@@ -39,9 +39,9 @@ const blog_data: BlogDataItem[] = [
   {
     id: 3,
     img: blog_thumb_3,
-    tag_1: "Supabase",
-    tag_2: "Admin",
-    title: "Why clinics need one patient operations dashboard",
+    tag_1: "Clinic",
+    tag_2: "Operations",
+    title: "Why clinics need one patient support dashboard",
     sm_des: "Appointments, leads, calls, tasks, and campaigns become easier to manage when the data is connected.",    
   },
   // home 03
@@ -57,7 +57,7 @@ const blog_data: BlogDataItem[] = [
     img: blog_thumb_2,
     home_3_serive_2: true,
     title: "Voice notes to care tasks",
-    sm_des: "Turn AI receptionist transcripts into structured follow-up work for the front desk team.",    
+    sm_des: "Turn reception conversations into structured follow-up work for the front desk team.",    
   },
   {
     id: 6,
@@ -71,7 +71,7 @@ const blog_data: BlogDataItem[] = [
     id: 7,
     img: blog_thumb_4_1,
     home_3_serive_2: true,
-    tag_1: "AI",
+    tag_1: "Care",
     tag_2: "Search",
     title: "Making clinic content easier to discover",
     sm_des: "Semantic search helps patients find doctors, services, and next steps even when they use natural language.",    
@@ -92,7 +92,7 @@ const blog_data: BlogDataItem[] = [
     tag_1: "Audit",
     tag_2: "Compliance",
     title: "Tracking automation decisions for clinic teams",
-    sm_des: "Audit logs make it easier to explain what the AI did, who reviewed it, and what happened next.",    
+    sm_des: "Review logs make it easier to explain what was sent, who reviewed it, and what happened next.",    
   },
 ]
 export default blog_data

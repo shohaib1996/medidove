@@ -19,15 +19,15 @@ const counter_data: DataType[] = [
     id: 1,
     count_number: 358,
     icon: counter_icon_1,
-    title: "AI-Assisted Requests",
-    sm_des: "Appointment, callback, WhatsApp, and website assistant requests can be captured in one Supabase-backed workflow.",
+    title: "Assisted Requests",
+    sm_des: "Appointment, callback, reminder, and website requests can be captured in one patient support workflow.",
   },
   {
     id: 2,
     count_number: 558,
     icon: counter_icon_2,
     title: "Patient Messages",
-    sm_des: "Consent-aware outreach keeps reminders, follow-ups, feedback, and receptionist handoffs visible for clinic staff.",
+    sm_des: "Consent-aware outreach keeps reminders, follow-ups, feedback, and reception handoffs visible for clinic staff.",
   },
   {
     id: 3,

@@ -30,15 +30,14 @@ const BlogPage = ({ posts }: { posts: PublicBlogPost[] }) => {
           <div className="mx-auto max-w-7xl">
             <Badge className="mb-6 bg-white/10 text-white">
               <Sparkles className="size-3.5" />
-              AI healthcare content
+              Health and clinic insights
             </Badge>
             <h1 className="max-w-4xl text-4xl font-bold tracking-normal md:text-6xl">
-              Clinic growth, AI reception, and patient engagement insights
+              Clinic care, reception, and patient support insights
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-              Publish Supabase-managed SEO content for healthcare buyers,
-              clinics, and care teams interested in automation without unsafe
-              diagnosis claims.
+              Read practical articles about online appointments, reception
+              support, patient reminders, and safe digital care workflows.
             </p>
           </div>
         </section>

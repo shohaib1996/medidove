@@ -19,7 +19,7 @@ const BlogAreaHomeTwo = () => {
                 </div>
                 <div className="section-text pos-rel">
                   <h5>Insights</h5>
-                  <h1>AI clinic workflow <br /> ideas for buyers.</h1>
+                  <h1>Clinic support <br /> insights for patients.</h1>
                 </div>
                 <div className="section-line pos-rel">
                   <Image src={line_icon} alt="theme-pure" />

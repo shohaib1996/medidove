@@ -35,40 +35,40 @@ interface DataType {
 
 const membership_content: DataType = {
   sub_title: "Care packages",
-  title: "AI-ready patient engagement packages",
+  title: "Patient engagement packages",
   membership_data: [
     {
       id: 1,
       img: membership_img_1,
       title: "Wellness Follow-Up",
-      sm_des: "Bundle routine checkup reminders, feedback requests, smart intake summaries, and WhatsApp confirmations into one patient engagement flow.",
+      sm_des: "Bundle routine checkup reminders, feedback requests, smart intake summaries, and appointment confirmations into one patient engagement flow.",
     },
     {
       id: 2,
       img: membership_img_2,
       title: "Reception Desk Automation",
-      sm_des: "Use AI receptionist callbacks, lead capture, appointment routing, and admin task generation to reduce missed patient requests.",
+      sm_des: "Use reception callbacks, inquiry capture, appointment routing, and staff task generation to reduce missed patient requests.",
     },
   ],
   testimonita_data: [
     {
       id: 1,
       img: testi_img_1,
-      sm_des: "The demo shows exactly how a clinic can capture calls and messages after hours without losing the human review step.",
+      sm_des: "The system shows how a clinic can capture calls and messages after hours without losing the human review step.",
       name: "Mr. Halim Dawn",
       job_title: "Clinic Owner",
     },
     {
       id: 2,
       img: testi_img_2,
-      sm_des: "AI intake made appointment requests easier to review because every message arrived with suggested urgency and next steps.",
+      sm_des: "Smart intake made appointment requests easier to review because every message arrived with suggested urgency and next steps.",
       name: "Hiliam D. Pawlu",
       job_title: "Operations Manager",
     },
     {
       id: 3,
       img: testi_img_3,
-      sm_des: "The WhatsApp and voice workflow gives buyers a clear picture of how patient engagement automation can work.",
+      sm_des: "The messaging and voice workflow gives clinics a clear picture of how patient engagement can work.",
       name: "Eric Z. Piedie",
       job_title: "Care Coordinator",
     }, 

@@ -149,7 +149,7 @@ export default async function DoctorPortalPage() {
               <CardTitle>Doctor profile not linked</CardTitle>
               <CardDescription>
                 Ask an admin to connect your user profile to a doctor record in
-                Supabase before using the doctor workspace.
+                the clinic directory before using the doctor workspace.
               </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-3 sm:flex-row">

@@ -15,8 +15,8 @@ const counter_data: CounterItem[] = [
     id: 1,
     icon: "fal fa-clinic-medical",
     counter_number: 24,
-    title: "AI Intake Channels",
-    sm_des: "Web, WhatsApp, voice, and admin intake flows route patients into one Supabase-backed workspace.",
+    title: "Intake Channels",
+    sm_des: "Web, messaging, voice, and reception intake flows route patients into one staff-reviewed workspace.",
   },
   {
     id: 2,

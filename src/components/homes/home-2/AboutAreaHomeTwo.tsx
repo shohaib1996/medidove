@@ -26,8 +26,8 @@ const about_content: AboutContentDatatype = {
       id: 1,
       cls: "mb-40",
       img: about_icon_1,
-      title: "AI Intake",
-      sm_info: "Routes patient requests into department, urgency, and admin-note fields.",
+      title: "Smart Intake",
+      sm_info: "Routes patient requests into department, urgency, and staff-note fields.",
     },
     {
       id: 2,
@@ -41,7 +41,7 @@ const about_content: AboutContentDatatype = {
       cls: "mb-30",
       img: about_icon_3,
       title: "Patient Messaging",
-      sm_info: "Queues WhatsApp, SMS, email, and voice outreach with consent checks.",
+      sm_info: "Queues reminders and follow-up messages with consent checks.",
     },
     {
       id: 4,
@@ -52,10 +52,10 @@ const about_content: AboutContentDatatype = {
     },
   ],
   sub_title: "About Us",
-  title: "MediDove turns a clinic website into an AI workflow hub.",
-  sm_des: "Patients can book appointments, ask the assistant, request callbacks, and receive reminder messages. Staff manage every record from Supabase-backed admin screens.",
+  title: "MediDove turns a clinic website into a patient support hub.",
+  sm_des: "Patients can book appointments, ask for help, request callbacks, and receive reminder messages. Staff manage each request from one review workflow.",
   features: [
-    "AI supports routing and summaries, not diagnosis or treatment decisions.",
+    "Smart support helps with routing and summaries, not diagnosis or treatment decisions.",
     "Consent-aware messaging protects reminder and campaign workflows.",
     "Admin teams can review appointments, conversations, calls, and tasks.",
   ]

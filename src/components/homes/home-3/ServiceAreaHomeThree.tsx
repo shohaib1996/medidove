@@ -7,7 +7,7 @@ import line_icon from "@/assets/img/shape/section-title-line.png";
 
 const service_content = {
   sub_title: "Departments",
-  title: "Manage clinic services with AI support",
+  title: "Manage clinic services with smart support",
 }
 const {title, sub_title} = service_content
 

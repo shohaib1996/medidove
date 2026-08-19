@@ -11,7 +11,7 @@ const navItems = [
   { href: "/packages", label: "Packages" },
   { href: "/shop", label: "Shop" },
   { href: "/testimonials", label: "Proof" },
-  { href: "/receptionist", label: "AI Receptionist" },
+  { href: "/receptionist", label: "Reception" },
   { href: "/engagement", label: "Engagement" },
   { href: "/appointment", label: "Appointment" },
   { href: "/contact", label: "Contact" },

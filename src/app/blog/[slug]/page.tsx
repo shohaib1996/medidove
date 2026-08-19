@@ -17,12 +17,12 @@ export const generateMetadata = async ({ params }: BlogArticleRouteProps) => {
 
   if (!post) {
     return {
-      title: "Article Not Found | MediDove AI Clinic",
+      title: "Article Not Found | MediDove Clinic",
     };
   }
 
   return {
-    title: `${post.title} | MediDove AI Clinic`,
+    title: `${post.title} | MediDove Clinic`,
     description: post.excerpt,
   };
 };

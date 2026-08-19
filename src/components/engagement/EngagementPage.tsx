@@ -29,7 +29,7 @@ const workflows = [
   "Appointment reminders and confirmation messages",
   "Post-visit follow-up prompts for opted-in patients",
   "Reactivation messages for overdue checkups",
-  "Admin-reviewed AI reply drafts before live sending",
+  "Staff-reviewed reply drafts before live sending",
 ];
 
 const EngagementPage = () => {
@@ -82,15 +82,15 @@ const EngagementPage = () => {
             <div>
               <Badge className="mb-5">
                 <Sparkles className="size-3.5" />
-                AI patient engagement
+                Patient reminders
               </Badge>
               <h1 className="max-w-4xl text-4xl font-bold leading-tight tracking-normal md:text-5xl">
-                Consent-first WhatsApp and AI marketing workflows
+                Consent-first reminders and patient outreach
               </h1>
               <p className="mt-5 max-w-2xl leading-8 text-slate-600">
-                Capture patient opt-ins, prepare reminder requests, and keep
-                every outbound workflow visible to clinic admins before a real
-                WhatsApp sender is connected.
+                Choose how the clinic may contact you for appointment
+                reminders, care follow-up, wellness updates, and support
+                messages.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Button asChild size="lg">
@@ -102,7 +102,7 @@ const EngagementPage = () => {
                 <Button asChild size="lg" variant="outline">
                   <Link href="/receptionist">
                     <PhoneForwarded />
-                    AI receptionist
+                    Contact reception
                   </Link>
                 </Button>
               </div>
@@ -131,11 +131,11 @@ const EngagementPage = () => {
               <Card>
                 <CardHeader>
                   <MessageCircle className="mb-2 size-9 text-primary" />
-                  <CardTitle>WhatsApp-ready data</CardTitle>
+                  <CardTitle>Message preferences</CardTitle>
                   <CardDescription className="leading-6">
-                    Requests are stored in `whatsapp_messages` with a requested
-                    status. A later provider phase can send them through
-                    WhatsApp Business or Twilio.
+                    Patients can request appointment reminders, follow-up
+                    messages, and care coordinator updates through their
+                    preferred contact channel.
                   </CardDescription>
                 </CardHeader>
               </Card>
@@ -144,8 +144,8 @@ const EngagementPage = () => {
                   <ShieldCheck className="mb-2 size-9 text-teal-600" />
                   <CardTitle>Consent log included</CardTitle>
                   <CardDescription className="leading-6">
-                    Each opt-in also writes a `consent_logs` row, giving buyers
-                    a clear compliance story for outbound engagement.
+                    Each opt-in gives the clinic a clear record of what the
+                    patient agreed to receive and how they can opt out later.
                   </CardDescription>
                 </CardHeader>
               </Card>
@@ -154,8 +154,8 @@ const EngagementPage = () => {
                   <BellRing className="mb-2 size-9 text-indigo-600" />
                   <CardTitle>Marketing without spam</CardTitle>
                   <CardDescription className="leading-6">
-                    The demo positions outreach as reminders, follow-ups, and
-                    reactivation for patients who explicitly opt in.
+                    Outreach is limited to reminders, follow-ups, and support
+                    messages for patients who explicitly opt in.
                   </CardDescription>
                 </CardHeader>
               </Card>

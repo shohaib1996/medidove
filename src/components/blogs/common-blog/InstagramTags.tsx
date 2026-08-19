@@ -6,11 +6,11 @@ type DataType = string[]
 
 
 const tags: DataType = [
-  "AI Receptionist",
-  "Supabase",
-  "Twilio",
-  "ElevenLabs",
-  "WhatsApp",
+  "Virtual Reception",
+  "Online Booking",
+  "Phone Support",
+  "Care Follow-up",
+  "Reminders",
   "Patient Intake",
   "Clinic CRM",
   "Automation",

@@ -63,7 +63,7 @@ const service_details_content: DataType = {
   sub_title: "Dental Care",
   title: "Dental care supported by smart intake and reminders.",
   des_1: "Patients can describe dental pain, cleaning needs, or follow-up requests in plain language. The smart intake workflow suggests the dental department, prepares an admin note, and keeps the final decision with clinic staff.",
-  des_2: "For demos, this page shows how service content can feed appointment booking, semantic search, receptionist scripts, and consent-based WhatsApp reminders without making diagnosis or treatment claims.",
+  des_2: "This page shows how service content can support appointment booking, care search, receptionist scripts, and consent-based reminders without making diagnosis or treatment claims.",
   features: [
     {
       id: 1,
@@ -110,7 +110,7 @@ const service_details_content: DataType = {
       file_size: "112KB",
     },
   ],
-  des_3: "The strongest clinic demos show AI supporting operations while staff remain responsible for patient care decisions.",
+  des_3: "Strong clinic systems support operations while staff remain responsible for patient care decisions.",
   name: "Rosalina D. Williamson",
   job_title: "Clinic Operations Lead",
   service_title: "More services",

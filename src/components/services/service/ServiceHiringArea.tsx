@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 const hiring_content = {
   title: "For Clinic Teams",
-  description: "Use MediDove to capture appointment requests, summarize patient intent, queue receptionist callbacks, and keep WhatsApp, SMS, email, and voice outreach tied to consent records.",
+  description: "Use MediDove to capture appointment requests, summarize patient intent, queue receptionist callbacks, and keep messages, email, and voice outreach tied to consent records.",
 }
 const { title, description } = hiring_content
 

@@ -41,7 +41,7 @@ interface DataType {
 
 const footer_content: DataType = {
   subscribe: "subscribe",
-  subscribe_text: "Get Clinic AI Updates",
+  subscribe_text: "Get Clinic Care Updates",
   footer_contact: [
     {
       id: 1,
@@ -89,13 +89,13 @@ const footer_content: DataType = {
     {
       id: 1,
       img: blog_thumb_1,
-      title: "AI receptionist handoffs for busy clinics",
+      title: "Reception handoffs for busy clinics",
       time: "12 August 2026"
     },
     {
       id: 2,
       img: blog_thumb_2,
-      title: "Consent-aware WhatsApp reminder workflows",
+      title: "Consent-aware reminder workflows",
       time: "14 August 2026"
     },
     {

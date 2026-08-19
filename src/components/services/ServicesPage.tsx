@@ -25,17 +25,17 @@ import {
 const aiWorkflows = [
   {
     icon: Bot,
-    title: "Website assistant",
+    title: "Service guidance",
     text: "Patients ask natural questions and get grounded answers from service knowledge.",
   },
   {
     icon: PhoneCall,
-    title: "Voice receptionist",
-    text: "ElevenLabs captures phone requests and creates structured Supabase records.",
+    title: "Reception support",
+    text: "Reception can capture phone requests and prepare structured notes for staff review.",
   },
   {
     icon: MessageCircle,
-    title: "WhatsApp follow-up",
+    title: "Patient follow-up",
     text: "Opt-in patients receive confirmations, reminders, and follow-up prompts.",
   },
 ];
@@ -57,17 +57,17 @@ const ServicesPage = ({ services }: { services: PublicService[] }) => {
           />
           <div className="absolute inset-0 bg-slate-950/75" />
           <div className="relative mx-auto max-w-7xl">
-            <Badge className="mb-5 bg-white/10 text-white hover:bg-white/15">
-              <Sparkles className="size-3.5" />
-              AI-ready departments
+              <Badge className="mb-5 bg-white/10 text-white hover:bg-white/15">
+                <Sparkles className="size-3.5" />
+              Clinic departments
             </Badge>
             <h1 className="max-w-4xl text-4xl font-bold leading-tight tracking-normal md:text-6xl">
               Medical services built for smart patient routing
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-200">
-              MediDove connects public service pages, appointment requests,
-              AI intake, phone reception, and WhatsApp reminders into one
-              Supabase-backed workflow.
+              MediDove connects service information, appointment requests,
+              reception support, and visit reminders so patients can find the
+              right next step.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Button asChild size="lg">
@@ -98,12 +98,11 @@ const ServicesPage = ({ services }: { services: PublicService[] }) => {
                 Departments
               </p>
               <h2 className="mt-3 text-3xl font-bold tracking-normal md:text-4xl">
-                Services that feed the AI assistant and booking flow
+                Services that guide each appointment request
               </h2>
               <p className="mt-4 text-slate-600">
-                These cards are the first clean Tailwind version of the
-                department experience. The next database step can load them from
-                Supabase instead of static arrays.
+                Explore departments, care options, and support paths before
+                sending an appointment request to the clinic team.
               </p>
             </div>
 
@@ -138,18 +137,18 @@ const ServicesPage = ({ services }: { services: PublicService[] }) => {
                 Patient intake logic
               </Badge>
               <h2 className="text-3xl font-bold tracking-normal md:text-4xl">
-                From department pages to structured clinical admin tasks
+                From department pages to clearer clinic follow-up
               </h2>
               <p className="mt-5 leading-8 text-slate-600">
-                Each service can become a knowledge source for the AI assistant,
-                a routing option for appointment requests, and a campaign target
-                for reminders or follow-ups.
+                Each service helps patients understand what care path may fit
+                their request and helps staff prepare reminders or follow-up
+                communication after review.
               </p>
               <div className="mt-8 space-y-4">
                 {[
-                  "Store department details, FAQs, and booking rules in Supabase.",
-                  "Generate embeddings for semantic search and chatbot answers.",
-                  "Route appointments to the correct admin queue or doctor type.",
+                  "Show department details, FAQs, and booking guidance.",
+                  "Help patients search services using everyday language.",
+                  "Route appointment requests to the right care team.",
                 ].map((item) => (
                   <div key={item} className="flex gap-3">
                     <ShieldCheck className="mt-1 size-5 shrink-0 text-teal-600" />
@@ -175,10 +174,10 @@ const ServicesPage = ({ services }: { services: PublicService[] }) => {
           <div className="mx-auto max-w-7xl">
             <div className="max-w-3xl">
               <p className="text-sm font-bold uppercase text-primary">
-                AI workflows
+                Patient workflows
               </p>
               <h2 className="mt-3 text-3xl font-bold tracking-normal md:text-4xl">
-                Turn service interest into measurable clinic activity
+                Turn service interest into the right next step
               </h2>
             </div>
 
@@ -204,14 +203,14 @@ const ServicesPage = ({ services }: { services: PublicService[] }) => {
           <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 rounded-lg border border-slate-200 bg-slate-50 p-8 md:flex-row md:items-center">
             <div>
               <p className="text-sm font-bold uppercase text-primary">
-                Next step
+                Ready to book
               </p>
               <h2 className="mt-2 text-3xl font-bold tracking-normal">
-                Connect services to Supabase
+                Choose a service and request an appointment
               </h2>
               <p className="mt-3 max-w-2xl text-slate-600">
-                The design is ready. The next phase can seed departments and
-                services into Supabase and read them dynamically.
+                Share your reason for visit and the clinic team will review the
+                best service, doctor, and appointment option.
               </p>
             </div>
             <Button asChild>

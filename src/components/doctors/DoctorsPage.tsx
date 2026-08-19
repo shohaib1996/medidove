@@ -51,17 +51,16 @@ const DoctorsPage = ({ doctors }: { doctors: PublicDoctor[] }) => {
           />
           <div className="absolute inset-0 bg-slate-950/75" />
           <div className="relative mx-auto max-w-7xl">
-            <Badge className="mb-5 bg-white/10 text-white hover:bg-white/15">
-              <Sparkles className="size-3.5" />
-              AI doctor matching ready
+              <Badge className="mb-5 bg-white/10 text-white hover:bg-white/15">
+                <Sparkles className="size-3.5" />
+              Doctor matching
             </Badge>
             <h1 className="max-w-4xl text-4xl font-bold leading-tight tracking-normal md:text-6xl">
               Find the right doctor before the patient reaches reception
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-200">
-              MediDove turns doctor profiles into structured care options for
-              appointments, AI intake, receptionist calls, and WhatsApp
-              follow-ups.
+              MediDove helps patients review doctor specialties, availability,
+              languages, and appointment options before contacting reception.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Button asChild size="lg">
@@ -93,12 +92,11 @@ const DoctorsPage = ({ doctors }: { doctors: PublicDoctor[] }) => {
                   Care team
                 </p>
                 <h2 className="mt-3 text-3xl font-bold tracking-normal md:text-4xl">
-                  Doctor profiles prepared for Supabase and AI routing
+                  Doctor profiles for easier appointment planning
                 </h2>
                 <p className="mt-4 text-slate-600">
-                  These cards are a clean Tailwind version of the doctor
-                  directory. The next data phase can move this list into
-                  Supabase and filter it dynamically.
+                  Browse the care team and request the doctor or department that
+                  best matches your appointment need.
                 </p>
               </div>
               <Button asChild variant="outline">
@@ -154,15 +152,14 @@ const DoctorsPage = ({ doctors }: { doctors: PublicDoctor[] }) => {
             <div>
               <Badge variant="secondary" className="mb-4">
                 <Bot className="size-3.5" />
-                Smart matching workflow
+                Matching workflow
               </Badge>
               <h2 className="text-3xl font-bold tracking-normal md:text-4xl">
-                AI doctor matching can use profile data without making diagnosis
-                claims
+                Doctor matching uses care needs without making diagnosis claims
               </h2>
               <p className="mt-5 leading-8 text-slate-600">
-                The assistant should route patients to a department or doctor
-                type based on intent, availability, and service fit. It should
+                The system can guide patients toward a department or doctor type
+                based on their request, availability, and service fit. It does
                 not diagnose or replace professional medical judgment.
               </p>
               <div className="mt-8 grid gap-3 sm:grid-cols-2">
@@ -190,11 +187,11 @@ const DoctorsPage = ({ doctors }: { doctors: PublicDoctor[] }) => {
               <CardContent className="space-y-4 text-sm leading-6 text-slate-300">
                 <div className="flex gap-3">
                   <Search className="mt-1 size-5 shrink-0 text-primary" />
-                  <p>AI detects pediatrics intent and appointment timing.</p>
+                  <p>The request suggests pediatrics and appointment timing.</p>
                 </div>
                 <div className="flex gap-3">
                   <Brain className="mt-1 size-5 shrink-0 text-primary" />
-                  <p>System suggests pediatrician and prepares admin notes.</p>
+                  <p>The clinic receives a suggested doctor type and visit note.</p>
                 </div>
                 <div className="flex gap-3">
                   <MessageCircle className="mt-1 size-5 shrink-0 text-primary" />

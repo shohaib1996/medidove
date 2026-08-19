@@ -49,9 +49,9 @@ const TestimonialsPage = ({
                 Stories that show the platform as an operational system
               </h1>
               <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-                Publish testimonials and case-study style proof points for
-                buyers who want appointment automation, AI reception, and
-                patient engagement in one workflow.
+                Publish testimonials and case-study style proof points from
+                patients and clinic teams using MediDove for appointments,
+                reception, and follow-up.
               </p>
             </div>
 
@@ -120,12 +120,12 @@ const TestimonialsPage = ({
             <div className="mt-12 flex flex-col items-start justify-between gap-5 rounded-lg border border-slate-200 bg-slate-50 p-6 md:flex-row md:items-center">
               <div>
                 <h2 className="text-2xl font-bold tracking-normal">
-                  Turn patient engagement into a buyer-ready demo
+                  Turn patient engagement into better clinic follow-up
                 </h2>
                 <p className="mt-2 max-w-2xl text-slate-600">
                   Combine testimonials with packages, appointment intake, and
-                  AI receptionist workflows to show a full clinic operations
-                  funnel.
+                  reception workflows to support a full clinic operations
+                  process.
                 </p>
               </div>
               <Button asChild>

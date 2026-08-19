@@ -2,9 +2,9 @@ import ShopCatalogPage from "@/components/shop/ShopCatalogPage";
 import { getPublicProducts } from "@/lib/products/content";
 
 export const metadata = {
-  title: "Wellness Shop | MediDove AI Clinic",
+  title: "Wellness Shop | MediDove Clinic",
   description:
-    "Browse non-prescription wellness products and staff-reviewed product inquiry workflows for the MediDove AI Clinic demo.",
+    "Browse non-prescription wellness products and staff-reviewed product inquiry workflows for MediDove patients.",
 };
 
 const index = async () => {

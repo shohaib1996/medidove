@@ -1,9 +1,9 @@
 import UnsubscribePage from "@/components/engagement/UnsubscribePage";
 
 export const metadata = {
-  title: "Unsubscribe | MediDove AI Clinic",
+  title: "Unsubscribe | MediDove Clinic",
   description:
-    "Opt out of MediDove AI Clinic WhatsApp, SMS, email, or voice outreach.",
+    "Opt out of MediDove clinic messages, email, or voice outreach.",
 };
 
 export default function UnsubscribeRoute() {

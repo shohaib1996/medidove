@@ -18,13 +18,13 @@ const popular_feeds: PopularFeed[] = [
   {
     id: 1,
     img: popular_feeds_1,
-    title: "AI receptionist handoffs for busy clinics",
+    title: "Reception handoffs for busy clinics",
     time: "August 12, 2026",
   },
   {
     id: 2,
     img: popular_feeds_2,
-    title: "Consent-aware WhatsApp reminder workflows",
+    title: "Consent-aware reminder workflows",
     time: "August 14, 2026",
   },
   {

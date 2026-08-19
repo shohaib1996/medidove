@@ -23,7 +23,7 @@ interface service_content_type {
 }
 const service_content: service_content_type = {
   sub_title: "Departments",
-  title: "Manage clinic services with AI support",
+  title: "Manage clinic services with smart support",
   service_data: [
     {
       id: 1,

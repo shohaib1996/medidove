@@ -1,9 +1,9 @@
 import RegisterPage from "@/components/auth/RegisterPage";
 
 export const metadata = {
-  title: "Register | MediDove AI Clinic",
+  title: "Register | MediDove",
   description:
-    "Create a MediDove AI Clinic account backed by Supabase authentication.",
+    "Create a MediDove account for appointment requests, reminders, and patient portal access.",
 };
 
 const RegisterRoute = () => {

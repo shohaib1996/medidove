@@ -10,7 +10,7 @@ type DataType = {
 const news_content: DataType = {
   sub_title: "Patient engagement",
   title: "Stay connected with clinic updates.",
-  sm_info: "Capture opt-in interest for appointment reminders, wellness campaigns, feedback requests, and AI receptionist callback workflows.",
+  sm_info: "Capture opt-in interest for appointment reminders, wellness updates, feedback requests, and reception callback workflows.",
 
 }
 const {sub_title, title, sm_info}  = news_content

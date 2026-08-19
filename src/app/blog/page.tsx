@@ -3,9 +3,9 @@ import BlogPage from "@/components/blogs/BlogPage";
 import { getPublicBlogPosts } from "@/lib/blog/content";
 
 export const metadata = {
-  title: "Blog | MediDove AI Clinic",
+  title: "Blog | MediDove Clinic",
   description:
-    "AI healthcare automation articles about clinic reception, appointment intake, patient engagement, and safe medical workflow support.",
+    "Articles about clinic reception, appointment intake, patient engagement, and safe medical workflow support.",
 };
 
 const index = async () => {

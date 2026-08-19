@@ -63,7 +63,7 @@ const PhotoGalleryHomeFive = () => {
                 </div>
                 <div className="section-text pos-rel">
                   <h5>Workflow Gallery</h5>
-                  <h1>AI clinic journeys built for modern patient care</h1>
+                  <h1>Clinic journeys built for modern patient care</h1>
                 </div>
                 <div className="section-line pos-rel">
                   <Image src={title_line} alt="theme-pure" />

@@ -96,14 +96,14 @@ const LoginPage = () => {
           <div className="relative flex h-full flex-col justify-end p-12">
             <Badge className="mb-5 w-fit bg-white/10 text-white">
               <ShieldCheck className="size-3.5" />
-              Supabase protected access
+              Secure patient access
             </Badge>
             <h1 className="max-w-xl text-4xl font-bold leading-tight tracking-normal">
-              Sign in to manage appointments, leads, and AI clinic workflows.
+              Sign in to manage appointments, messages, and clinic workflows.
             </h1>
             <p className="mt-5 max-w-xl leading-7 text-slate-300">
-              This login connects to Supabase Auth and prepares the platform for
-              patient, admin, doctor, and receptionist roles.
+              This secure login supports patient, doctor, receptionist, and
+              admin workspaces.
             </p>
           </div>
         </section>

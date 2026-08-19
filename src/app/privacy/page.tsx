@@ -14,25 +14,25 @@ import PublicHeader from "@/components/marketing/PublicHeader";
 export const metadata = {
   title: "Privacy Policy | MediDove",
   description:
-    "Privacy policy for the MediDove AI clinic demo, covering patient engagement, consent, and AI-assisted workflows.",
+    "Privacy policy for MediDove patient engagement, consent, and clinic support workflows.",
 };
 
 const sections = [
   {
-    title: "What this demo collects",
+    title: "What MediDove collects",
     body: "MediDove stores the information patients submit through appointment, contact, feedback, chat, consent, and communication forms. This can include names, contact details, appointment requests, preferred channels, and workflow notes.",
   },
   {
-    title: "How AI is used",
-    body: "AI features summarize messages, suggest department routing, draft patient engagement copy, and help staff review requests. AI output is intended for administrative support and should be reviewed by clinic staff where care decisions are involved.",
+    title: "How automated support is used",
+    body: "Automated features summarize messages, suggest department routing, draft patient engagement copy, and help staff review requests. These outputs are intended for administrative support and should be reviewed by clinic staff where care decisions are involved.",
   },
   {
     title: "Communication consent",
-    body: "WhatsApp, SMS, email, and voice outreach should only be used for patients who have opted in. Campaigns and automations include consent checks before provider dispatch.",
+    body: "Messages, email, and voice outreach should only be used for patients who have opted in. Campaigns and automated reminders include consent checks before staff-approved contact.",
   },
   {
     title: "Data storage",
-    body: "The demo is designed around Supabase Auth, Postgres, Row Level Security, and audit logs. Production healthcare deployments may require extra contractual, security, and regulatory controls.",
+    body: "MediDove uses secure account access, structured clinic records, access controls, and activity logs. Production healthcare deployments may require extra contractual, security, and regulatory controls.",
   },
   {
     title: "Patient rights",
@@ -55,8 +55,8 @@ export default function PrivacyPage() {
               Privacy Policy
             </h1>
             <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-300">
-              This page describes how the MediDove AI clinic demo handles
-              patient workflow data, AI assistance, and opt-in communications.
+              This page describes how MediDove handles patient workflow data,
+              clinic assistance, and opt-in communications.
             </p>
           </div>
         </section>
@@ -65,7 +65,7 @@ export default function PrivacyPage() {
           <div className="mx-auto grid max-w-5xl gap-5">
             <Card className="border-cyan-100 bg-cyan-50">
               <CardHeader>
-                <CardDescription>Demo notice</CardDescription>
+                <CardDescription>Important notice</CardDescription>
                 <CardTitle className="flex items-center gap-2">
                   <Stethoscope className="size-5 text-primary" />
                   Not a medical diagnosis system

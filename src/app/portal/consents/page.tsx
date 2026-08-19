@@ -118,7 +118,7 @@ export default async function PatientConsentsPage() {
               </h1>
               <p className="mt-3 max-w-2xl text-slate-600">
                 Review how MediDove may contact you for appointments,
-                reminders, AI receptionist callbacks, and follow-up support.
+                reminders, reception callbacks, and follow-up support.
               </p>
             </div>
             <Button asChild variant="secondary">

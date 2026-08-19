@@ -29,7 +29,7 @@ const testimonials_data: TestimonialItem[] = [
   },
   {
     id: 2,
-    title: "The AI receptionist concept is easy to demo to stakeholders.",
+    title: "The reception workflow is easy to explain to stakeholders.",
     description: "Call logs, summaries, and follow-up tasks show exactly how voice automation can support front desk teams without replacing clinical judgment.",
     img: avatar_img_2,
     name: "David Rahman",
@@ -38,14 +38,14 @@ const testimonials_data: TestimonialItem[] = [
   {
     id: 3,
     title: "The admin dashboard connects the clinic workflow.",
-    description: "Appointments, leads, conversations, campaigns, and audit history are visible in one place, which makes the demo feel like a real platform.",
+    description: "Appointments, leads, conversations, reminders, and review history are visible in one place, which makes the workflow feel complete.",
     img: avatar_img_1,
     name: "Maya Chen",
     job_title: "Healthcare Product Manager",
   },
   {
     id: 4,
-    title: "Consent-aware marketing is a strong buyer feature.",
+    title: "Consent-aware outreach supports responsible follow-up.",
     description: "The campaign tools make it clear which patients can receive reminders and how outreach should be reviewed before dispatch.",
     img: avatar_img_1,
     name: "Alicia Morgan",
@@ -61,8 +61,8 @@ const testimonials_data: TestimonialItem[] = [
   },
   {
     id: 6,
-    title: "It shows the right technical stack for a modern clinic app.",
-    description: "Next.js, Supabase, OpenAI, ElevenLabs, Twilio, and WhatsApp integrations are tied together in a way buyers can understand quickly.",
+    title: "It shows the right patient experience for a modern clinic.",
+    description: "Online booking, reception support, reminders, follow-up, and staff review are tied together in a way patients and clinic teams understand quickly.",
     img: avatar_img_1,
     name: "Nadia Brooks",
     job_title: "SaaS Delivery Lead",
@@ -96,7 +96,7 @@ const testimonials_data: TestimonialItem[] = [
   {
     id: 10, 
     home: 4,
-    description: "The demo covers real buyer needs: booking, communication, lead follow-up, and AI-assisted clinic operations.",
+    description: "The system covers real clinic needs: booking, communication, patient follow-up, and staff-reviewed care coordination.",
     img: avatar_img_4_1,
     name: "Chris Bennett",
     job_title: "Healthcare SaaS Advisor",

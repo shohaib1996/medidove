@@ -11,9 +11,9 @@ type DataType = {
   sm_des: string;
 }
 const service_content: DataType = {
-  sub_title: "AI clinic services",
+  sub_title: "Clinic services",
   title: "Route patients to the right care path without diagnosis claims.",
-  sm_des: "MediDove combines clinic service pages with Supabase booking, AI intake, voice receptionist workflows, and consent-based reminders. Patients get clearer next steps while staff keep control of final scheduling and follow-up.",
+  sm_des: "MediDove combines clinic service pages with online booking, smart intake, voice reception workflows, and consent-based reminders. Patients get clearer next steps while staff keep control of final scheduling and follow-up.",
 
 }
 const { sub_title, title, sm_des } = service_content

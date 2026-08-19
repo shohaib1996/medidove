@@ -128,7 +128,7 @@ const BlogInnerArea = ({style}: BlogInnerAreaProps) => {
         <article className="postbox post format-quote mb-40">
           <div className="post-text">
             <blockquote>
-              <p>Healthcare AI should save staff time, respect patient consent, and avoid replacing licensed clinical judgment.</p>
+              <p>Clinic automation should save staff time, respect patient consent, and avoid replacing licensed clinical judgment.</p>
               <footer>- MediDove Safety Note</footer>
             </blockquote>
           </div>

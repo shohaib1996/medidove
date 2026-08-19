@@ -15,9 +15,9 @@ interface about_content_type {
 }
 const about_content: about_content_type = {
   sub_title: "About Us",
-  title: "A clinic website connected to real AI workflows.",
-  sm_des_1: "MediDove is positioned as a modern meditech demo for appointment automation, patient engagement, AI receptionist handoff, and clinic admin operations.",
-  sm_des_2: "The system uses Supabase records for appointments, leads, conversations, calls, campaigns, consent logs, and staff review. AI assists with routing and summaries while avoiding diagnosis claims.",
+  title: "A clinic website built around patient support.",
+  sm_des_1: "MediDove helps patients book appointments, contact reception, understand services, and receive timely follow-up from the clinic team.",
+  sm_des_2: "Staff can review appointment requests, patient questions, reception notes, reminders, consent status, and follow-up activity in one connected workflow.",
   name: "Rosalina D. Williamson",
   job_title: "Clinic Operations Lead",
 };

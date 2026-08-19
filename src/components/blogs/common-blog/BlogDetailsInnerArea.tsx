@@ -66,13 +66,13 @@ const blog_details_content = {
   title_1: "Smart appointment intake without unsafe diagnosis claims",
   title_2: "Route patients without pretending to diagnose",
   title_3: "Keep every automation reviewable",
-  description_1: "A strong healthcare AI demo should help clinics collect better information without making medical decisions. MediDove uses AI to structure appointment reasons, suggest departments, identify urgent language, and prepare staff handoff notes.",
+  description_1: "A strong online clinic should help care teams collect better information without making medical decisions. MediDove structures appointment reasons, suggests departments, identifies urgent language, and prepares staff handoff notes.",
   description_2: "The safest positioning is operational support: scheduling, intake, reminders, lead handling, and patient communication. The assistant can explain services and recommend booking paths, but clinical advice remains with qualified professionals.",
   description_3: "For urgent symptoms, the system uses clear safety language and routes the patient toward emergency care instead of continuing a normal marketing or booking flow.",
   description_4: "Patients describe their reason for visit in natural language. The intake endpoint returns a suggested department, urgency level, and a concise appointment note that staff can review before confirming the visit.",
-  description_5: "Call summaries, WhatsApp replies, campaign drafts, and AI chat messages are stored with enough context for a clinic team to understand what happened and what should happen next.",
-  description_6: "The MediDove demo is built for portfolio presentations with sample data only. Production healthcare deployments require vendor agreements, consent handling, privacy review, and local compliance checks.",
-  qoute_text: "Healthcare AI is strongest when it saves staff time and leaves clinical judgment with licensed professionals.",
+  description_5: "Call summaries, patient replies, campaign drafts, and chat messages are stored with enough context for a clinic team to understand what happened and what should happen next.",
+  description_6: "MediDove is designed around sample patient workflows. Real healthcare deployments require consent handling, privacy review, and local compliance checks.",
+  qoute_text: "Clinic automation is strongest when it saves staff time and leaves clinical judgment with licensed professionals.",
   qoute_writer: "MediDove Safety Note",
   comments_data: [
     {
@@ -80,7 +80,7 @@ const blog_details_content = {
       img: comment_avatar_1,
       name: "Alicia Morgan",
       time: "12th August 2026",
-      comment_text: "The consent and audit language makes the workflow easier to explain to healthcare buyers.",
+      comment_text: "The consent and review language makes the workflow easier to explain to clinic teams.",
 
     },
     {
@@ -88,7 +88,7 @@ const blog_details_content = {
       img: comment_avatar_2,
       name: "David Rahman",
       time: "14th August 2026",
-      comment_text: "Voice call summaries and callback queues are the kind of concrete AI features clinic clients understand quickly.",
+      comment_text: "Voice call summaries and callback queues are the kind of concrete features clinic teams understand quickly.",
 
     },
     {
@@ -96,7 +96,7 @@ const blog_details_content = {
       img: comment_avatar_1,
       name: "Sarah Mitchell",
       time: "18th August 2026",
-      comment_text: "Separating patient routing from diagnosis is the right boundary for a portfolio healthcare AI system.",
+      comment_text: "Separating patient routing from diagnosis is the right boundary for a responsible healthcare system.",
 
     },
 
@@ -236,7 +236,7 @@ const BlogDetailsInnerArea = ({
               <div className="col-xl-8 col-lg-8 col-md-8 mb-15">
                 <div className="blog-post-tag">
                   <span>Related Tags</span>
-                  <Link href="/blog">AI Receptionist</Link>
+                  <Link href="/blog">Virtual Reception</Link>
                   <Link href="/blog">Patient Intake</Link>
                   <Link href="/blog">Clinic Automation</Link>
                 </div>
@@ -255,7 +255,7 @@ const BlogDetailsInnerArea = ({
               <div className="col-xl-5 col-lg-5 col-md-5">
                 <div className="bakix-navigation b-next-post text-left mb-30">
                   <span><Link href="/blog">Prev Post</Link></span>
-                  <h4><Link href="/blog">Consent-aware WhatsApp reminders</Link></h4>
+                  <h4><Link href="/blog">Consent-aware reminders</Link></h4>
                 </div>
               </div>
               <div className="col-xl-2 col-lg-2 col-md-2 ">
@@ -266,7 +266,7 @@ const BlogDetailsInnerArea = ({
               <div className="col-xl-5 col-lg-5 col-md-5">
                 <div className="bakix-navigation b-next-post text-left text-md-end  mb-30">
                   <span><Link href="/blog">Next Post</Link></span>
-                  <h4><Link href="/blog">AI receptionist missed-call workflows</Link></h4>
+                  <h4><Link href="/blog">Reception missed-call workflows</Link></h4>
                 </div>
               </div>
             </div>

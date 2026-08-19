@@ -179,7 +179,7 @@ const FullscreenSearch = ({
               MediDove Search
             </p>
             <h2 className="mt-2 text-2xl font-bold md:text-3xl">
-              Find care, doctors, products, packages, and AI knowledge
+              Find care, doctors, products, packages, and patient support
             </h2>
           </div>
           <Button
@@ -224,7 +224,7 @@ const FullscreenSearch = ({
         {query.trim().length >= 2 && results.expandedTerms?.length ? (
           <div className="mt-5 flex flex-wrap items-center gap-2 text-xs text-white/65">
             <Badge variant="secondary">
-              {results.provider === "openai" ? "AI expanded" : "Smart expanded"}
+              {results.provider === "openai" ? "Expanded results" : "Smart expanded"}
             </Badge>
             {results.expandedTerms.slice(0, 8).map((term) => (
               <span
@@ -251,8 +251,8 @@ const FullscreenSearch = ({
                   <Stethoscope className="mb-4 size-7 text-cyan-300" />
                   <h3 className="font-semibold">{item}</h3>
                   <p className="mt-2 text-sm leading-6 text-white/65">
-                    Search clinic content with Supabase-backed results and
-                    emergency-safe routing language.
+                    Search clinic services, products, packages, and care
+                    guidance with emergency-safe support language.
                   </p>
                 </div>
               ))}

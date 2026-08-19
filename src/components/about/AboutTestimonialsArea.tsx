@@ -18,7 +18,7 @@ type DataType = {
 const about_testi: DataType = {
   sub_title: "Testimonials",
   title: "Clinic Teams Need Faster Patient Follow-Up",
-  sm_info: "MediDove shows how an AI receptionist, smart intake form, and consent-based messaging can help a clinic reduce missed requests while keeping staff in control of patient decisions.",
+  sm_info: "MediDove shows how virtual reception, smart intake, and consent-based messaging can help a clinic reduce missed requests while keeping staff in control of patient decisions.",
   name: "Rosalina D. Williamson",
   job_title: "Clinic Operations Manager",
 }

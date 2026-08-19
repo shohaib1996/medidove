@@ -102,7 +102,7 @@ const BlogArticlePage = ({
                         Safety note
                       </h2>
                       <p className="mt-2 leading-7 text-slate-700">
-                        MediDove AI content is for clinic automation,
+                        MediDove content is for clinic automation,
                         scheduling, routing, and patient engagement workflows.
                         It is not a diagnosis or treatment recommendation.
                       </p>
@@ -119,9 +119,9 @@ const BlogArticlePage = ({
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <p className="text-sm leading-6 text-slate-600">
-                      Use this article content with the AI assistant,
-                      appointment intake, and receptionist workflow to show a
-                      complete clinic growth system.
+                      Use this article content with the care assistant,
+                      appointment intake, and receptionist workflow to support a
+                      complete clinic growth process.
                     </p>
                     <Button asChild className="w-full">
                       <Link href="/appointment">Book appointment</Link>

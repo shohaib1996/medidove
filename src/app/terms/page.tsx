@@ -14,7 +14,7 @@ import PublicHeader from "@/components/marketing/PublicHeader";
 export const metadata = {
   title: "Terms of Use | MediDove",
   description:
-    "Terms of use for the MediDove AI clinic demo, including AI safety, communication consent, and demo limitations.",
+    "Terms of use for MediDove clinic support, communication consent, and service limitations.",
 };
 
 const terms = [
@@ -24,15 +24,15 @@ const terms = [
   },
   {
     title: "Emergency symptoms",
-    body: "Patients should not rely on this website, chatbot, WhatsApp, SMS, email, or AI voice assistant for emergencies. Emergency symptoms require local emergency services or the nearest emergency department.",
+    body: "Patients should not rely on this website, chat, messaging, email, or voice support for emergencies. Emergency symptoms require local emergency services or the nearest emergency department.",
   },
   {
-    title: "AI review",
-    body: "AI-generated summaries, routing suggestions, scripts, and campaign copy are draft assistance. Clinics are responsible for reviewing outputs before using them in real care workflows.",
+    title: "Staff review",
+    body: "Automated summaries, routing suggestions, scripts, and campaign copy are draft assistance. Clinics are responsible for reviewing outputs before using them in real care workflows.",
   },
   {
     title: "Communication rules",
-    body: "Outbound calls, SMS, WhatsApp, and email campaigns must follow patient consent, opt-out, template approval, and local communication laws. Cold healthcare marketing is not supported by this demo.",
+    body: "Outbound calls, messages, and email campaigns must follow patient consent, opt-out, template approval, and local communication laws. Cold healthcare marketing is not supported by MediDove.",
   },
   {
     title: "Production compliance",
@@ -55,8 +55,8 @@ export default function TermsPage() {
               Terms of Use
             </h1>
             <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-300">
-              These terms clarify the safe use boundaries for the MediDove AI
-              clinic demo and its patient engagement workflows.
+              These terms clarify the safe use boundaries for MediDove clinic
+              support and patient engagement workflows.
             </p>
           </div>
         </section>

@@ -35,7 +35,7 @@ interface DataType {
 }
 
 const footer_content: DataType = {
-  sm_des: "MediDove is a Next.js and Supabase clinic platform demo with AI reception, smart intake, reminders, and admin operations.",
+  sm_des: "MediDove supports online appointments, clinic reception, patient reminders, and staff-reviewed follow-up.",
   email: "hello@medidove.ai",
   website: "medidove.ai",
   address: "227 Marion Street, Columbia",
@@ -57,13 +57,13 @@ const footer_content: DataType = {
     {
       id: 1,
       img: blog_thumb_1,
-      title: "AI receptionist handoffs for busy clinics",
+      title: "Reception handoffs for busy clinics",
       time: "12 August 2026"
     },
     {
       id: 2,
       img: blog_thumb_2,
-      title: "Consent-aware WhatsApp reminder workflows",
+      title: "Consent-aware reminder workflows",
       time: "14 August 2026"
     },
     {

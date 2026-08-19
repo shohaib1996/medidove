@@ -48,16 +48,16 @@ const hero_slider_data: SliderDataType[] = [
 	{
 		id: 1,
 		bg_img: "slider_bg_1",
-		sub_title: "AI-powered clinic operations.",
-		title: "Smart Intake & Voice Reception.",
-		sm_info: "MediDove helps clinics capture appointment requests, route patients safely, and follow up through consent-aware communication workflows.",
+		sub_title: "Modern clinic support.",
+		title: "Appointments, Reception & Follow-up.",
+		sm_info: "MediDove helps patients request appointments, contact reception, find the right service, and receive timely reminders.",
 	},
 	{
 		id: 2,
 		bg_img: "slider_bg_2",
-		sub_title: "Built for modern care teams.",
-		title: "Supabase Admin, Calls & WhatsApp.",
-		sm_info: "Show buyers a real meditech workflow with bookings, AI assistant chats, receptionist logs, reminders, campaigns, and audit-ready admin tools.",
+		sub_title: "Built for connected care.",
+		title: "Patient Support Beyond Office Hours.",
+		sm_info: "Patients can leave callback details, get service guidance, and stay connected with the clinic before and after each visit.",
 	},
 ]
 

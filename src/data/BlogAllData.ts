@@ -36,7 +36,7 @@ const blog_all_data = [
     img_3m: blog_thumb_m3_1,
     post_writer: "MediDove Team",
     comments: 12,
-    title: "How AI receptionists reduce missed clinic calls",
+    title: "How virtual reception reduces missed clinic calls",
     sm_des: "Voice intake, call summaries, and callback queues help clinics capture appointment requests even when the front desk is busy.",
     
   },
@@ -48,7 +48,7 @@ const blog_all_data = [
     img_3m: blog_thumb_m3_2,
     post_writer: "MediDove Team",
     comments: 9,
-    title: "Building consent-aware WhatsApp reminder workflows",
+    title: "Building consent-aware reminder workflows",
     sm_des: "Appointment reminders and recall campaigns need clear opt-in status, unsubscribe handling, and staff visibility before messages are sent.",
     
   },
@@ -61,7 +61,7 @@ const blog_all_data = [
     post_writer: "MediDove Team",
     comments: 15,
     title: "Smart appointment intake without diagnosis claims",
-    sm_des: "AI can collect symptoms, suggest the right department, and flag urgent language while leaving diagnosis and care decisions to clinicians.",
+    sm_des: "Smart intake can collect symptoms, suggest the right department, and flag urgent language while leaving diagnosis and care decisions to clinicians.",
     
   },
   {
@@ -97,7 +97,7 @@ const blog_all_data = [
     post_writer: "MediDove Team",
     comments: 8,
     title: "Using audit logs to explain healthcare automations",
-    sm_des: "A portfolio-ready AI system should show what was generated, what was sent, and which staff member reviewed the workflow.",
+    sm_des: "A reliable clinic system should show what was prepared, what was sent, and which staff member reviewed the workflow.",
     
   },
 ]

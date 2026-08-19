@@ -27,7 +27,7 @@ interface FooterContentDatatype {
 const footer_content:FooterContentDatatype = {
   number_text: "Emergency number",
   number: "202-555-0104",
-  sm_info: "MediDove is an AI-powered clinic operations demo for smart booking, patient communication, voice reception, and admin workflows.",
+  sm_info: "MediDove helps patients book appointments, reach reception, receive reminders, and stay connected with the clinic team.",
   email: "hello@medidove.ai",
   website: "medidove.ai",
   address: "227 Marion Street, Columbia",

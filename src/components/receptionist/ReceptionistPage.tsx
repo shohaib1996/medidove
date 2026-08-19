@@ -133,15 +133,15 @@ const ReceptionistPage = () => {
             <div>
               <Badge className="mb-5 bg-white/10 text-white hover:bg-white/15">
                 <Headphones className="size-3.5" />
-                ElevenLabs AI receptionist
+                Virtual reception
               </Badge>
               <h1 className="max-w-4xl text-4xl font-bold leading-tight tracking-normal md:text-5xl">
                 Voice receptionist for booking, routing, and patient callbacks
               </h1>
               <p className="mt-5 max-w-2xl leading-8 text-slate-300">
-                This page demonstrates how a clinic can use an ElevenLabs agent
-                for inbound voice conversations and store callback requests in
-                Supabase for the admin team.
+                Patients can speak with a virtual reception desk, leave callback
+                details, ask common questions, and start an appointment request
+                for staff review.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Button
@@ -172,7 +172,7 @@ const ReceptionistPage = () => {
                 <CardDescription className="text-slate-300">
                   Receptionist scope
                 </CardDescription>
-                <CardTitle>Designed for admin-safe automation</CardTitle>
+                <CardTitle>Designed for staff-reviewed support</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {receptionistJobs.map((job) => (
@@ -192,10 +192,10 @@ const ReceptionistPage = () => {
               <Card>
                 <CardHeader>
                   <Bot className="mb-2 size-9 text-primary" />
-                  <CardTitle>Private agent friendly</CardTitle>
+                  <CardTitle>Private voice sessions</CardTitle>
                   <CardDescription className="leading-6">
-                    The API route requests a temporary signed URL from
-                    ElevenLabs, so the browser never receives the API key.
+                    Voice sessions are started securely so patients can speak
+                    with reception without exposing private clinic settings.
                   </CardDescription>
                 </CardHeader>
               </Card>
@@ -213,10 +213,10 @@ const ReceptionistPage = () => {
               <Card>
                 <CardHeader>
                   <Activity className="mb-2 size-9 text-indigo-600" />
-                  <CardTitle>Ready for Twilio next</CardTitle>
+                  <CardTitle>Ready for phone reminders</CardTitle>
                   <CardDescription className="leading-6">
-                    The data model already tracks direction, provider, status,
-                    transcript, summary, and linked appointment records.
+                    Reception and reminder activity can be reviewed by staff
+                    before any real patient follow-up is completed.
                   </CardDescription>
                 </CardHeader>
               </Card>
@@ -224,8 +224,8 @@ const ReceptionistPage = () => {
 
             <Card>
               <CardHeader>
-                <CardDescription>Outbound request demo</CardDescription>
-                <CardTitle>Ask the AI receptionist to call back</CardTitle>
+                <CardDescription>Callback request</CardDescription>
+                <CardTitle>Ask reception to call back</CardTitle>
               </CardHeader>
               <CardContent>
                 <form className="space-y-5" onSubmit={submitCallbackRequest}>
@@ -256,7 +256,7 @@ const ReceptionistPage = () => {
                     />
                     I agree that the clinic may contact this number about this
                     request. Emergency symptoms should use local emergency
-                    services, not this demo.
+                    services, not this form.
                   </label>
                   <Button type="submit" disabled={isSubmitting}>
                     <PhoneCall />

@@ -2,9 +2,9 @@ import PackagesPage from "@/components/packages/PackagesPage";
 import { getHealthPackages } from "@/lib/packages/content";
 
 export const metadata = {
-  title: "Health Packages | MediDove AI Clinic",
+  title: "Health Packages | MediDove Clinic",
   description:
-    "Browse preventive health, dental, and screening packages with AI-assisted appointment intake and patient follow-up workflows.",
+    "Browse preventive health, dental, and screening packages with smart appointment intake and patient follow-up workflows.",
 };
 
 export default async function PackagesRoute() {

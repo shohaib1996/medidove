@@ -20,7 +20,7 @@ const ServicesAreaHomeTwo = () => {
                 </div>
                 <div className="section-text pos-rel">
                   <h5>Services</h5>
-                  <h1>AI-supported clinic workflows</h1>
+                  <h1>Smart clinic workflows</h1>
                 </div>
                 <div className="section-line pos-rel">
                   <Image src={line_icon} alt="theme-pure" />

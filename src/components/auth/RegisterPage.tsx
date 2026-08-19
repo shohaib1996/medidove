@@ -160,15 +160,15 @@ const RegisterPage = () => {
           <div className="relative flex h-full flex-col justify-end p-12">
             <Badge className="mb-5 w-fit bg-white/10 text-white">
               <ShieldCheck className="size-3.5" />
-              Role-based Supabase profile
+              Secure patient profile
             </Badge>
             <h1 className="max-w-xl text-4xl font-bold leading-tight tracking-normal">
-              Patient accounts are the base for appointments, reminders, and AI
-              chat history.
+              Patient accounts are the base for appointments, reminders, and
+              care history.
             </h1>
             <p className="mt-5 max-w-xl leading-7 text-slate-300">
-              New users are created through Supabase Auth and receive a patient
-              profile row automatically through the database trigger.
+              New users receive a patient profile for appointments, reminders,
+              messages, and portal access.
             </p>
           </div>
         </section>

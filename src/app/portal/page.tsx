@@ -127,11 +127,11 @@ export default async function PatientPortalPage() {
                 Patient portal
               </Badge>
               <h1 className="max-w-3xl text-4xl font-bold leading-tight tracking-normal md:text-5xl">
-                Track your MediDove appointments and AI intake history
+                Track your MediDove appointments and intake history
               </h1>
               <p className="mt-5 max-w-2xl leading-8 text-slate-300">
                 Signed-in patients can review their appointment requests,
-                routing status, and AI-generated intake summaries.
+                routing status, and intake summaries.
               </p>
             </div>
             <form action={signOut}>

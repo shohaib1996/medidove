@@ -22,7 +22,7 @@ const BlogSidebarArea = () => {
             <h3 className="widget-title">Search Insights</h3>
           </div>
           <form className="search-form" onSubmit={e => e.preventDefault()}>
-            <input type="text" placeholder="Search clinic AI topics..." />
+            <input type="text" placeholder="Search clinic care topics..." />
             <button type="submit"><i className="fas fa-search"></i></button>
           </form>
         </div>
@@ -36,7 +36,7 @@ const BlogSidebarArea = () => {
 
         <div className="widget mb-40 p-0 b-0">
           <div className="banner-widget">
-            <Link href="/appointment"><Image src={blog_banner} style={{ width: "100%", height: "auto" }} alt="Book an AI-assisted appointment" /></Link>
+            <Link href="/appointment"><Image src={blog_banner} style={{ width: "100%", height: "auto" }} alt="Book an appointment" /></Link>
           </div>
         </div>
       </div>

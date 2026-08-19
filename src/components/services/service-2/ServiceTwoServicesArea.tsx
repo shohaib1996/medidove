@@ -13,7 +13,7 @@ type DataType = {
 }
 const servcies_content: DataType = {
   sub_title: "Departments",
-  title: "Manage clinic services with AI support",
+  title: "Manage clinic services with smart support",
 }
 const {sub_title, title}  = servcies_content
 

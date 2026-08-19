@@ -8,7 +8,7 @@ type CategoryItem = {
 };
 
 const categories_data: CategoryItem[] = [
-  { id: 1, title: 'AI Receptionist', items: 18 },
+  { id: 1, title: 'Virtual Reception', items: 18 },
   { id: 2, title: 'Smart Intake', items: 14 },
   { id: 3, title: 'Patient Outreach', items: 21 },
   { id: 4, title: 'Clinic Admin', items: 16 },

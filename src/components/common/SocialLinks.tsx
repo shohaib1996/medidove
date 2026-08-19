@@ -159,7 +159,7 @@ type CopyRightDataType = {
 }
 
 const copy_right_text: CopyRightDataType = {
-  copy_right: <> ©{new Date().getFullYear()} MediDove AI Clinic Platform. All rights reserved.
+  copy_right: <> ©{new Date().getFullYear()} MediDove Clinic Platform. All rights reserved.
   </>,
 }
 
