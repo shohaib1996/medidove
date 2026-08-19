@@ -25,6 +25,10 @@ type SearchResult = {
 };
 
 type SearchResponse = {
+  query?: string;
+  intent?: string | null;
+  expandedTerms?: string[];
+  provider?: "rules" | "openai";
   results: SearchResult[];
   grouped: Record<SearchResultType, SearchResult[]>;
   safetyMessage: string | null;
@@ -68,6 +72,10 @@ const FullscreenSearch = ({
 }: FullscreenSearchProps) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResponse>({
+    query: "",
+    intent: null,
+    expandedTerms: [],
+    provider: "rules",
     results: [],
     grouped: emptyGroups,
     safetyMessage: null,
@@ -210,6 +218,22 @@ const FullscreenSearch = ({
           <div className="mt-6 flex gap-3 rounded-lg border border-red-300/40 bg-red-500/10 p-4 text-sm leading-6 text-red-50">
             <AlertTriangle className="mt-0.5 size-5 shrink-0 text-red-200" />
             <p>{results.safetyMessage}</p>
+          </div>
+        ) : null}
+
+        {query.trim().length >= 2 && results.expandedTerms?.length ? (
+          <div className="mt-5 flex flex-wrap items-center gap-2 text-xs text-white/65">
+            <Badge variant="secondary">
+              {results.provider === "openai" ? "AI expanded" : "Smart expanded"}
+            </Badge>
+            {results.expandedTerms.slice(0, 8).map((term) => (
+              <span
+                key={term}
+                className="rounded-full border border-white/10 px-2.5 py-1"
+              >
+                {term}
+              </span>
+            ))}
           </div>
         ) : null}
 
