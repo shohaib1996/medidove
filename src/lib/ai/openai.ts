@@ -14,6 +14,13 @@ type GenerateOpenAITextOptions = {
   instructions: string;
   input: string;
   metadata?: Record<string, string>;
+  textFormat?: {
+    type: "json_schema";
+    name: string;
+    description?: string;
+    strict?: boolean;
+    schema: Record<string, unknown>;
+  };
 };
 
 type OpenAIResponsesPayload = {
@@ -42,6 +49,7 @@ export const generateOpenAIText = async ({
   instructions,
   input,
   metadata,
+  textFormat,
 }: GenerateOpenAITextOptions): Promise<OpenAITextResult> => {
   const apiKey = getEnv("OPENAI_API_KEY");
   const model = getOpenAIModel();
@@ -67,6 +75,7 @@ export const generateOpenAIText = async ({
         input,
         max_output_tokens: getMaxOutputTokens(),
         metadata,
+        ...(textFormat ? { text: { format: textFormat } } : {}),
       }),
     });
 

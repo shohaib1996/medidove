@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { CalendarClock, Megaphone, Send, Sparkles, Users } from "lucide-react";
+import { CalendarClock, Megaphone, Send, Users } from "lucide-react";
+import CampaignBuilder from "@/components/admin/CampaignBuilder";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,10 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { generateCampaignCopy, getCampaignRecommendation } from "@/lib/campaigns/copy";
 import { createClient } from "@/lib/supabase/server";
 import { createCampaign, queueCampaign } from "./actions";
@@ -186,83 +183,13 @@ export default async function AdminCampaignsPage() {
         </section>
 
         <section className="grid gap-6 lg:grid-cols-[420px_1fr]">
-          <Card>
-            <CardHeader>
-              <CardDescription>Campaign builder</CardDescription>
-              <CardTitle className="flex items-center gap-2">
-                <Sparkles className="size-5 text-primary" />
-                Create AI campaign
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form action={createCampaign} className="space-y-5">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Campaign name</Label>
-                  <Input
-                    id="name"
-                    name="name"
-                    placeholder="Annual wellness reminder"
-                    required
-                  />
-                </div>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="campaign_type">Type</Label>
-                    <Select id="campaign_type" name="campaign_type">
-                      {Object.entries(campaignTypeLabels).map(([value, label]) => (
-                        <option key={value} value={value}>
-                          {label}
-                        </option>
-                      ))}
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="channel">Channel</Label>
-                    <Select id="channel" name="channel">
-                      <option value="whatsapp">WhatsApp</option>
-                      <option value="sms">SMS</option>
-                      <option value="email">Email</option>
-                      <option value="voice">Voice</option>
-                    </Select>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="audience">Audience</Label>
-                  <Select id="audience" name="audience">
-                    {Object.entries(audienceLabels).map(([value, label]) => (
-                      <option key={value} value={value}>
-                        {label}
-                      </option>
-                    ))}
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="goal">Campaign goal</Label>
-                  <Input
-                    id="goal"
-                    name="goal"
-                    placeholder="Invite patients to book a routine checkup."
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="message">Message</Label>
-                  <Textarea
-                    id="message"
-                    name="message"
-                    rows={8}
-                    defaultValue={starterMessage}
-                  />
-                </div>
-                <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-900">
-                  {getCampaignRecommendation("wellness_check")}
-                </div>
-                <Button type="submit">
-                  <Sparkles />
-                  Save draft campaign
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
+          <CampaignBuilder
+            starterMessage={starterMessage}
+            starterRecommendation={getCampaignRecommendation("wellness_check")}
+            campaignTypeLabels={campaignTypeLabels}
+            audienceLabels={audienceLabels}
+            createCampaignAction={createCampaign}
+          />
 
           <div className="grid gap-4">
             {campaigns.length > 0 ? (
