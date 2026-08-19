@@ -1,17 +1,12 @@
  
-import ErrorPage from '@/components/error';
-import Wrapper from '@/layout/Wrapper';
-import React from 'react';
+import { notFound } from "next/navigation";
 
 export const metadata = {
-  title: "404 Page MediDove React Next js Tempalte",
-};
-const index = () => {
-  return (
-    <Wrapper>
-      <ErrorPage />
-    </Wrapper>
-  );
+  title: "Page Not Found | MediDove",
 };
 
-export default index;
+const NotFoundCatchAllPage = () => {
+  notFound();
+};
+
+export default NotFoundCatchAllPage;

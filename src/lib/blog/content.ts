@@ -54,12 +54,12 @@ const mapBlogPost = (post: PublicBlogPostRow): PublicBlogPost => ({
 export const fallbackBlogPosts: PublicBlogPost[] = [
   {
     id: "fallback-ai-receptionist",
-    title: "How AI receptionists reduce missed clinic calls",
+    title: "How virtual reception reduces missed clinic calls",
     slug: "ai-receptionist-missed-calls",
     excerpt:
       "A practical look at using voice AI to capture appointment requests, callback tasks, and patient questions after hours.",
     content:
-      "AI receptionists can support clinics by collecting patient name, phone number, appointment reason, and preferred timing. The goal is not medical diagnosis. The goal is better routing, faster staff follow-up, and clearer appointment operations.",
+      "Virtual reception can support clinics by collecting patient name, phone number, appointment reason, and preferred timing. The goal is not medical diagnosis. The goal is better routing, faster staff follow-up, and clearer appointment operations.",
     category: "AI Reception",
     imageUrl: "/assets/img/blog/news-thumb-1.jpg",
     authorName: "MediDove Team",

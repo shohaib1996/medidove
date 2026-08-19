@@ -39,9 +39,10 @@ const integrationDefinitions = [
   },
   {
     name: "ElevenLabs Outbound Webhook",
-    category: "AI voice calls",
+    category: "Optional voice calls",
+    optional: true,
     requiredKeys: ["ELEVENLABS_OUTBOUND_CALL_WEBHOOK_URL"],
-    workflow: "Outbound call dispatch from communication outbox",
+    workflow: "Fallback outbound call dispatch from communication outbox",
     href: "/admin/outreach",
   },
   {
@@ -54,7 +55,8 @@ const integrationDefinitions = [
   },
   {
     name: "Meta WhatsApp Cloud API",
-    category: "Patient messaging",
+    category: "Optional patient messaging",
+    optional: true,
     requiredKeys: [
       "META_WHATSAPP_ACCESS_TOKEN",
       "META_WHATSAPP_PHONE_NUMBER_ID",

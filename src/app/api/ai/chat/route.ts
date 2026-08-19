@@ -149,7 +149,7 @@ const getRuleBasedAssistantResponse = async (
 
   return {
     answer:
-      "I can help with appointments, doctor matching, medical services, AI receptionist workflows, WhatsApp reminders, and admin lead handling. Tell me what you want to do next.",
+      "I can help with appointments, doctor matching, medical services, virtual reception workflows, reminder preferences, and clinic message handling. Tell me what you want to do next.",
     cta: "/appointment",
     intent: "general_help",
     provider: "rules",
