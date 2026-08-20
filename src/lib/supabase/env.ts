@@ -7,7 +7,7 @@ const requireEnv = (key: string) => {
 
   return value;
 };
-
+// getSupabaseBrowserEnv returns the environment variables needed to initialize a Supabase client in the browser.
 export const getSupabaseBrowserEnv = () => ({
   url: requireEnv("NEXT_PUBLIC_SUPABASE_URL"),
   publishableKey: requireEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY"),
