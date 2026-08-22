@@ -1,23 +1,8 @@
 import type { ReactNode } from "react";
 import type { Metadata, Viewport } from "next";
-import { Poppins, Rubik } from "next/font/google";
 import "./globals.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://medidove.ai";
-
-const poppins = Poppins({
-  weight: ["200", "300", "400", "500", "600", "700"],
-  subsets: ["latin"],
-  variable: "--font-poppins",
-  display: "swap",
-});
-
-const rubik = Rubik({
-  weight: ["400", "500", "700"],
-  subsets: ["latin"],
-  variable: "--font-rubik",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -84,7 +69,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${poppins.variable} ${rubik.variable}`}>{children}</body>
+      <body>{children}</body>
     </html>
   );
 }

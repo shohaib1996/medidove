@@ -27,6 +27,8 @@
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
   --radius: 0.5rem;
+  --font-sans: Arial, Helvetica, sans-serif;
+  --font-heading: Arial, Helvetica, sans-serif;
 }
 
 @theme inline {
@@ -48,8 +50,8 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --font-sans: var(--font-rubik), Arial, sans-serif;
-  --font-heading: var(--font-poppins), Arial, sans-serif;
+  --font-sans: Arial, Helvetica, sans-serif;
+  --font-heading: Arial, Helvetica, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -62,7 +64,7 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-rubik), Arial, sans-serif;
+    font-family: var(--font-sans);
   }
 
   h1,
@@ -71,7 +73,7 @@
   h4,
   h5,
   h6 {
-    font-family: var(--font-poppins), Arial, sans-serif;
+    font-family: var(--font-heading);
   }
 
   a {
