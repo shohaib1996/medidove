@@ -54,18 +54,6 @@ const integrationDefinitions = [
     href: "/admin/outreach",
   },
   {
-    name: "Meta WhatsApp Cloud API",
-    category: "Optional patient messaging",
-    optional: true,
-    requiredKeys: [
-      "META_WHATSAPP_ACCESS_TOKEN",
-      "META_WHATSAPP_PHONE_NUMBER_ID",
-      "META_WHATSAPP_VERIFY_TOKEN",
-    ],
-    workflow: "WhatsApp reminders and follow-up delivery",
-    href: "/engagement",
-  },
-  {
     name: "Twilio WhatsApp",
     category: "Optional messaging fallback",
     optional: true,

@@ -1,6 +1,7 @@
 import {
   logVoiceReceptionistIntake,
   parseTwilioForm,
+  validateTwilioWebhook,
   voiceResponse,
 } from "@/lib/communications/twilio";
 
@@ -26,6 +27,18 @@ export async function POST(request: Request) {
   try {
     const { from, callSid, callStatus, digits, speechResult } =
       await parseTwilioForm(request);
+
+    if (
+      !validateTwilioWebhook(request, {
+        from,
+        callSid,
+        callStatus,
+        digits,
+        speechResult,
+      })
+    ) {
+      return new Response("Invalid Twilio signature.", { status: 403 });
+    }
 
     await logVoiceReceptionistIntake({
       from,

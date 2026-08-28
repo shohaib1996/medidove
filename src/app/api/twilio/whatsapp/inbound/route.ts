@@ -2,11 +2,16 @@ import {
   logInboundWhatsApp,
   messagingResponse,
   parseTwilioForm,
+  validateTwilioWebhook,
 } from "@/lib/communications/twilio";
 
 export async function POST(request: Request) {
   try {
     const { from, body, messageSid } = await parseTwilioForm(request);
+
+    if (!validateTwilioWebhook(request, { from, body, messageSid })) {
+      return new Response("Invalid Twilio signature.", { status: 403 });
+    }
 
     if (from) {
       await logInboundWhatsApp({ from, body, messageSid });

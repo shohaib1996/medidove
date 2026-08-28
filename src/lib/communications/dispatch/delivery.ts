@@ -1,5 +1,4 @@
 import { sendSmtpEmail } from "@/lib/communications/email";
-import { sendMetaWhatsAppMessage } from "@/lib/communications/meta-whatsapp";
 import {
   getEmailProvider,
   getMessagingProvider,
@@ -147,14 +146,6 @@ export const deliverRecord = async (
       return sendTwilioMessage(record);
     }
 
-    if (provider === "meta_whatsapp" && record.channel === "whatsapp") {
-      return sendMetaWhatsAppMessage({
-        recipientPhone: record.recipient_phone,
-        message: record.message,
-        metadata: record.metadata,
-      });
-    }
-
     if (provider === "webhook") {
       return sendWebhook(
         record,
@@ -167,7 +158,7 @@ export const deliverRecord = async (
       ok: false,
       provider,
       error:
-        "Message delivery is disabled. Set OUTBOUND_MESSAGING_PROVIDER to meta_whatsapp, twilio, or webhook to enable it.",
+        "Message delivery is disabled. Set OUTBOUND_MESSAGING_PROVIDER to twilio or webhook to enable it.",
     };
   }
 

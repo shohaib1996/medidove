@@ -2,7 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import { assertAdmin, refreshContent, slugify, text } from "./action-utils";
-export { seedDemoWorkspace } from "./seed-demo-workspace";
+import { seedDemoWorkspace as runSeedDemoWorkspace } from "./seed-demo-workspace";
+
+export const seedDemoWorkspace = async () => runSeedDemoWorkspace();
 
 export const createDepartment = async (formData: FormData) => {
   const name = text(formData.get("name"));

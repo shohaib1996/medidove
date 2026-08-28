@@ -1,3 +1,4 @@
+import crypto from "node:crypto";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { writeAuditLog } from "@/lib/audit/log";
 
@@ -12,6 +13,9 @@ type TwilioFieldMap = {
   speechResult: string;
 };
 
+const optionalEnv = (key: string) => process.env[key]?.trim() || "";
+const parsedTwilioForms = new WeakMap<Request, URLSearchParams>();
+
 const xmlEscape = (value: string) =>
   value
     .replaceAll("&", "&amp;")
@@ -20,12 +24,16 @@ const xmlEscape = (value: string) =>
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&apos;");
 
-export const parseTwilioForm = async (request: Request): Promise<TwilioFieldMap> => {
-  const formData = await request.formData();
+export const parseTwilioForm = async (
+  request: Request,
+): Promise<TwilioFieldMap> => {
+  const body = await request.text();
+  const formData = new URLSearchParams(body);
+  parsedTwilioForms.set(request, formData);
   const field = (name: string) => {
     const value = formData.get(name);
 
-    return typeof value === "string" ? value.trim() : "";
+    return value?.trim() || "";
   };
 
   return {
@@ -38,6 +46,83 @@ export const parseTwilioForm = async (request: Request): Promise<TwilioFieldMap>
     digits: field("Digits"),
     speechResult: field("SpeechResult"),
   };
+};
+
+const getTwilioValidationUrl = (request: Request) => {
+  const baseUrl = optionalEnv("TWILIO_WEBHOOK_BASE_URL");
+
+  if (!baseUrl) {
+    return request.url;
+  }
+
+  const requestUrl = new URL(request.url);
+  const publicBaseUrl = new URL(baseUrl);
+
+  requestUrl.protocol = publicBaseUrl.protocol;
+  requestUrl.host = publicBaseUrl.host;
+
+  return requestUrl.toString();
+};
+
+export const shouldValidateTwilioWebhook = () => {
+  const setting = optionalEnv("TWILIO_VALIDATE_WEBHOOKS").toLowerCase();
+
+  if (setting === "true") {
+    return true;
+  }
+
+  if (setting === "false") {
+    return false;
+  }
+
+  return process.env.NODE_ENV === "production";
+};
+
+export const validateTwilioWebhook = (
+  request: Request,
+  fields: Partial<TwilioFieldMap>,
+) => {
+  if (!shouldValidateTwilioWebhook()) {
+    return true;
+  }
+
+  const authToken = optionalEnv("TWILIO_AUTH_TOKEN");
+  const signature = request.headers.get("x-twilio-signature") || "";
+
+  if (!authToken || !signature) {
+    return false;
+  }
+
+  const formEntries = parsedTwilioForms.get(request)
+    ? Array.from(parsedTwilioForms.get(request)!.entries())
+    : Object.entries({
+        Body: fields.body,
+        CallSid: fields.callSid,
+        CallStatus: fields.callStatus,
+        Digits: fields.digits,
+        From: fields.from,
+        MessageSid: fields.messageSid,
+        SpeechResult: fields.speechResult,
+        To: fields.to,
+      }).filter((entry): entry is [string, string] => Boolean(entry[1]));
+  const payload = formEntries
+    .sort(([first], [second]) => first.localeCompare(second))
+    .reduce(
+      (input, [key, value]) => `${input}${key}${value}`,
+      getTwilioValidationUrl(request),
+    );
+
+  const expected = crypto
+    .createHmac("sha1", authToken)
+    .update(payload)
+    .digest("base64");
+  const expectedBuffer = Buffer.from(expected);
+  const actualBuffer = Buffer.from(signature);
+
+  return (
+    expectedBuffer.length === actualBuffer.length &&
+    crypto.timingSafeEqual(expectedBuffer, actualBuffer)
+  );
 };
 
 export const twimlResponse = (xml: string) =>
