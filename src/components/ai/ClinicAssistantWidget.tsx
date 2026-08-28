@@ -114,7 +114,7 @@ const ClinicAssistantWidget = () => {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-[80]">
+    <div className="fixed bottom-5 right-5 z-80">
       <div
         className={cn(
           "mb-4 w-[calc(100vw-40px)] max-w-sm overflow-hidden rounded-lg border border-slate-200 bg-white shadow-2xl transition",
@@ -138,7 +138,7 @@ const ClinicAssistantWidget = () => {
           </button>
         </div>
 
-        <div className="max-h-[420px] space-y-3 overflow-y-auto p-4">
+        <div className="max-h-105 space-y-3 overflow-y-auto p-4">
           {messages.map((message) => (
             <div
               key={message.id}
