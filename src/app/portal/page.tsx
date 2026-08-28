@@ -6,7 +6,6 @@ import {
   CheckCircle2,
   Clock,
   FileText,
-  LogOut,
   MessageCircle,
   Stethoscope,
   UserRound,
@@ -24,7 +23,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/server";
-import { signOut, updateProfile } from "./actions";
+import { updateProfile } from "./actions";
+import SignOutButton from "./SignOutButton";
 
 export const metadata = {
   title: "Patient Portal | MediDove",
@@ -65,7 +65,7 @@ const DetailItem = ({
 }) => (
   <div>
     <dt className="text-xs font-semibold uppercase text-slate-400">{label}</dt>
-    <dd className="mt-1 break-words text-sm text-slate-700">
+    <dd className="mt-1 wrap-break-word text-sm text-slate-700">
       {value || "Not provided"}
     </dd>
   </div>
@@ -117,10 +117,13 @@ export default async function PatientPortalPage() {
             fill
             priority
             sizes="100vw"
-            className="object-cover opacity-25"
+            className="pointer-events-none object-cover opacity-25"
           />
-          <div className="absolute inset-0 bg-slate-950/75" />
-          <div className="relative mx-auto flex max-w-7xl flex-col justify-between gap-8 md:flex-row md:items-end">
+          <div className="pointer-events-none absolute inset-0 bg-slate-950/75" />
+          <div className="absolute right-4 top-6 z-50 md:right-8">
+            <SignOutButton className="border-white/30 bg-white text-red-700 hover:bg-red-50" />
+          </div>
+          <div className="relative z-10 mx-auto flex max-w-7xl flex-col justify-between gap-8 md:flex-row md:items-end">
             <div>
               <Badge className="mb-5 bg-white/10 text-white hover:bg-white/15">
                 <UserRound className="size-3.5" />
@@ -134,16 +137,6 @@ export default async function PatientPortalPage() {
                 routing status, and intake summaries.
               </p>
             </div>
-            <form action={signOut}>
-              <Button
-                type="submit"
-                variant="outline"
-                className="border-white/30 bg-white/10 text-white hover:bg-white hover:text-slate-950"
-              >
-                <LogOut />
-                Sign out
-              </Button>
-            </form>
           </div>
         </section>
 
@@ -188,6 +181,7 @@ export default async function PatientPortalPage() {
                     Save profile
                   </Button>
                 </form>
+                <SignOutButton className="w-full" />
               </CardContent>
             </Card>
 

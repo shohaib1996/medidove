@@ -1,10 +1,5 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
 import { ArrowRight, KeyRound, LockKeyhole, Mail, ShieldCheck } from "lucide-react";
 import PublicHeader from "@/components/marketing/PublicHeader";
 import { Badge } from "@/components/ui/badge";
@@ -18,65 +13,13 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createClient } from "@/lib/supabase/client";
 
-const LoginPage = () => {
-  const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [remember, setRemember] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+type LoginPageProps = {
+  errorMessage?: string;
+  statusMessage?: string;
+};
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (!email || !password) {
-      toast.error("Email and password are required.");
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      const supabase = createClient();
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      toast.success("Login successful.");
-      router.refresh();
-      router.push("/portal");
-    } catch (error) {
-      const message = error instanceof Error ? error.message : "Unable to log in.";
-      toast.error(message);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handlePasswordReset = async () => {
-    if (!email) {
-      toast.error("Enter your email address first.");
-      return;
-    }
-
-    const supabase = createClient();
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/login`,
-    });
-
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-
-    toast.success("Password reset email sent.");
-  };
+const LoginPage = ({ errorMessage, statusMessage }: LoginPageProps) => {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
@@ -115,18 +58,18 @@ const LoginPage = () => {
               <CardTitle className="text-3xl">Login to MediDove</CardTitle>
             </CardHeader>
             <CardContent>
-              <form className="space-y-5" onSubmit={handleSubmit}>
+              <form className="space-y-5" action="/auth/login" method="post">
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
                   <div className="relative">
                     <Mail className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
                     <Input
                       id="email"
+                      name="email"
                       type="email"
-                      value={email}
-                      onChange={(event) => setEmail(event.target.value)}
                       placeholder="name@example.com"
                       className="pl-10"
+                      required
                     />
                   </div>
                 </div>
@@ -137,11 +80,11 @@ const LoginPage = () => {
                     <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
                     <Input
                       id="password"
+                      name="password"
                       type="password"
-                      value={password}
-                      onChange={(event) => setPassword(event.target.value)}
                       placeholder="Enter password"
                       className="pl-10"
+                      required
                     />
                   </div>
                 </div>
@@ -150,25 +93,38 @@ const LoginPage = () => {
                   <label className="flex items-center gap-2 text-slate-600">
                     <input
                       type="checkbox"
-                      checked={remember}
-                      onChange={(event) => setRemember(event.target.checked)}
                       className="size-4 rounded border-slate-300"
+                      defaultChecked
                     />
                     Remember me
                   </label>
                   <button
-                    type="button"
-                    onClick={handlePasswordReset}
+                    type="submit"
+                    name="intent"
+                    value="reset"
+                    formNoValidate
                     className="font-medium text-primary hover:underline"
                   >
                     Reset password
                   </button>
                 </div>
 
-                <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
+                <Button type="submit" name="intent" value="login" className="w-full" size="lg">
                   <KeyRound />
-                  {isSubmitting ? "Logging in..." : "Login"}
+                  Login
                 </Button>
+
+                {errorMessage ? (
+                  <p className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                    {errorMessage}
+                  </p>
+                ) : null}
+
+                {statusMessage ? (
+                  <p className="rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+                    {statusMessage}
+                  </p>
+                ) : null}
 
                 <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
                   New to MediDove?{" "}
@@ -188,8 +144,6 @@ const LoginPage = () => {
           </Card>
         </section>
       </main>
-
-      <ToastContainer />
     </div>
   );
 };

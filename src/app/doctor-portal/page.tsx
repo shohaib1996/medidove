@@ -6,7 +6,6 @@ import {
   CheckCircle2,
   Clock,
   FileText,
-  LogOut,
   MapPin,
   Stethoscope,
   UserRoundCheck,
@@ -22,7 +21,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
-import { signOut } from "@/app/portal/actions";
+import SignOutButton from "@/app/portal/SignOutButton";
 
 export const metadata = {
   title: "Doctor Workspace | MediDove",
@@ -100,12 +99,7 @@ export default async function DoctorPortalPage() {
               <Button asChild variant="outline">
                 <Link href="/admin/content">Manage doctors</Link>
               </Button>
-              <form action={signOut}>
-                <Button type="submit" variant="secondary">
-                  <LogOut className="h-4 w-4" />
-                  Sign out
-                </Button>
-              </form>
+              <SignOutButton variant="secondary" />
             </CardContent>
           </Card>
         </main>
@@ -161,10 +155,10 @@ export default async function DoctorPortalPage() {
             fill
             priority
             sizes="100vw"
-            className="object-cover opacity-25"
+            className="pointer-events-none object-cover opacity-25"
           />
-          <div className="absolute inset-0 bg-slate-950/75" />
-          <div className="relative mx-auto flex max-w-7xl flex-col justify-between gap-8 md:flex-row md:items-end">
+          <div className="pointer-events-none absolute inset-0 bg-slate-950/75" />
+          <div className="relative z-10 mx-auto flex max-w-7xl flex-col justify-between gap-8 md:flex-row md:items-end">
             <div>
               <Badge className="mb-5 bg-white/10 text-white hover:bg-white/15">
                 <Stethoscope className="h-3.5 w-3.5" />
@@ -178,16 +172,7 @@ export default async function DoctorPortalPage() {
                 blocks, and reviewed patient notes.
               </p>
             </div>
-            <form action={signOut}>
-              <Button
-                type="submit"
-                variant="outline"
-                className="border-white/30 bg-white/10 text-white hover:bg-white hover:text-slate-950"
-              >
-                <LogOut className="h-4 w-4" />
-                Sign out
-              </Button>
-            </form>
+            <SignOutButton className="border-white/30 bg-white/10 text-white hover:bg-white hover:text-slate-950" />
           </div>
         </section>
 

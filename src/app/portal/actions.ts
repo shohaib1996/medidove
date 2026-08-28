@@ -7,12 +7,6 @@ import { createClient } from "@/lib/supabase/server";
 const text = (value: FormDataEntryValue | null) =>
   typeof value === "string" ? value.trim() : "";
 
-export const signOut = async () => {
-  const supabase = await createClient();
-  await supabase.auth.signOut();
-  redirect("/");
-};
-
 export const updateProfile = async (formData: FormData) => {
   const supabase = await createClient();
   const {

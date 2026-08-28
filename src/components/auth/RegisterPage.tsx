@@ -1,10 +1,5 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
 import { ArrowRight, Mail, ShieldCheck, Sparkles, UserRound } from "lucide-react";
 import PublicHeader from "@/components/marketing/PublicHeader";
 import { Badge } from "@/components/ui/badge";
@@ -18,58 +13,12 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createClient } from "@/lib/supabase/client";
 
-const RegisterPage = () => {
-  const router = useRouter();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+type RegisterPageProps = {
+  errorMessage?: string;
+};
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (!name || !email || !password) {
-      toast.error("Name, email, and password are required.");
-      return;
-    }
-
-    if (password.length < 6) {
-      toast.error("Password must be at least 6 characters.");
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      const supabase = createClient();
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: name,
-          },
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      toast.success("Account created. Check your email if confirmation is enabled.");
-      router.refresh();
-      router.push("/login");
-    } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Unable to create account.";
-      toast.error(message);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+const RegisterPage = ({ errorMessage }: RegisterPageProps) => {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
@@ -83,17 +32,17 @@ const RegisterPage = () => {
               <CardTitle className="text-3xl">Create your account</CardTitle>
             </CardHeader>
             <CardContent>
-              <form className="space-y-5" onSubmit={handleSubmit}>
+              <form className="space-y-5" action="/auth/register" method="post">
                 <div className="space-y-2">
                   <Label htmlFor="name">Full name</Label>
                   <div className="relative">
                     <UserRound className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
                     <Input
                       id="name"
-                      value={name}
-                      onChange={(event) => setName(event.target.value)}
+                      name="name"
                       placeholder="Enter your full name"
                       className="pl-10"
+                      required
                     />
                   </div>
                 </div>
@@ -104,11 +53,11 @@ const RegisterPage = () => {
                     <Mail className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
                     <Input
                       id="email"
+                      name="email"
                       type="email"
-                      value={email}
-                      onChange={(event) => setEmail(event.target.value)}
                       placeholder="name@example.com"
                       className="pl-10"
+                      required
                     />
                   </div>
                 </div>
@@ -117,17 +66,24 @@ const RegisterPage = () => {
                   <Label htmlFor="password">Password</Label>
                   <Input
                     id="password"
+                    name="password"
                     type="password"
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
                     placeholder="Minimum 6 characters"
+                    minLength={6}
+                    required
                   />
                 </div>
 
-                <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
+                <Button type="submit" className="w-full" size="lg">
                   <Sparkles />
-                  {isSubmitting ? "Creating account..." : "Register"}
+                  Register
                 </Button>
+
+                {errorMessage ? (
+                  <p className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                    {errorMessage}
+                  </p>
+                ) : null}
 
                 <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
                   Already registered?{" "}
@@ -173,8 +129,6 @@ const RegisterPage = () => {
           </div>
         </section>
       </main>
-
-      <ToastContainer />
     </div>
   );
 };

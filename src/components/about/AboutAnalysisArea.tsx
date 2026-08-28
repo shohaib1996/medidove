@@ -74,7 +74,7 @@ const AboutAnalysisArea = () => {
         <div className="container">
           <div className="row">
             <div className="col-xl-12">
-              <ul className="nav nav-pills mb-3 mb-65" id="pills-tab" role="tablist">
+              <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
                 {tab_data.map((item, i) =>
                   <li key={i} className="nav-item" role="presentation">
                     <button
