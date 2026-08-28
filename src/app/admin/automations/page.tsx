@@ -28,72 +28,13 @@ export const metadata = {
   title: "Automation Rules | MediDove Admin",
 };
 
-type AutomationRule = {
-  id: string;
-  name: string;
-  trigger_event: string;
-  channel: string;
-  audience: string;
-  delay_minutes: number;
-  template_id: string | null;
-  instructions: string;
-  is_active: boolean;
-  created_at: string;
-};
-
-type MessageTemplate = {
-  id: string;
-  name: string;
-  channel: string;
-  category: string;
-  is_active: boolean;
-};
-
-const triggerOptions = [
-  "appointment_created",
-  "appointment_confirmed",
-  "appointment_reminder",
-  "missed_appointment",
-  "lead_created",
-  "lead_high_urgency",
-  "recall_due",
-  "post_visit_follow_up",
-];
-
-const audienceOptions = [
-  "all_patients",
-  "new_patients",
-  "confirmed_appointments",
-  "missed_appointments",
-  "high_urgency_leads",
-  "inactive_patients",
-];
-
-const formatDate = (value: string) =>
-  new Intl.DateTimeFormat("en", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(new Date(value));
-
-const formatDelay = (minutes: number) => {
-  if (minutes === 0) {
-    return "Immediate";
-  }
-
-  if (minutes < 60) {
-    return `${minutes} min delay`;
-  }
-
-  if (minutes % 1440 === 0) {
-    return `${minutes / 1440} day delay`;
-  }
-
-  if (minutes % 60 === 0) {
-    return `${minutes / 60} hour delay`;
-  }
-
-  return `${minutes} min delay`;
-};
+import type { AutomationRule, MessageTemplate } from "./types";
+import {
+  audienceOptions,
+  formatDate,
+  formatDelay,
+  triggerOptions,
+} from "./automation-utils";
 
 const AdminAutomationsPage = async () => {
   const supabase = await createClient();

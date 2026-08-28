@@ -21,90 +21,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { createClient } from "@/lib/supabase/server";
-import { createCareTask, generateCareTasks, updateCareTaskStatus } from "./actions";
+import { createCareTask, generateCareTasks } from "./actions";
 
 export const metadata = {
   title: "Care Tasks | MediDove Admin",
 };
 
-type TaskFilter = "all" | "open" | "in_progress" | "done" | "cancelled";
-
-type ProfileOption = {
-  id: string;
-  full_name: string | null;
-  phone: string | null;
-  role: string;
-};
-
-type CareTask = {
-  id: string;
-  patient_id: string | null;
-  assigned_to: string | null;
-  source_type: string;
-  source_id: string | null;
-  title: string;
-  description: string | null;
-  priority: string;
-  status: string;
-  due_at: string | null;
-  created_at: string;
-};
-
-const filters: TaskFilter[] = ["all", "open", "in_progress", "done", "cancelled"];
-const priorities = ["low", "medium", "high", "urgent"];
-const sourceTypes = [
-  "manual",
-  "appointment",
-  "lead",
-  "feedback",
-  "clinical_note",
-  "automation",
-];
-
-const formatDate = (value: string | null) => {
-  if (!value) {
-    return "Not scheduled";
-  }
-
-  return new Intl.DateTimeFormat("en", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(new Date(value));
-};
-
-const normalizeFilter = (value: string | string[] | undefined): TaskFilter => {
-  const filter = Array.isArray(value) ? value[0] : value;
-
-  return filters.includes(filter as TaskFilter) ? (filter as TaskFilter) : "all";
-};
-
-const profileLabel = (profiles: ProfileOption[], id: string | null) => {
-  if (!id) {
-    return "Unassigned";
-  }
-
-  const profile = profiles.find((item) => item.id === id);
-
-  return profile?.full_name || profile?.phone || profile?.role || "Unknown user";
-};
-
-const StatusAction = ({
-  id,
-  status,
-  label,
-}: {
-  id: string;
-  status: Exclude<TaskFilter, "all">;
-  label: string;
-}) => (
-  <form action={updateCareTaskStatus}>
-    <input type="hidden" name="id" value={id} />
-    <input type="hidden" name="status" value={status} />
-    <Button type="submit" size="sm" variant="outline">
-      {label}
-    </Button>
-  </form>
-);
+import StatusAction from "./StatusAction";
+import type { CareTask, ProfileOption } from "./types";
+import {
+  filters,
+  formatDate,
+  normalizeFilter,
+  priorities,
+  profileLabel,
+  sourceTypes,
+} from "./task-utils";
 
 export default async function AdminTasksPage({
   searchParams,

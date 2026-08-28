@@ -28,69 +28,13 @@ export const metadata = {
   title: "Doctor Workspace | MediDove",
 };
 
-type DoctorProfile = {
-  id: string;
-  full_name: string;
-  specialty: string;
-  image_url: string | null;
-};
-
-type AppointmentRow = {
-  id: string;
-  patient_name: string;
-  patient_email: string | null;
-  patient_phone: string;
-  requested_department: string | null;
-  requested_at: string | null;
-  reason: string | null;
-  ai_summary: string | null;
-  urgency: string | null;
-  status: string;
-  created_at: string;
-};
-
-type AvailabilityRow = {
-  id: string;
-  weekday: number;
-  start_time: string;
-  end_time: string;
-  slot_minutes: number;
-  location: string | null;
-  is_active: boolean;
-};
-
-type ClinicalNoteRow = {
-  id: string;
-  patient_name: string;
-  visit_type: string;
-  subjective: string;
-  assessment: string;
-  care_plan: string;
-  risk_flags: string[];
-  status: string;
-  created_at: string;
-};
-
-const weekdays = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
-
-const formatDate = (value: string | null) => {
-  if (!value) {
-    return "Not selected";
-  }
-
-  return new Intl.DateTimeFormat("en", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(new Date(value));
-};
+import type {
+  AppointmentRow,
+  AvailabilityRow,
+  ClinicalNoteRow,
+  DoctorProfile,
+} from "./types";
+import { formatDate, weekdays } from "./utils";
 
 export default async function DoctorPortalPage() {
   const supabase = await createClient();

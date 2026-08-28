@@ -1,0 +1,390 @@
+MEDIDOVE AI MEDITECH SYSTEM PLAN
+================================
+
+Project goal
+------------
+Convert the old MediDove Next.js medical template into a modern AI-powered clinic, hospital, and meditech demo system for Upwork buyers.
+
+Target positioning:
+AI Medical Receptionist and Patient Engagement Platform built with Next.js 16, Supabase, ElevenLabs, Twilio, WhatsApp Business, and RAG-based AI assistant.
+
+Important product direction:
+This should not be positioned as an AI diagnosis system. It should be positioned as appointment automation, patient communication, clinic admin support, service search, lead triage, reminders, and patient engagement.
+
+
+Current project understanding
+-----------------------------
+The existing project is a static medical website template with:
+
+- Home pages
+- About page
+- Services pages
+- Doctor listing and doctor details
+- Appointment page
+- Contact page
+- Blog pages
+- Shop, cart, wishlist, checkout pages
+- Login/register pages
+- Static local data in src/data/*.ts
+- Static forms and EmailJS contact submission
+- Basic search UI in src/components/common/FullscreenSearch.tsx
+
+This gives a strong base for converting the app into a live SaaS-style meditech platform.
+
+
+Recommended tech stack
+----------------------
+Frontend:
+- Next.js 16 App Router
+- React 19
+- TypeScript
+- Existing MediDove UI/components as the base
+
+Backend:
+- Supabase Postgres
+- Supabase Auth
+- Supabase Storage
+- Supabase Row Level Security
+- Supabase Realtime where useful
+- Supabase pgvector for semantic search/RAG
+
+AI:
+- OpenAI or another LLM provider for text AI
+- Supabase pgvector for retrieval augmented generation
+- ElevenLabs Conversational AI for voice receptionist
+- ElevenLabs text-to-speech where needed
+
+Communication:
+- Twilio Programmable Voice for real phone calls
+- Twilio WhatsApp Business Messaging
+- Twilio WhatsApp Business Calling where available
+- Email provider for notifications
+
+Deployment:
+- Vercel for Next.js
+- Supabase Cloud for database/auth/storage
+- Twilio for calls/SMS/WhatsApp
+- ElevenLabs for voice agents
+
+
+Core system modules
+-------------------
+
+1. Public medical website
+Keep and modernize the existing MediDove website.
+
+Features:
+- Dynamic home page sections from Supabase
+- Dynamic services
+- Dynamic doctors
+- Dynamic departments
+- Dynamic testimonials
+- Dynamic blog posts
+- Dynamic pricing/health packages
+- Dynamic shop/products if keeping the shop module
+- SEO metadata for all key pages
+- Modern copywriting focused on AI-powered patient care
+
+Pages:
+- /
+- /about
+- /services
+- /services/[slug]
+- /doctors
+- /doctors/[slug]
+- /appointment
+- /contact
+- /blog
+- /blog/[slug]
+- /shop optional
+
+
+2. Supabase authentication
+Replace the static login/register pages with real authentication.
+
+User roles:
+- patient
+- doctor
+- receptionist
+- admin
+
+Features:
+- Patient registration/login
+- Admin login
+- Protected admin dashboard
+- Protected patient dashboard
+- Password reset
+- Optional social login later
+
+Supabase tables:
+- profiles
+- user_roles
+- patients
+- doctors
+- staff_members
+
+
+3. Doctor and department management
+Move doctor and service data from src/data/*.ts into Supabase.
+
+Admin features:
+- Create/update/delete doctors
+- Create/update/delete departments
+- Add doctor specialty
+- Add availability
+- Add photo
+- Add consultation fee
+- Add spoken languages
+- Add online/in-person status
+
+Public features:
+- Doctor listing
+- Filter by department
+- Filter by specialty
+- Filter by availability
+- View doctor profile
+- Book appointment with selected doctor
+
+Supabase tables:
+- departments
+- doctors
+- doctor_availability
+- doctor_services
+
+
+4. Appointment booking system
+Convert the current appointment form into a real booking workflow.
+
+Patient flow:
+- Select department
+- Select doctor
+- Select date/time
+- Enter patient details
+- Add symptoms or reason for visit
+- Submit appointment request
+- Receive confirmation message/email/SMS
+
+Admin flow:
+- View appointments
+- Approve appointment
+- Reject appointment
+- Reschedule appointment
+- Mark as completed
+- Add internal notes
+- Trigger reminder call/SMS/WhatsApp
+
+Supabase tables:
+- appointments
+- appointment_notes
+- appointment_status_history
+
+
+5. AI smart appointment intake
+This is one of the strongest portfolio features.
+
+User types:
+"I have tooth pain and swelling"
+
+AI returns:
+- Suggested department: Dental
+- Suggested doctor type: Dentist
+- Urgency: Medium
+- Suggested appointment note
+- Recommended next step: Book dental consultation
+
+Use cases:
+- Patient does not know which department to choose
+- Clinic receives better structured appointment requests
+- Admin saves time triaging patient needs
+
+Important safety rule:
+AI should not diagnose. It should say it can help route the patient to the right service and recommend urgent care when emergency symptoms are mentioned.
+
+Emergency examples:
+- Chest pain
+- Severe breathing problem
+- Stroke symptoms
+- Heavy bleeding
+- Loss of consciousness
+
+For emergency-like input, AI should show:
+"This may require urgent medical attention. Please contact emergency services or visit the nearest emergency department."
+
+
+6. AI website assistant
+Add a floating AI chat widget to the website.
+
+Capabilities:
+- Answer questions about clinic services
+- Explain departments
+- Recommend doctor type
+- Help book appointments
+- Answer pricing/package questions
+- Search doctors
+- Search blog content
+- Search products if shop remains
+- Capture leads
+- Hand off to human/admin
+
+Implementation:
+- Store services, doctors, FAQs, blog posts, policies in Supabase
+- Generate embeddings
+- Store embeddings using Supabase pgvector
+- On question, retrieve matching content
+- Send retrieved context to LLM
+- Return grounded answer
+
+Supabase tables:
+- ai_documents
+- ai_document_chunks
+- ai_chat_sessions
+- ai_chat_messages
+- ai_leads
+
+Admin features:
+- Upload/edit AI knowledge
+- View chat history
+- Convert chat to appointment
+- Mark lead as followed up
+
+
+7. Semantic website search
+Upgrade FullscreenSearch.tsx.
+
+Current behavior:
+- User searches
+- Search text is only logged
+
+New behavior:
+- Search by meaning, not only exact keyword
+- "heart doctor" can return cardiology services
+- "child fever" can return pediatric care
+- "tooth pain" can return dental service and dentist doctors
+
+Search result types:
+- doctors
+- departments
+- services
+- blog posts
+- products
+
+Implementation:
+- API route /api/search
+- Supabase full-text search first
+- Optional pgvector semantic search
+- Search overlay shows grouped results
+
+
+8. AI receptionist with ElevenLabs
+Add voice receptionist for clinic phone calls.
+
+Inbound call flow:
+- Patient calls clinic number
+- Twilio receives call
+- ElevenLabs AI agent answers
+- Agent asks patient name, phone, appointment reason, preferred date/time
+- Agent checks or records appointment request through Next.js/Supabase API
+- Agent confirms request
+- Admin sees call transcript and appointment request in dashboard
+
+Example receptionist script:
+"Hello, this is MediDove Clinic. I can help you book an appointment, find a doctor, or leave a message for our team. How can I help today?"
+
+Capabilities:
+- Book appointment request
+- Check department
+- Find doctor type
+- Capture callback request
+- Answer clinic FAQ
+- Escalate to staff
+- Store call summary
+
+Supabase tables:
+- call_logs
+- call_transcripts
+- call_summaries
+- receptionist_tasks
+
+Important:
+Every call should disclose that the caller is speaking with an AI assistant.
+
+
+9. Real phone network calls
+Use Twilio Programmable Voice for regular mobile/landline phone calls.
+
+Supported features:
+- Inbound calls to clinic phone number
+- Outbound appointment reminder calls
+- Follow-up calls after visit
+- Missed appointment calls
+- Patient feedback calls
+- Staff transfer where supported
+- Call recording if legally allowed
+- Transcript and summary storage
+
+Outbound call examples:
+- "Your appointment is tomorrow at 10:00 AM. Press or say confirm to confirm."
+- "We noticed you missed your appointment. Would you like to reschedule?"
+- "This is a follow-up from MediDove Clinic. How are you feeling after your visit?"
+
+Do not use for cold healthcare marketing without consent.
+
+
+10. WhatsApp messaging assistant
+Use WhatsApp Business API through Twilio.
+
+Features:
+- Appointment confirmation via WhatsApp
+- Appointment reminder messages
+- Patient can reply confirm/cancel/reschedule
+- FAQ assistant over WhatsApp
+- Send approved templates
+- Send health package reminders to opted-in users
+- Human handoff
+
+Supabase tables:
+- whatsapp_conversations
+- whatsapp_messages
+- notification_preferences
+- consent_logs
+
+Important WhatsApp rules:
+- Use approved templates when required
+- Respect 24-hour customer service window
+- Store consent
+- Provide opt-out
+
+
+11. WhatsApp Business Calling
+Can be added, but it has more restrictions than normal phone calls.
+
+Supported concept:
+- User can call the business through WhatsApp
+- Business can call user on WhatsApp only when permission rules are satisfied
+- Twilio WhatsApp Business Calling can connect WhatsApp calls to Twilio Voice workflows
+
+Limitations:
+- Requires WhatsApp Business sender
+- Requires Meta/Twilio onboarding
+- May require Meta Business Verification
+- Business-initiated outbound WhatsApp calls are not available in every country
+- WhatsApp calls cannot be bridged to normal phone network/PSTN endpoints
+
+Recommended usage:
+- Add WhatsApp messaging first
+- Add normal Twilio phone calls second
+- Add WhatsApp Business Calling as an advanced/pro feature
+
+
+12. AI patient engagement and marketing
+This should be opt-in patient engagement, not cold calling.
+
+Allowed/sensible use cases:
+- Annual checkup reminders
+- Dental cleaning reminders
+- Vaccination campaign reminders
+- Health screening package reminders
+- Lab report pickup reminders
+- Follow-up care reminders
+- Medication refill reminders if clinic workflow supports it
+- Missed appointment recovery

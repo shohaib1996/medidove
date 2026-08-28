@@ -1,0 +1,376 @@
+- Patient feedback calls
+
+Admin features:
+- Create patient segment
+- Choose campaign type
+- Select channel: WhatsApp, SMS, email, voice call
+- Generate AI message/call script
+- Preview before sending/calling
+- Start campaign
+- Track status
+
+Supabase tables:
+- campaigns
+- campaign_recipients
+- campaign_messages
+- campaign_call_logs
+- consent_logs
+- opt_outs
+
+AI campaign assistant:
+- Generate message copy
+- Generate call script
+- Personalize by patient name/service
+- Suggest best channel
+- Summarize campaign results
+
+
+13. Admin dashboard
+This is needed to make the system look complete to Upwork buyers.
+
+Dashboard sections:
+- Overview
+- Appointments
+- Patients
+- Doctors
+- Departments
+- Services
+- AI assistant chats
+- Calls
+- WhatsApp messages
+- Contact leads
+- Campaigns
+- Blog/content
+- Settings
+
+Dashboard metrics:
+- Total appointments
+- Pending appointments
+- Confirmed appointments
+- Cancelled appointments
+- Calls handled by AI
+- Missed calls
+- WhatsApp replies
+- New leads
+- Campaign conversion
+- Top requested departments
+
+
+14. Patient dashboard
+Features:
+- View upcoming appointments
+- Cancel/reschedule request
+- View appointment history
+- Chat with AI assistant
+- Update profile
+- Set communication preferences
+- Opt in/out of reminders and marketing
+
+
+15. Doctor dashboard
+Optional but useful for a bigger demo.
+
+Features:
+- View assigned appointments
+- View patient intake notes
+- Add visit notes
+- Mark appointment completed
+- View schedule
+
+Do not store sensitive real medical records unless building for a compliant production environment.
+
+
+16. Contact and lead management
+Replace EmailJS-only contact with Supabase lead capture.
+
+Features:
+- Save contact submissions
+- AI classify lead type
+- AI summarize message
+- Admin status: new, contacted, converted, closed
+- Optional email notification
+
+Lead categories:
+- Appointment
+- General question
+- Insurance/billing
+- Product/shop
+- Partnership
+- Complaint
+- Spam
+
+
+17. Blog and SEO content management
+Turn static blog data into Supabase CMS.
+
+Features:
+- Admin can create/edit blog posts
+- AI can generate draft
+- AI can generate title/meta description
+- AI can suggest FAQ schema
+- Public blog listing
+- Blog detail pages
+
+Good for Upwork:
+Small clinics care about SEO and lead generation.
+
+
+18. Medical shop module
+Optional. Keep only if the final demo needs ecommerce.
+
+Possible features:
+- Products from Supabase
+- Categories
+- Cart
+- Wishlist
+- Checkout request
+- AI product FAQ
+- Recommended products by category
+
+Avoid selling prescription/regulated items in demo unless properly handled.
+
+
+Suggested database tables
+-------------------------
+Core:
+- profiles
+- roles
+- patients
+- doctors
+- departments
+- services
+- doctor_availability
+- appointments
+- appointment_notes
+- contact_leads
+- testimonials
+- blog_posts
+- products
+
+AI:
+- ai_documents
+- ai_document_chunks
+- ai_chat_sessions
+- ai_chat_messages
+- ai_leads
+- ai_tool_calls
+
+Communication:
+- call_logs
+- call_transcripts
+- call_summaries
+- whatsapp_conversations
+- whatsapp_messages
+- sms_messages
+- email_logs
+- notification_preferences
+- consent_logs
+- opt_outs
+
+Marketing:
+- campaigns
+- campaign_recipients
+- campaign_messages
+- campaign_call_logs
+
+Admin:
+- audit_logs
+- settings
+
+
+Suggested API routes
+--------------------
+- POST /api/contact
+- POST /api/appointments
+- GET /api/doctors
+- GET /api/services
+- POST /api/ai/chat
+- POST /api/ai/intake
+- POST /api/ai/search
+- POST /api/twilio/voice/inbound
+- POST /api/twilio/voice/outbound
+- POST /api/twilio/status
+- POST /api/elevenlabs/webhook
+- POST /api/whatsapp/inbound
+- POST /api/campaigns/start
+- POST /api/reminders/run
+
+
+Suggested AI tools/functions
+----------------------------
+The AI agent should be able to call backend tools such as:
+
+- find_departments
+- find_doctors
+- check_doctor_availability
+- create_appointment_request
+- update_appointment_status
+- create_contact_lead
+- create_callback_task
+- search_knowledge_base
+- send_whatsapp_message
+- start_outbound_call
+- log_call_summary
+
+
+Compliance and safety requirements
+----------------------------------
+For a portfolio demo:
+- Use fake/sample patient data only
+- Add AI disclosure
+- Add consent checkbox
+- Add opt-out for marketing/reminders
+- Avoid diagnosis claims
+- Avoid storing real health data
+- Add privacy policy page
+- Add terms page
+
+For real healthcare clients:
+- HIPAA may be required in the USA
+- BAA may be required with vendors
+- Patient consent is required for many communications
+- Marketing calls/SMS need strict consent and opt-out
+- Call recording laws vary by location
+- Medical advice should be reviewed by licensed professionals
+
+
+Build phases
+------------
+
+Phase 1: Clean modern foundation
+- Confirm Next.js 16 build is stable
+- Clean remaining lint warnings
+- Fix typos like appoinment to appointment where practical
+- Improve metadata and branding
+- Clean suspicious remote git issue before pushing
+
+Phase 2: Supabase foundation
+- Install Supabase client
+- Add environment variables
+- Create Supabase schema
+- Add auth
+- Add profiles and roles
+- Migrate doctors/services/blog/contact from static data to Supabase
+
+Phase 3: Appointment system
+- Build real appointment form
+- Store appointment requests
+- Build admin appointment list
+- Add appointment status updates
+- Add email/WhatsApp confirmation placeholder
+
+Phase 4: AI website assistant
+- Create AI chat widget
+- Add Supabase chat tables
+- Add RAG document tables
+- Add embeddings
+- Train on services/doctors/blog/FAQ
+- Add admin chat history
+
+Phase 5: Smart intake and semantic search
+- Upgrade FullscreenSearch.tsx to real semantic search
+- Add AI department/doctor matching
+- Add emergency-safe routing language
+- Add "Book from AI suggestion" flow
+
+Phase 6: ElevenLabs AI receptionist
+- Create ElevenLabs agent
+- Add Twilio phone number
+- Add inbound voice webhook
+- Save call logs/transcripts/summaries
+- Create appointment from voice call
+- Add admin call inbox
+
+Phase 7: Outbound phone calls
+- Appointment reminder calls
+- Follow-up calls
+- Missed appointment recovery calls
+- Consent and opt-out handling
+- Campaign call logs
+
+Phase 8: WhatsApp
+- Add WhatsApp Business messaging
+- Add appointment reminders through WhatsApp
+- Add patient replies: confirm/cancel/reschedule
+- Add WhatsApp assistant
+- Add WhatsApp Business Calling as advanced feature if account eligibility allows it
+
+Phase 9: AI marketing dashboard
+- Patient segments
+- Campaign creation
+- AI message/script generation
+- Channel selection
+- Campaign analytics
+
+Phase 10: Polish for Upwork portfolio
+- Add demo data
+- Add admin demo account
+- Add screenshots/video
+- Add landing section explaining features
+- Add README
+- Add deployment
+
+
+Best MVP scope for fastest strong demo
+--------------------------------------
+Build this first:
+
+1. Supabase Auth
+2. Supabase doctors/services/appointments/contact leads
+3. Admin dashboard
+4. AI website assistant
+5. Smart appointment intake
+6. ElevenLabs receptionist proof of concept
+7. Twilio real phone appointment reminder
+8. WhatsApp appointment reminder message
+
+This is enough to impress Upwork buyers without getting stuck in too many integrations.
+
+
+Upwork portfolio title ideas
+----------------------------
+- AI Medical Receptionist Platform with Next.js, Supabase, ElevenLabs, Twilio, and WhatsApp
+- AI-Powered Clinic Website and Appointment System
+- Healthcare AI Assistant with Voice Calls, WhatsApp, and Supabase Dashboard
+- Meditech SaaS Demo: AI Receptionist, Smart Booking, Patient Reminders, and Admin CRM
+
+
+Upwork service package idea
+---------------------------
+Basic package:
+- Modern medical website
+- Supabase appointment booking
+- Contact lead capture
+- Admin dashboard
+
+Standard package:
+- Everything in Basic
+- AI website assistant
+- Smart doctor/department matching
+- WhatsApp appointment reminders
+
+Premium package:
+- Everything in Standard
+- ElevenLabs AI receptionist
+- Twilio real phone calls
+- AI follow-up calls
+- Campaign dashboard
+- Full deployment
+
+
+Recommended first implementation task
+-------------------------------------
+Start with Supabase foundation and appointment system.
+
+Reason:
+All AI, calls, WhatsApp, and marketing features need real patient, doctor, appointment, consent, and lead data. Without Supabase tables and admin screens, the AI features will only be demos instead of a real system.
+
+Suggested first build order:
+1. Add Supabase client and environment config
+2. Create database schema
+3. Replace static doctors/services with Supabase queries
+4. Build real appointment form
+5. Build admin dashboard appointments page
+6. Add AI smart intake
+7. Add AI chat assistant
+8. Add ElevenLabs/Twilio call flows
