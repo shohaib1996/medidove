@@ -6,15 +6,12 @@ import ClinicAssistantWidget from "@/components/ai/ClinicAssistantWidget";
 import PublicSearchButton from "@/components/common/PublicSearchButton";
 
 const navItems = [
-  { href: "/service", label: "Services" },
-  { href: "/doctor", label: "Doctors" },
-  { href: "/packages", label: "Packages" },
-  { href: "/shop", label: "Shop" },
-  { href: "/testimonials", label: "Proof" },
-  { href: "/receptionist", label: "Reception" },
-  { href: "/engagement", label: "Engagement" },
-  { href: "/appointment", label: "Appointment" },
-  { href: "/contact", label: "Contact" },
+  { href: "/#services", label: "Services" },
+  { href: "/#doctors", label: "Doctors" },
+  { href: "/#packages", label: "Packages" },
+  { href: "/#shop", label: "Shop" },
+  { href: "/#testimonials", label: "Proof" },
+  { href: "/#contact", label: "Contact" },
 ];
 
 const PublicHeader = () => {

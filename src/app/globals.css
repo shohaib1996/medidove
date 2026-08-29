@@ -4,7 +4,6 @@
 @import "react-18-image-lightbox/src/style.css";
 @import "react-toastify/dist/ReactToastify.css";
 @import "slick-carousel/slick/slick.css";
-@import "./legacy-components.css";
 
 @custom-variant dark (&:is(.dark *));
 

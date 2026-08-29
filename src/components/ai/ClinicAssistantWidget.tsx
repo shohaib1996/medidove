@@ -117,7 +117,7 @@ const ClinicAssistantWidget = () => {
     <div className="fixed bottom-5 right-5 z-80">
       <div
         className={cn(
-          "mb-4 w-[calc(100vw-40px)] max-w-sm overflow-hidden rounded-lg border border-slate-200 bg-white shadow-2xl transition",
+          "absolute bottom-full right-0 mb-4 w-[calc(100vw-40px)] max-w-sm overflow-hidden rounded-lg border border-slate-200 bg-white shadow-2xl transition",
           isOpen
             ? "translate-y-0 opacity-100"
             : "pointer-events-none translate-y-4 opacity-0",
