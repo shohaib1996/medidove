@@ -96,6 +96,25 @@ create policy "Admins can manage doctor availability"
   using (public.is_admin())
   with check (public.is_admin());
 
+create policy "Doctors can manage own availability"
+  on public.doctor_availability for all
+  using (
+    exists (
+      select 1
+      from public.doctors
+      where doctors.id = doctor_availability.doctor_id
+        and doctors.profile_id = auth.uid()
+    )
+  )
+  with check (
+    exists (
+      select 1
+      from public.doctors
+      where doctors.id = doctor_availability.doctor_id
+        and doctors.profile_id = auth.uid()
+    )
+  );
+
 create policy "Admins can manage services"
   on public.services for all
   using (public.is_admin())

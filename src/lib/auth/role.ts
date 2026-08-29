@@ -11,5 +11,13 @@ export const resolveRoleDestination = async (
     .eq("id", userId)
     .single();
 
-  return profile?.role === "admin" ? "/admin" : "/portal";
+  if (profile?.role === "admin") {
+    return "/admin";
+  }
+
+  if (profile?.role === "doctor") {
+    return "/doctor-portal";
+  }
+
+  return "/portal";
 };

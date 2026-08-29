@@ -7,6 +7,7 @@ import {
   Clock,
   FileText,
   MapPin,
+  Power,
   Stethoscope,
   UserRoundCheck,
 } from "lucide-react";
@@ -20,8 +21,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select } from "@/components/ui/select";
 import { createClient } from "@/lib/supabase/server";
 import SignOutButton from "@/app/portal/SignOutButton";
+import { createOwnAvailability, toggleOwnAvailability } from "./actions";
 
 export const metadata = {
   title: "Doctor Workspace | MediDove",
@@ -33,7 +38,8 @@ import type {
   ClinicalNoteRow,
   DoctorProfile,
 } from "./types";
-import { formatDate, weekdays } from "./utils";
+import { formatDate, toDateKey, weekdays } from "./utils";
+import DoctorScheduleLookup from "./DoctorScheduleLookup";
 
 export default async function DoctorPortalPage() {
   const supabase = await createClient();
@@ -134,7 +140,22 @@ export default async function DoctorPortalPage() {
 
   const appointments = (appointmentsData || []) as AppointmentRow[];
   const availability = (availabilityData || []) as AvailabilityRow[];
+  const activeAvailability = availability.filter((block) => block.is_active);
   const notes = (notesData || []) as ClinicalNoteRow[];
+
+  const bookedDates = [
+    ...new Set(
+      appointments
+        .filter(
+          (appointment) =>
+            appointment.requested_at &&
+            appointment.status !== "cancelled" &&
+            appointment.status !== "completed",
+        )
+        .map((appointment) => toDateKey(new Date(appointment.requested_at as string))),
+    ),
+  ];
+
   const confirmed = appointments.filter(
     (appointment) => appointment.status === "confirmed",
   ).length;
@@ -276,6 +297,25 @@ export default async function DoctorPortalPage() {
                   </CardContent>
                 </Card>
               )}
+
+              <div className="pt-4">
+                <p className="text-sm font-bold uppercase text-primary">
+                  Schedule lookup
+                </p>
+                <h2 className="mt-2 text-3xl font-bold tracking-normal">
+                  Check any date
+                </h2>
+                <p className="mt-2 text-sm text-slate-600">
+                  Pick a date to see that day&apos;s slots. Dates in bold have at
+                  least one booked appointment.
+                </p>
+              </div>
+
+              <DoctorScheduleLookup
+                activeAvailability={activeAvailability}
+                appointments={appointments}
+                bookedDates={bookedDates}
+              />
             </div>
 
             <aside className="space-y-5">
@@ -283,7 +323,7 @@ export default async function DoctorPortalPage() {
                 <CardHeader>
                   <CardTitle>Weekly availability</CardTitle>
                   <CardDescription>
-                    Managed by admin scheduling.
+                    Add and manage your own schedule blocks.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
@@ -304,6 +344,18 @@ export default async function DoctorPortalPage() {
                           <MapPin className="h-3.5 w-3.5" />
                           {block.location || "Location not set"}
                         </p>
+                        <form action={toggleOwnAvailability} className="mt-3">
+                          <input type="hidden" name="id" value={block.id} />
+                          <input
+                            type="hidden"
+                            name="is_active"
+                            value={String(block.is_active)}
+                          />
+                          <Button type="submit" size="sm" variant="outline">
+                            <Power className="h-4 w-4" />
+                            {block.is_active ? "Pause" : "Activate"}
+                          </Button>
+                        </form>
                       </div>
                     ))
                   ) : (
@@ -311,6 +363,73 @@ export default async function DoctorPortalPage() {
                       No availability blocks have been configured.
                     </p>
                   )}
+
+                  <form
+                    action={createOwnAvailability}
+                    className="space-y-4 border-t border-slate-200 pt-4"
+                  >
+                    <p className="text-xs font-semibold uppercase text-slate-400">
+                      Add a time slot
+                    </p>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="weekday">Weekday</Label>
+                        <Select id="weekday" name="weekday" defaultValue="1">
+                          {weekdays.map((weekday, index) => (
+                            <option key={weekday} value={index}>
+                              {weekday}
+                            </option>
+                          ))}
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="slot_minutes">Slot minutes</Label>
+                        <Input
+                          id="slot_minutes"
+                          min="10"
+                          name="slot_minutes"
+                          type="number"
+                          defaultValue="30"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="start_time">Start</Label>
+                        <Input
+                          id="start_time"
+                          name="start_time"
+                          type="time"
+                          defaultValue="09:00"
+                          required
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="end_time">End</Label>
+                        <Input
+                          id="end_time"
+                          name="end_time"
+                          type="time"
+                          defaultValue="17:00"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="location">Location</Label>
+                      <Input
+                        id="location"
+                        name="location"
+                        placeholder="Main clinic, Room 2"
+                      />
+                    </div>
+
+                    <Button type="submit" className="w-full">
+                      Add availability
+                    </Button>
+                  </form>
                 </CardContent>
               </Card>
 
