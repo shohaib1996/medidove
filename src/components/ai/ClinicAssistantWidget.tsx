@@ -199,10 +199,10 @@ const ClinicAssistantWidget = () => {
         type="button"
         size="lg"
         onClick={() => setIsOpen((current) => !current)}
-        className="h-14 rounded-full px-5 shadow-xl"
+        className="h-14 rounded-full px-5 shadow-lg"
       >
         {isOpen ? <X /> : <MessageCircle />}
-        {isOpen ? "Close" : "Ask MediDove"}
+        {isOpen ? "Close" : "Ask"}
       </Button>
     </div>
   );
