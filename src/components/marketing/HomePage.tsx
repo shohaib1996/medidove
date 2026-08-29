@@ -142,7 +142,7 @@ const HomePage = ({
           />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,23,42,0.96),rgba(15,23,42,0.74),rgba(15,23,42,0.32))]" />
 
-          <div className="relative mx-auto grid min-h-[720px] max-w-7xl items-center gap-12 px-4 py-20 md:px-8 lg:grid-cols-[1.08fr_0.92fr]">
+          <div className="relative mx-auto grid min-h-180 max-w-7xl items-center gap-12 px-4 py-20 md:px-8 lg:grid-cols-[1.08fr_0.92fr]">
             <div>
               <Badge className="mb-6 bg-white/10 text-white hover:bg-white/15">
                 <Sparkles className="size-3.5" />
@@ -260,7 +260,7 @@ const HomePage = ({
         <section id="services" className="px-4 py-20 md:px-8">
           <div className="mx-auto max-w-7xl">
             <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-slate-100">
+              <div className="relative aspect-4/3 overflow-hidden rounded-lg bg-slate-100">
                 <Image
                   src="/assets/img/about/about-img.jpg"
                   alt="Doctor consulting patient"
@@ -351,7 +351,7 @@ const HomePage = ({
                   key={doctor.name}
                   className="overflow-hidden transition hover:-translate-y-1 hover:shadow-lg"
                 >
-                  <div className="relative aspect-[4/3] bg-white">
+                  <div className="relative aspect-4/3 bg-white">
                     <Image
                       src={doctor.image}
                       alt={doctor.name}
@@ -416,7 +416,7 @@ const HomePage = ({
                       : "overflow-hidden"
                   }
                 >
-                  <div className="relative aspect-[16/10] bg-slate-100">
+                  <div className="relative aspect-16/10 bg-slate-100">
                     <Image
                       src={item.imageUrl}
                       alt={item.name}
@@ -491,7 +491,7 @@ const HomePage = ({
             <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
               {products.slice(0, 3).map((item) => (
                 <Card key={item.id} className="overflow-hidden">
-                  <div className="relative aspect-[16/10] bg-white">
+                  <div className="relative aspect-16/10 bg-white">
                     <Image
                       src={item.imageUrl}
                       alt={item.name}

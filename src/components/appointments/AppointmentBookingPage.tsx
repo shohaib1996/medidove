@@ -1,7 +1,6 @@
 "use client";
 
 import PublicHeader from "@/components/marketing/PublicHeader";
-import { ToastContainer } from "react-toastify";
 import AppointmentFormCard from "./appointment-booking/AppointmentFormCard";
 import AppointmentHero from "./appointment-booking/AppointmentHero";
 import SupportSidebar from "./appointment-booking/SupportSidebar";
@@ -51,8 +50,6 @@ const AppointmentBookingPage = ({
           </div>
         </section>
       </main>
-
-      <ToastContainer />
     </div>
   );
 };

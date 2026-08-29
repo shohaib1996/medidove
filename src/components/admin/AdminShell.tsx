@@ -27,6 +27,7 @@ import {
   UserCog,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import SignOutButton from "@/app/portal/SignOutButton";
 
 const sections = [
   {
@@ -131,6 +132,10 @@ const AdminShell = ({ children }: { children: React.ReactNode }) => {
             </div>
           ))}
         </nav>
+
+        <div className="border-t border-slate-200 p-4 lg:px-5">
+          <SignOutButton className="w-full justify-center" />
+        </div>
       </aside>
       <div className="min-w-0">{children}</div>
     </div>

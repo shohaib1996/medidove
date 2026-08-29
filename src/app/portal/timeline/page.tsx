@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
@@ -9,7 +8,7 @@ import {
   ShieldCheck,
   Stethoscope,
 } from "lucide-react";
-import PublicHeader from "@/components/marketing/PublicHeader";
+import PortalHeader from "@/components/portal/PortalHeader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -203,36 +202,22 @@ export default async function PatientTimelinePage() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
-      <PublicHeader />
+      <PortalHeader />
 
       <main>
-        <section className="relative overflow-hidden bg-slate-950 px-4 py-16 text-white md:px-8">
-          <Image
-            src="/assets/img/slider/slider-bg-2.jpg"
-            alt="Patient timeline"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover opacity-25"
-          />
-          <div className="absolute inset-0 bg-slate-950/75" />
-          <div className="relative mx-auto flex max-w-7xl flex-col justify-between gap-8 md:flex-row md:items-end">
-            <div>
-              <Badge className="mb-5 bg-white/10 text-white hover:bg-white/15">
-                <Stethoscope className="h-3.5 w-3.5" />
-                Health timeline
-              </Badge>
-              <h1 className="max-w-3xl text-4xl font-bold leading-tight tracking-normal md:text-5xl">
-                Your care history in one secure view
-              </h1>
-              <p className="mt-5 max-w-2xl leading-8 text-slate-300">
-                Review appointments, reviewed clinical notes, consent changes,
-                and patient communication history.
-              </p>
-            </div>
-            <Button asChild variant="outline" className="border-white/30 bg-white/10 text-white hover:bg-white hover:text-slate-950">
-              <Link href="/portal">Back to portal</Link>
-            </Button>
+        <section className="border-b border-slate-200 bg-white px-4 py-10 md:px-8">
+          <div className="mx-auto max-w-7xl">
+            <Badge className="mb-4">
+              <Stethoscope className="h-3.5 w-3.5" />
+              Health timeline
+            </Badge>
+            <h1 className="max-w-3xl text-3xl font-bold leading-tight tracking-normal md:text-4xl">
+              Your care history in one secure view
+            </h1>
+            <p className="mt-4 max-w-2xl leading-7 text-slate-600">
+              Review appointments, reviewed clinical notes, consent changes,
+              and patient communication history.
+            </p>
           </div>
         </section>
 

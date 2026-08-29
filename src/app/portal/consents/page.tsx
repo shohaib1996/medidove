@@ -8,7 +8,7 @@ import {
   Phone,
   ShieldCheck,
 } from "lucide-react";
-import PublicHeader from "@/components/marketing/PublicHeader";
+import PortalHeader from "@/components/portal/PortalHeader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -104,26 +104,21 @@ export default async function PatientConsentsPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
-      <PublicHeader />
+      <PortalHeader />
 
       <main className="px-4 py-10 md:px-8">
         <div className="mx-auto max-w-7xl space-y-8">
-          <section className="flex flex-col justify-between gap-5 md:flex-row md:items-center">
-            <div>
-              <p className="text-xs font-bold uppercase text-primary">
-                Consent center
-              </p>
-              <h1 className="mt-2 text-3xl font-bold tracking-normal md:text-4xl">
-                Manage communication preferences
-              </h1>
-              <p className="mt-3 max-w-2xl text-slate-600">
-                Review how MediDove may contact you for appointments,
-                reminders, reception callbacks, and follow-up support.
-              </p>
-            </div>
-            <Button asChild variant="secondary">
-              <Link href="/portal">Back to portal</Link>
-            </Button>
+          <section>
+            <p className="text-xs font-bold uppercase text-primary">
+              Consent center
+            </p>
+            <h1 className="mt-2 text-3xl font-bold tracking-normal md:text-4xl">
+              Manage communication preferences
+            </h1>
+            <p className="mt-3 max-w-2xl text-slate-600">
+              Review how MediDove may contact you for appointments,
+              reminders, reception callbacks, and follow-up support.
+            </p>
           </section>
 
           <section className="grid gap-4 md:grid-cols-4">

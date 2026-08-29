@@ -1,20 +1,26 @@
+"use client";
+
+import { useTransition } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { CalendarDays, LayoutDashboard, LogIn, UserRound } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { CalendarDays, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ClinicAssistantWidget from "@/components/ai/ClinicAssistantWidget";
 import PublicSearchButton from "@/components/common/PublicSearchButton";
-
-const navItems = [
-  { href: "/#services", label: "Services" },
-  { href: "/#doctors", label: "Doctors" },
-  { href: "/#packages", label: "Packages" },
-  { href: "/#shop", label: "Shop" },
-  { href: "/#testimonials", label: "Proof" },
-  { href: "/#contact", label: "Contact" },
-];
+import { getBookDestination } from "@/lib/auth/actions";
 
 const PublicHeader = () => {
+  const router = useRouter();
+  const [isResolving, startTransition] = useTransition();
+
+  const handleBookClick = () => {
+    startTransition(async () => {
+      const destination = await getBookDestination();
+      router.push(destination);
+    });
+  };
+
   return (
     <>
       <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
@@ -29,43 +35,15 @@ const PublicHeader = () => {
             />
           </Link>
 
-          <nav className="hidden items-center gap-7 lg:flex">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-sm font-semibold text-slate-600 transition hover:text-primary"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-
           <div className="flex items-center gap-2">
             <PublicSearchButton />
-            <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
-              <Link href="/login">
-                <LogIn />
-                Login
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="sm" className="hidden md:inline-flex">
-              <Link href="/admin">
-                <LayoutDashboard />
-                Admin
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="sm" className="hidden md:inline-flex">
-              <Link href="/portal">
-                <UserRound />
-                Portal
-              </Link>
-            </Button>
-            <Button asChild size="sm">
-              <Link href="/appointment">
-                <CalendarDays />
-                Book
-              </Link>
+            <Button
+              size="sm"
+              onClick={handleBookClick}
+              disabled={isResolving}
+            >
+              {isResolving ? <Loader2 className="animate-spin" /> : <CalendarDays />}
+              Book
             </Button>
           </div>
         </div>

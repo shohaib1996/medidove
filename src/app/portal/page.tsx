@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
@@ -8,9 +7,8 @@ import {
   FileText,
   MessageCircle,
   Stethoscope,
-  UserRound,
 } from "lucide-react";
-import PublicHeader from "@/components/marketing/PublicHeader";
+import PortalHeader from "@/components/portal/PortalHeader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,7 +22,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/server";
 import { updateProfile } from "./actions";
-import SignOutButton from "./SignOutButton";
 
 export const metadata = {
   title: "Patient Portal | MediDove",
@@ -56,6 +53,13 @@ const formatDate = (value: string | null) => {
   }).format(new Date(value));
 };
 
+const getInitials = (value: string) => {
+  const parts = value.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "P";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+};
+
 const DetailItem = ({
   label,
   value,
@@ -69,6 +73,35 @@ const DetailItem = ({
       {value || "Not provided"}
     </dd>
   </div>
+);
+
+const StatCard = ({
+  label,
+  value,
+  description,
+  icon: Icon,
+  iconClassName,
+}: {
+  label: string;
+  value: number;
+  description: string;
+  icon: React.ComponentType<{ className?: string }>;
+  iconClassName: string;
+}) => (
+  <Card>
+    <CardHeader className="flex flex-row items-center justify-between gap-4">
+      <div>
+        <CardDescription>{label}</CardDescription>
+        <CardTitle className="mt-2 text-3xl">{value}</CardTitle>
+      </div>
+      <div
+        className={`flex size-11 shrink-0 items-center justify-center rounded-full ${iconClassName}`}
+      >
+        <Icon className="size-5" />
+      </div>
+    </CardHeader>
+    <CardContent className="text-sm text-slate-500">{description}</CardContent>
+  </Card>
 );
 
 export default async function PatientPortalPage() {
@@ -105,59 +138,81 @@ export default async function PatientPortalPage() {
     (appointment) => appointment.status === "confirmed",
   ).length;
 
+  const displayName = profile?.full_name || user.email || "there";
+  const firstName = displayName.split(" ")[0];
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
-      <PublicHeader />
+      <PortalHeader />
 
-      <main>
-        <section className="relative overflow-hidden bg-slate-950 px-4 py-16 text-white md:px-8">
-          <Image
-            src="/assets/img/slider/slider-bg-2.jpg"
-            alt="Patient portal"
-            fill
-            priority
-            sizes="100vw"
-            className="pointer-events-none object-cover opacity-25"
+      <main className="mx-auto max-w-7xl px-4 py-8 md:px-8">
+        <div className="flex flex-col justify-between gap-4 rounded-xl border border-slate-200 bg-white p-6 md:flex-row md:items-center">
+          <div>
+            <p className="text-sm font-bold uppercase text-primary">
+              Patient portal
+            </p>
+            <h1 className="mt-1 text-2xl font-bold tracking-normal md:text-3xl">
+              Welcome back, {firstName}
+            </h1>
+            <p className="mt-1 text-sm text-slate-500">
+              Here is a quick look at your appointments and account.
+            </p>
+          </div>
+          <Button asChild size="lg">
+            <Link href="/appointment">
+              <CalendarClock />
+              New appointment
+            </Link>
+          </Button>
+        </div>
+
+        <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          <StatCard
+            label="Total requests"
+            value={appointments.length}
+            description="all appointment requests"
+            icon={Stethoscope}
+            iconClassName="bg-slate-100 text-slate-600"
           />
-          <div className="pointer-events-none absolute inset-0 bg-slate-950/75" />
-          <div className="absolute right-4 top-6 z-50 md:right-8">
-            <SignOutButton className="border-white/30 bg-white text-red-700 hover:bg-red-50" />
-          </div>
-          <div className="relative z-10 mx-auto flex max-w-7xl flex-col justify-between gap-8 md:flex-row md:items-end">
-            <div>
-              <Badge className="mb-5 bg-white/10 text-white hover:bg-white/15">
-                <UserRound className="size-3.5" />
-                Patient portal
-              </Badge>
-              <h1 className="max-w-3xl text-4xl font-bold leading-tight tracking-normal md:text-5xl">
-                Track your MediDove appointments and intake history
-              </h1>
-              <p className="mt-5 max-w-2xl leading-8 text-slate-300">
-                Signed-in patients can review their appointment requests,
-                routing status, and intake summaries.
-              </p>
-            </div>
-          </div>
-        </section>
+          <StatCard
+            label="Pending"
+            value={pendingCount}
+            description="waiting for clinic review"
+            icon={Clock}
+            iconClassName="bg-amber-50 text-amber-600"
+          />
+          <StatCard
+            label="Confirmed"
+            value={confirmedCount}
+            description="approved by admin"
+            icon={CheckCircle2}
+            iconClassName="bg-teal-50 text-teal-600"
+          />
+        </div>
 
-        <section className="px-4 py-10 md:px-8">
-          <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-3">
+        <div className="mt-8 grid gap-6 lg:grid-cols-[320px_1fr]">
+          <div className="space-y-6">
             <Card>
-              <CardHeader>
-                <CardDescription>Profile</CardDescription>
-                <CardTitle className="text-2xl">
-                  {profile?.full_name || user.email}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-5 text-sm leading-6 text-slate-600">
-                <div>
-                  <p>{user.email}</p>
-                  <p>{profile?.phone || "Phone not added"}</p>
-                  <Badge variant="secondary" className="mt-4 capitalize">
-                  {profile?.role || "patient"}
-                  </Badge>
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-4">
+                  <div className="flex size-14 shrink-0 items-center justify-center rounded-full bg-primary/10 text-lg font-bold text-primary">
+                    {getInitials(displayName)}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="truncate font-semibold">{displayName}</p>
+                    <p className="truncate text-sm text-slate-500">
+                      {user.email}
+                    </p>
+                  </div>
                 </div>
-                <form action={updateProfile} className="space-y-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
+                <Badge variant="secondary" className="mt-4 capitalize">
+                  {profile?.role || "patient"}
+                </Badge>
+
+                <form
+                  action={updateProfile}
+                  className="mt-5 space-y-4 border-t border-slate-100 pt-5"
+                >
                   <div className="space-y-2">
                     <Label htmlFor="full_name">Full name</Label>
                     <Input
@@ -177,79 +232,50 @@ export default async function PatientPortalPage() {
                       placeholder="+1 555 0100"
                     />
                   </div>
-                  <Button type="submit" size="sm" variant="outline">
+                  <Button
+                    type="submit"
+                    size="sm"
+                    variant="outline"
+                    className="w-full"
+                  >
                     Save profile
                   </Button>
                 </form>
-                <SignOutButton className="w-full" />
               </CardContent>
             </Card>
 
             <Card>
-              <CardHeader className="flex flex-row items-center justify-between gap-4">
-                <div>
-                  <CardDescription>Pending</CardDescription>
-                  <CardTitle className="mt-2 text-3xl">{pendingCount}</CardTitle>
-                </div>
-                <Clock className="size-8 text-amber-600" />
+              <CardHeader>
+                <CardDescription>Quick links</CardDescription>
               </CardHeader>
-              <CardContent className="text-sm text-slate-500">
-                waiting for clinic review
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between gap-4">
-                <div>
-                  <CardDescription>Confirmed</CardDescription>
-                  <CardTitle className="mt-2 text-3xl">
-                    {confirmedCount}
-                  </CardTitle>
-                </div>
-                <CheckCircle2 className="size-8 text-teal-600" />
-              </CardHeader>
-              <CardContent className="text-sm text-slate-500">
-                appointments approved by admin
+              <CardContent className="space-y-1">
+                <Link
+                  href="/portal/timeline"
+                  className="flex items-center gap-3 rounded-md p-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+                >
+                  <FileText className="size-4 text-primary" />
+                  Health timeline
+                </Link>
+                <Link
+                  href="/portal/consents"
+                  className="flex items-center gap-3 rounded-md p-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+                >
+                  <MessageCircle className="size-4 text-primary" />
+                  Consent center
+                </Link>
               </CardContent>
             </Card>
           </div>
-        </section>
 
-        <section className="px-4 pb-16 md:px-8">
-          <div className="mx-auto max-w-7xl">
-            <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-center">
-              <div>
-                <p className="text-sm font-bold uppercase text-primary">
-                  My appointments
-                </p>
-                <h2 className="mt-2 text-3xl font-bold tracking-normal">
-                  Latest requests
-                </h2>
-              </div>
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <Button asChild variant="outline">
-                  <Link href="/portal/timeline">
-                    <FileText />
-                    Health timeline
-                  </Link>
-                </Button>
-                <Button asChild variant="outline">
-                  <Link href="/portal/consents">
-                    <MessageCircle />
-                    Consent center
-                  </Link>
-                </Button>
-                <Button asChild>
-                  <Link href="/appointment">
-                    <CalendarClock />
-                    New appointment
-                  </Link>
-                </Button>
-              </div>
+          <div>
+            <div className="mb-4 flex items-center justify-between gap-4">
+              <h2 className="text-xl font-bold tracking-normal">
+                My appointments
+              </h2>
             </div>
 
             {appointments.length > 0 ? (
-              <div className="grid gap-5 lg:grid-cols-2">
+              <div className="grid gap-4 md:grid-cols-2">
                 {appointments.map((appointment) => (
                   <Card key={appointment.id}>
                     <CardHeader>
@@ -302,7 +328,7 @@ export default async function PatientPortalPage() {
               </Card>
             )}
           </div>
-        </section>
+        </div>
       </main>
     </div>
   );

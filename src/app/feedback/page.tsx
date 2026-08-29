@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "sonner";
 import { MessageSquareHeart, Send, Star } from "lucide-react";
 import PublicHeader from "@/components/marketing/PublicHeader";
 import { Badge } from "@/components/ui/badge";
@@ -205,8 +205,6 @@ export default function FeedbackPage() {
           </div>
         </section>
       </main>
-
-      <ToastContainer />
     </div>
   );
 }

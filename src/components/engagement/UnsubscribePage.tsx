@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "sonner";
 import { Ban, Mail, MessageCircle, Phone, ShieldCheck } from "lucide-react";
 import PublicHeader from "@/components/marketing/PublicHeader";
 import { Badge } from "@/components/ui/badge";
@@ -212,7 +212,6 @@ const UnsubscribePage = () => {
           </div>
         </section>
       </main>
-      <ToastContainer />
     </div>
   );
 };

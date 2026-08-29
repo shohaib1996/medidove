@@ -50,7 +50,7 @@ const PackagesPage = ({ packages }: { packages: HealthPackage[] }) => (
                   : "overflow-hidden"
               }
             >
-              <div className="relative aspect-[16/10] bg-slate-100">
+              <div className="relative aspect-16/10 bg-slate-100">
                 <Image
                   src={item.imageUrl}
                   alt={item.name}

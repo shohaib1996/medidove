@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { resolveRoleDestination } from "@/lib/auth/role";
 
 const redirectToLogin = (request: Request, key: "error" | "status", message: string) => {
   const url = new URL("/login", request.url);
@@ -34,7 +35,7 @@ export async function POST(request: Request) {
     return redirectToLogin(request, "error", "Password is required.");
   }
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
@@ -43,7 +44,9 @@ export async function POST(request: Request) {
     return redirectToLogin(request, "error", error.message);
   }
 
-  return NextResponse.redirect(new URL("/portal", request.url), {
+  const destination = await resolveRoleDestination(supabase, data.user.id);
+
+  return NextResponse.redirect(new URL(destination, request.url), {
     status: 303,
   });
 }

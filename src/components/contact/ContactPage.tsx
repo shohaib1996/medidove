@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "sonner";
 import {
   CalendarDays,
   Clock,
@@ -325,8 +325,6 @@ const ContactPage = ({
           </div>
         </section>
       </main>
-
-      <ToastContainer />
     </div>
   );
 };

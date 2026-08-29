@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { Metadata, Viewport } from "next";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://medidove.ai";
@@ -69,7 +70,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }
