@@ -3,6 +3,7 @@
 import { FormEvent, useMemo, useState } from "react";
 import { toast } from "sonner";
 import {
+  getAvailableWeekdays,
   getMatchingAvailability,
   getSelectedDateWeekday,
   getSlotTimes,
@@ -53,6 +54,17 @@ export const useAppointmentBooking = (
       ...current,
       requestedDoctor: doctorValue,
       doctorId: selected?.id || "",
+    }));
+  };
+
+  const handleDepartmentChange = (departmentValue: string) => {
+    const firstAvailable = bookingOptions.doctors[0];
+
+    setForm((current) => ({
+      ...current,
+      requestedDepartment: departmentValue,
+      requestedDoctor: firstAvailable?.value || "",
+      doctorId: firstAvailable?.id || "",
     }));
   };
 
@@ -121,6 +133,15 @@ export const useAppointmentBooking = (
     [matchingAvailability],
   );
 
+  const availableWeekdays = useMemo(
+    () =>
+      getAvailableWeekdays({
+        availability: bookingOptions.availability,
+        doctorId: form.doctorId,
+      }),
+    [bookingOptions.availability, form.doctorId],
+  );
+
   const handleSmartIntake = async () => {
     if (form.reason.trim().length < 10) {
       toast.error("Describe the appointment reason first.");
@@ -167,8 +188,10 @@ export const useAppointmentBooking = (
     isAnalyzing,
     isSubmitting,
     slotTimes,
+    availableWeekdays,
     updateField,
     handleDoctorChange,
+    handleDepartmentChange,
     handleSmartIntake,
     handleSubmit,
   };

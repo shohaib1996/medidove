@@ -21,7 +21,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/server";
-import { updateProfile } from "./actions";
+import { toDateTimeInputs } from "@/lib/appointments/requested-at";
+import RescheduleDialog from "@/components/common/RescheduleDialog";
+import { rescheduleOwnAppointment, updateProfile } from "./actions";
 
 export const metadata = {
   title: "Patient Portal | MediDove",
@@ -312,6 +314,20 @@ export default async function PatientPortalPage() {
                           value={appointment.urgency || "Not scored"}
                         />
                       </dl>
+
+                      {appointment.status === "pending" ? (
+                        <RescheduleDialog
+                          appointmentId={appointment.id}
+                          defaultDate={
+                            toDateTimeInputs(appointment.requested_at).date
+                          }
+                          defaultTime={
+                            toDateTimeInputs(appointment.requested_at).time
+                          }
+                          action={rescheduleOwnAppointment}
+                          triggerLabel="Change date/time"
+                        />
+                      ) : null}
                     </CardContent>
                   </Card>
                 ))}

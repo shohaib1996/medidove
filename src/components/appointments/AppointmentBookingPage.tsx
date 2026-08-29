@@ -18,8 +18,10 @@ const AppointmentBookingPage = ({
     isAnalyzing,
     isSubmitting,
     slotTimes,
+    availableWeekdays,
     updateField,
     handleDoctorChange,
+    handleDepartmentChange,
     handleSmartIntake,
     handleSubmit,
   } = useAppointmentBooking(bookingOptions);
@@ -40,8 +42,10 @@ const AppointmentBookingPage = ({
               isAnalyzing={isAnalyzing}
               isSubmitting={isSubmitting}
               slotTimes={slotTimes}
+              availableWeekdays={availableWeekdays}
               updateField={updateField}
               onDoctorChange={handleDoctorChange}
+              onDepartmentChange={handleDepartmentChange}
               onAnalyze={handleSmartIntake}
               onSubmit={handleSubmit}
             />

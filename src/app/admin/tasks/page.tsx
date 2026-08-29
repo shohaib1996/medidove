@@ -20,6 +20,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import DatePicker from "@/components/common/DatePicker";
 import { createClient } from "@/lib/supabase/server";
 import { createCareTask, generateCareTasks } from "./actions";
 
@@ -253,7 +254,7 @@ export default async function AdminTasksPage({
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor="due_date">Due date</Label>
-                    <Input id="due_date" name="due_date" type="date" />
+                    <DatePicker id="due_date" name="due_date" />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="due_time">Due time</Label>

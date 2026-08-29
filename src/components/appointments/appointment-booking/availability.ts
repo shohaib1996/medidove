@@ -11,6 +11,20 @@ export const getSelectedDateWeekday = (requestedDate: string) => {
   return Number.isNaN(date.getTime()) ? null : date.getDay();
 };
 
+export const getAvailableWeekdays = ({
+  availability,
+  doctorId,
+}: {
+  availability: AvailabilityOption[];
+  doctorId: string;
+}) => {
+  const relevant = doctorId
+    ? availability.filter((block) => block.doctorId === doctorId)
+    : availability;
+
+  return new Set(relevant.map((block) => block.weekday));
+};
+
 export const getMatchingAvailability = ({
   availability,
   doctorId,

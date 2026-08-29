@@ -249,6 +249,11 @@ create policy "Admins can update appointments"
   on public.appointments for update
   using (public.is_admin());
 
+create policy "Patients can reschedule own pending appointments"
+  on public.appointments for update
+  using (auth.uid() = patient_id and status = 'pending')
+  with check (auth.uid() = patient_id and status = 'pending');
+
 create policy "Admins can manage clinical notes"
   on public.clinical_notes for all
   using (public.is_admin())

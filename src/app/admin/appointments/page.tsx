@@ -16,8 +16,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { updateAdminRecordStatus } from "@/app/admin/actions";
+import { updateAdminRecordStatus, rescheduleAppointment } from "@/app/admin/actions";
 import { createClient } from "@/lib/supabase/server";
+import { toDateTimeInputs } from "@/lib/appointments/requested-at";
+import RescheduleDialog from "@/components/common/RescheduleDialog";
 
 export const metadata = {
   title: "Appointments | MediDove Admin",
@@ -147,22 +149,34 @@ const AdminAppointmentsPage = async ({
 
   if (activeStatus !== "all") {
     appointmentQuery.eq("status", activeStatus);
+  } else {
+    appointmentQuery.not("status", "in", '("completed","cancelled")');
   }
 
-  const { data: appointmentsData } = await appointmentQuery;
+  const countByStatus = (status: Exclude<AppointmentStatus, "all">) =>
+    supabase
+      .from("appointments")
+      .select("id", { count: "exact", head: true })
+      .eq("status", status);
+
+  const [
+    { data: appointmentsData },
+    { count: pending },
+    { count: confirmed },
+    { count: completed },
+    { count: urgent },
+  ] = await Promise.all([
+    appointmentQuery,
+    countByStatus("pending"),
+    countByStatus("confirmed"),
+    countByStatus("completed"),
+    supabase
+      .from("appointments")
+      .select("id", { count: "exact", head: true })
+      .eq("urgency", "high"),
+  ]);
+
   const appointments = (appointmentsData || []) as AppointmentRow[];
-  const pending = appointments.filter(
-    (appointment) => appointment.status === "pending",
-  ).length;
-  const confirmed = appointments.filter(
-    (appointment) => appointment.status === "confirmed",
-  ).length;
-  const completed = appointments.filter(
-    (appointment) => appointment.status === "completed",
-  ).length;
-  const urgent = appointments.filter(
-    (appointment) => appointment.urgency === "high",
-  ).length;
 
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-8 text-slate-950 sm:px-6 lg:px-8">
@@ -205,7 +219,7 @@ const AdminAppointmentsPage = async ({
               <CircleAlert className="h-4 w-4 text-slate-500" />
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-semibold">{pending}</p>
+              <p className="text-3xl font-semibold">{pending ?? 0}</p>
               <p className="text-xs text-slate-500">Need staff confirmation</p>
             </CardContent>
           </Card>
@@ -215,7 +229,7 @@ const AdminAppointmentsPage = async ({
               <UserRoundCheck className="h-4 w-4 text-slate-500" />
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-semibold">{confirmed}</p>
+              <p className="text-3xl font-semibold">{confirmed ?? 0}</p>
               <p className="text-xs text-slate-500">Ready for visit</p>
             </CardContent>
           </Card>
@@ -225,8 +239,8 @@ const AdminAppointmentsPage = async ({
               <CalendarCheck className="h-4 w-4 text-slate-500" />
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-semibold">{completed}</p>
-              <p className="text-xs text-slate-500">{urgent} high urgency items</p>
+              <p className="text-3xl font-semibold">{completed ?? 0}</p>
+              <p className="text-xs text-slate-500">{urgent ?? 0} high urgency items</p>
             </CardContent>
           </Card>
         </section>
@@ -289,26 +303,32 @@ const AdminAppointmentsPage = async ({
                         </p>
                       </div>
                       <div className="flex flex-wrap gap-2">
-                        {appointment.status !== "confirmed" ? (
-                          <StatusAction
-                            id={appointment.id}
-                            status="confirmed"
-                            label="Confirm"
-                          />
-                        ) : null}
-                        {appointment.status !== "rescheduled" ? (
-                          <StatusAction
-                            id={appointment.id}
-                            status="rescheduled"
-                            label="Reschedule"
-                          />
-                        ) : null}
-                        {appointment.status !== "completed" ? (
-                          <StatusAction
-                            id={appointment.id}
-                            status="completed"
-                            label="Complete"
-                          />
+                        {appointment.status !== "completed" &&
+                        appointment.status !== "cancelled" ? (
+                          <>
+                            {appointment.status !== "confirmed" ? (
+                              <StatusAction
+                                id={appointment.id}
+                                status="confirmed"
+                                label="Confirm"
+                              />
+                            ) : null}
+                            <RescheduleDialog
+                              appointmentId={appointment.id}
+                              defaultDate={
+                                toDateTimeInputs(appointment.requested_at).date
+                              }
+                              defaultTime={
+                                toDateTimeInputs(appointment.requested_at).time
+                              }
+                              action={rescheduleAppointment}
+                            />
+                            <StatusAction
+                              id={appointment.id}
+                              status="completed"
+                              label="Complete"
+                            />
+                          </>
                         ) : null}
                       </div>
                     </div>

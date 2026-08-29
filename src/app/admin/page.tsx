@@ -80,6 +80,7 @@ const AdminPage = async () => {
 
   const [
     { data: appointmentsData },
+    { data: latestPendingAppointmentData },
     { data: leadsData },
     { data: callLogsData },
     { data: whatsAppData },
@@ -91,6 +92,15 @@ const AdminPage = async () => {
       )
       .order("created_at", { ascending: false })
       .limit(8),
+    supabase
+      .from("appointments")
+      .select(
+        "id, patient_name, patient_email, patient_phone, requested_department, requested_doctor, requested_at, reason, urgency, status, source_channel, created_at",
+      )
+      .eq("status", "pending")
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
     supabase
       .from("contact_leads")
       .select(
@@ -113,6 +123,8 @@ const AdminPage = async () => {
   ]);
 
   const appointments = (appointmentsData || []) as AppointmentRow[];
+  const latestPendingAppointment =
+    (latestPendingAppointmentData as AppointmentRow | null) || null;
   const leads = (leadsData || []) as LeadRow[];
   const callLogs = (callLogsData || []) as CallLogRow[];
   const whatsAppMessages = (whatsAppData || []) as WhatsAppMessageRow[];
@@ -149,7 +161,7 @@ const AdminPage = async () => {
           ])}
         />
         <AdminRecordLists
-          appointments={appointments}
+          latestPendingAppointment={latestPendingAppointment}
           callLogs={callLogs}
           whatsAppMessages={whatsAppMessages}
           leads={leads}

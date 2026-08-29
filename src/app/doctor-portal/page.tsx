@@ -260,8 +260,8 @@ export default async function DoctorPortalPage() {
                       </p>
                       <div className="grid gap-3 text-sm text-slate-600 sm:grid-cols-3">
                         <span>{appointment.requested_department || "General care"}</span>
-                        <span className="break-words">{appointment.patient_phone}</span>
-                        <span className="break-words">
+                        <span className="wrap-break-word">{appointment.patient_phone}</span>
+                        <span className="wrap-break-word">
                           {appointment.patient_email || "No email"}
                         </span>
                       </div>

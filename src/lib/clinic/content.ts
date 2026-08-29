@@ -7,6 +7,7 @@ export type BookingOption = {
   label: string;
   value: string;
   id?: string;
+  department?: string;
 };
 export type AvailabilityOption = {
   id: string;
@@ -42,20 +43,85 @@ export const getPublicServices = async (): Promise<PublicService[]> => {
   }));
 };
 
-export const getPublicDoctors = async (): Promise<PublicDoctor[]> => {
-  const supabase = await createClient();
-  const { data } = await supabase
-    .from("doctors")
-    .select("full_name, specialty, image_url, departments(name)")
-    .eq("is_active", true)
-    .order("created_at", { ascending: false })
-    .limit(12);
+export type PublicDoctorFilters = {
+  search?: string;
+  department?: string;
+  page?: number;
+  pageSize?: number;
+};
 
-  if (!data?.length) {
-    return fallbackDoctors;
+export type PublicDoctorsResult = {
+  doctors: PublicDoctor[];
+  total: number;
+  page: number;
+  pageSize: number;
+};
+
+export const getPublicDoctors = async (
+  filters: PublicDoctorFilters = {},
+): Promise<PublicDoctorsResult> => {
+  const supabase = await createClient();
+  const search = filters.search?.trim();
+  const department = filters.department?.trim();
+  const hasDepartmentFilter = Boolean(department && department !== "all");
+  const page = Math.max(1, filters.page ?? 1);
+  const pageSize = filters.pageSize ?? 9;
+
+  let departmentId: string | null = null;
+
+  if (department && hasDepartmentFilter) {
+    const { data: departmentRow } = await supabase
+      .from("departments")
+      .select("id")
+      .eq("name", department)
+      .maybeSingle();
+
+    departmentId = departmentRow?.id ?? null;
+
+    if (!departmentId) {
+      return { doctors: [], total: 0, page, pageSize };
+    }
   }
 
-  return data.map((doctor, index) => ({
+  let query = supabase
+    .from("doctors")
+    .select("full_name, specialty, image_url, departments(name)", {
+      count: "exact",
+    })
+    .eq("is_active", true)
+    .order("full_name", { ascending: true });
+
+  if (search) {
+    const escaped = search.replace(/[%,]/g, "");
+    query = query.or(
+      `full_name.ilike.%${escaped}%,specialty.ilike.%${escaped}%`,
+    );
+  }
+
+  if (departmentId) {
+    query = query.eq("department_id", departmentId);
+  }
+
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+  const { data, count } = await query.range(from, to);
+
+  const hasFilters = Boolean(search) || hasDepartmentFilter;
+
+  if (!data?.length) {
+    if (hasFilters || page > 1) {
+      return { doctors: [], total: count ?? 0, page, pageSize };
+    }
+
+    return {
+      doctors: fallbackDoctors,
+      total: fallbackDoctors.length,
+      page,
+      pageSize,
+    };
+  }
+
+  const doctors = data.map((doctor, index) => ({
     name: doctor.full_name,
     specialty: doctor.specialty,
     department: doctor.departments?.name || "Clinic Care",
@@ -63,6 +129,23 @@ export const getPublicDoctors = async (): Promise<PublicDoctor[]> => {
     availability: "Admin managed",
     languages: "Configured by clinic",
   }));
+
+  return { doctors, total: count ?? doctors.length, page, pageSize };
+};
+
+export const getDoctorDepartments = async (): Promise<string[]> => {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("departments")
+    .select("name")
+    .eq("is_active", true)
+    .order("name", { ascending: true });
+
+  if (!data?.length) {
+    return [...new Set(fallbackDoctors.map((doctor) => doctor.department))];
+  }
+
+  return data.map((department) => department.name);
 };
 
 export const getBookingOptions = async (): Promise<{
@@ -83,7 +166,7 @@ export const getBookingOptions = async (): Promise<{
       .order("name", { ascending: true }),
     supabase
       .from("doctors")
-      .select("id, full_name, specialty")
+      .select("id, full_name, specialty, departments(name)")
       .eq("is_active", true)
       .order("full_name", { ascending: true }),
     supabase
@@ -110,6 +193,7 @@ export const getBookingOptions = async (): Promise<{
           label: `${doctor.full_name} - ${doctor.specialty}`,
           value: doctor.full_name,
           id: doctor.id,
+          department: doctor.departments?.name,
         })),
       ]
     : [
@@ -117,6 +201,7 @@ export const getBookingOptions = async (): Promise<{
         ...fallbackDoctors.map((doctor) => ({
           label: `${doctor.name} - ${doctor.specialty}`,
           value: doctor.name,
+          department: doctor.department,
         })),
       ];
 

@@ -12,10 +12,10 @@ export const metadata = {
 };
 
 const HomeMain = async () => {
-  const [services, doctors, packages, products, testimonials, settings] =
+  const [services, { doctors }, packages, products, testimonials, settings] =
     await Promise.all([
       getPublicServices(),
-      getPublicDoctors(),
+      getPublicDoctors({ pageSize: 8 }),
       getHealthPackages(),
       getPublicProducts(),
       getPublicTestimonials(),

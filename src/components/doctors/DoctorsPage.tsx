@@ -10,7 +10,6 @@ import {
   MessageCircle,
   Search,
   ShieldCheck,
-  Sparkles,
   Stethoscope,
 } from "lucide-react";
 import PublicHeader from "@/components/marketing/PublicHeader";
@@ -24,6 +23,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
+import GlobalPagination from "@/components/common/GlobalPagination";
 
 const matchingSignals = [
   "Reason for visit",
@@ -34,56 +36,39 @@ const matchingSignals = [
   "Communication consent",
 ];
 
-const DoctorsPage = ({ doctors }: { doctors: PublicDoctor[] }) => {
+type DoctorsPageProps = {
+  doctors: PublicDoctor[];
+  departments: string[];
+  search: string;
+  department: string;
+  page: number;
+  totalPages: number;
+};
+
+const DoctorsPage = ({
+  doctors,
+  departments,
+  search,
+  department,
+  page,
+  totalPages,
+}: DoctorsPageProps) => {
+  const hasActiveFilters = Boolean(search) || (department && department !== "all");
+
+  const buildHref = (targetPage: number) => {
+    const params = new URLSearchParams();
+    if (search) params.set("q", search);
+    if (department && department !== "all") params.set("department", department);
+    if (targetPage > 1) params.set("page", String(targetPage));
+    const query = params.toString();
+    return query ? `/doctor?${query}` : "/doctor";
+  };
+
   return (
     <div className="min-h-screen bg-white text-slate-900">
       <PublicHeader />
 
       <main>
-        <section className="relative overflow-hidden bg-slate-950 px-4 py-20 text-white md:px-8">
-          <Image
-            src="/assets/img/team/member-big.jpg"
-            alt="MediDove medical specialist"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover opacity-25"
-          />
-          <div className="absolute inset-0 bg-slate-950/75" />
-          <div className="relative mx-auto max-w-7xl">
-              <Badge className="mb-5 bg-white/10 text-white hover:bg-white/15">
-                <Sparkles className="size-3.5" />
-              Doctor matching
-            </Badge>
-            <h1 className="max-w-4xl text-4xl font-bold leading-tight tracking-normal md:text-6xl">
-              Find the right doctor before the patient reaches reception
-            </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-200">
-              MediDove helps patients review doctor specialties, availability,
-              languages, and appointment options before contacting reception.
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button asChild size="lg">
-                <Link href="/appointment">
-                  <CalendarCheck />
-                  Book a doctor
-                </Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="border-white/30 bg-white/10 text-white hover:bg-white hover:text-slate-950"
-              >
-                <Link href="/service">
-                  <Stethoscope />
-                  View services
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </section>
-
         <section className="bg-slate-50 px-4 py-20 md:px-8">
           <div className="mx-auto max-w-7xl">
             <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
@@ -107,8 +92,43 @@ const DoctorsPage = ({ doctors }: { doctors: PublicDoctor[] }) => {
               </Button>
             </div>
 
+            <form
+              key={`${search}-${department}`}
+              className="mt-8 grid gap-3 sm:grid-cols-[1fr_220px_auto]"
+            >
+              <div className="relative">
+                <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
+                <Input
+                  type="search"
+                  name="q"
+                  defaultValue={search}
+                  placeholder="Search by doctor name or specialty"
+                  className="pl-9"
+                />
+              </div>
+              <Select name="department" defaultValue={department}>
+                <option value="all">All departments</option>
+                {departments.map((item) => (
+                  <option key={item} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </Select>
+              <div className="flex gap-2">
+                <Button type="submit" className="flex-1 sm:flex-none">
+                  Search
+                </Button>
+                {hasActiveFilters ? (
+                  <Button asChild variant="outline" type="button">
+                    <Link href="/doctor">Clear</Link>
+                  </Button>
+                ) : null}
+              </div>
+            </form>
+
             <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-              {doctors.map((doctor) => (
+              {doctors.length > 0 ? (
+                doctors.map((doctor) => (
                 <Card key={doctor.name} className="overflow-hidden transition hover:-translate-y-1 hover:shadow-lg">
                   <div className="relative aspect-[4/3] bg-slate-100">
                     <Image
@@ -142,8 +162,21 @@ const DoctorsPage = ({ doctors }: { doctors: PublicDoctor[] }) => {
                     </Button>
                   </CardContent>
                 </Card>
-              ))}
+                ))
+              ) : (
+                <div className="col-span-full rounded-lg border border-dashed border-slate-300 bg-white p-12 text-center text-slate-500">
+                  <Stethoscope className="mx-auto mb-3 size-9" />
+                  No doctors match your search. Try a different name, specialty,
+                  or department.
+                </div>
+              )}
             </div>
+
+            <GlobalPagination
+              page={page}
+              totalPages={totalPages}
+              buildHref={buildHref}
+            />
           </div>
         </section>
 

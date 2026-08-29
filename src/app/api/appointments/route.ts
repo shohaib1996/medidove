@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
+import { getRequestedAt } from "@/lib/appointments/requested-at";
 
 type AppointmentRequest = {
   patientName?: string;
@@ -22,17 +23,6 @@ const cleanText = (value: unknown) =>
 
 const isEmail = (value: string) =>
   value.length === 0 || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-
-const getRequestedAt = (date: string, time: string) => {
-  if (!date) {
-    return null;
-  }
-
-  const timestamp = time ? `${date}T${time}:00` : `${date}T09:00:00`;
-  const parsed = new Date(timestamp);
-
-  return Number.isNaN(parsed.getTime()) ? null : parsed.toISOString();
-};
 
 export async function POST(request: Request) {
   let body: AppointmentRequest;

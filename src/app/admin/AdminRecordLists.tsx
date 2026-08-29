@@ -1,5 +1,7 @@
+import Link from "next/link";
 import { Headphones, Inbox, MessageCircle, Stethoscope } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { DetailItem, StatusAction } from "./DashboardActions";
 import { formatDate } from "./dashboard-utils";
@@ -10,48 +12,51 @@ import type {
   WhatsAppMessageRow,
 } from "./dashboard-types";
 
-export const AppointmentList = ({
-  appointments,
+export const LatestPendingAppointment = ({
+  appointment,
 }: {
-  appointments: AppointmentRow[];
+  appointment: AppointmentRow | null;
 }) => (
   <Card>
-    <CardHeader>
-      <CardDescription>Appointments</CardDescription>
-      <CardTitle>Latest booking requests</CardTitle>
+    <CardHeader className="flex flex-row items-center justify-between gap-4">
+      <div>
+        <CardDescription>Appointments</CardDescription>
+        <CardTitle>Latest pending request</CardTitle>
+      </div>
+      <Button asChild variant="outline" size="sm">
+        <Link href="/admin/appointments">View all</Link>
+      </Button>
     </CardHeader>
-    <CardContent className="space-y-4">
-      {appointments.length > 0 ? (
-        appointments.map((appointment) => (
-          <article key={appointment.id} className="rounded-lg border border-slate-200 p-4">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <h2 className="font-semibold text-slate-900">
-                  {appointment.patient_name}
-                </h2>
-                <p className="mt-2 line-clamp-2 text-sm text-slate-600">
-                  {appointment.reason || "No reason provided."}
-                </p>
-              </div>
-              <Badge className="capitalize">{appointment.status}</Badge>
+    <CardContent>
+      {appointment ? (
+        <article className="rounded-lg border border-slate-200 p-4">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h2 className="font-semibold text-slate-900">
+                {appointment.patient_name}
+              </h2>
+              <p className="mt-2 line-clamp-2 text-sm text-slate-600">
+                {appointment.reason || "No reason provided."}
+              </p>
             </div>
-            <dl className="mt-4 grid gap-3 sm:grid-cols-2">
-              <DetailItem label="Phone" value={appointment.patient_phone} />
-              <DetailItem label="Department" value={appointment.requested_department || "Any"} />
-              <DetailItem label="Doctor" value={appointment.requested_doctor || "Any"} />
-              <DetailItem label="Requested" value={formatDate(appointment.requested_at)} />
-            </dl>
-            <div className="mt-4 flex flex-wrap gap-2">
-              <StatusAction table="appointments" id={appointment.id} status="confirmed" label="Confirm" />
-              <StatusAction table="appointments" id={appointment.id} status="completed" label="Complete" />
-              <StatusAction table="appointments" id={appointment.id} status="cancelled" label="Cancel" />
-            </div>
-          </article>
-        ))
+            <Badge className="capitalize">{appointment.status}</Badge>
+          </div>
+          <dl className="mt-4 grid gap-3 sm:grid-cols-2">
+            <DetailItem label="Phone" value={appointment.patient_phone} />
+            <DetailItem label="Department" value={appointment.requested_department || "Any"} />
+            <DetailItem label="Doctor" value={appointment.requested_doctor || "Any"} />
+            <DetailItem label="Requested" value={formatDate(appointment.requested_at)} />
+          </dl>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <StatusAction table="appointments" id={appointment.id} status="confirmed" label="Confirm" />
+            <StatusAction table="appointments" id={appointment.id} status="completed" label="Complete" />
+            <StatusAction table="appointments" id={appointment.id} status="cancelled" label="Cancel" />
+          </div>
+        </article>
       ) : (
         <div className="rounded-lg border border-dashed border-slate-300 p-8 text-center text-slate-500">
           <Stethoscope className="mx-auto mb-3 size-8" />
-          No appointment requests yet.
+          No pending appointment requests.
         </div>
       )}
     </CardContent>
@@ -214,18 +219,18 @@ export const LeadList = ({ leads }: { leads: LeadRow[] }) => (
 );
 
 const AdminRecordLists = ({
-  appointments,
+  latestPendingAppointment,
   callLogs,
   whatsAppMessages,
   leads,
 }: {
-  appointments: AppointmentRow[];
+  latestPendingAppointment: AppointmentRow | null;
   callLogs: CallLogRow[];
   whatsAppMessages: WhatsAppMessageRow[];
   leads: LeadRow[];
 }) => (
   <section className="grid gap-6 xl:grid-cols-2">
-    <AppointmentList appointments={appointments} />
+    <LatestPendingAppointment appointment={latestPendingAppointment} />
     <CallbackList callLogs={callLogs} />
     <WhatsAppList messages={whatsAppMessages} />
     <LeadList leads={leads} />

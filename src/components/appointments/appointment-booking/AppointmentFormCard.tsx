@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import DatePicker from "@/components/common/DatePicker";
 import AvailabilitySlotsCard from "./AvailabilitySlotsCard";
 import SmartIntakeCard from "./SmartIntakeCard";
 import type {
@@ -30,11 +31,21 @@ type AppointmentFormCardProps = {
   isAnalyzing: boolean;
   isSubmitting: boolean;
   slotTimes: SlotTime[];
+  availableWeekdays: Set<number>;
   updateField: AppointmentFieldUpdater;
   onDoctorChange: (doctorValue: string) => void;
+  onDepartmentChange: (departmentValue: string) => void;
   onAnalyze: () => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
 };
+
+const startOfToday = () => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return today;
+};
+
+const allWeekdays = [0, 1, 2, 3, 4, 5, 6];
 
 const AppointmentFormCard = ({
   bookingOptions,
@@ -43,11 +54,27 @@ const AppointmentFormCard = ({
   isAnalyzing,
   isSubmitting,
   slotTimes,
+  availableWeekdays,
   updateField,
   onDoctorChange,
+  onDepartmentChange,
   onAnalyze,
   onSubmit,
-}: AppointmentFormCardProps) => (
+}: AppointmentFormCardProps) => {
+  const unavailableWeekdays = form.doctorId
+    ? allWeekdays.filter((day) => !availableWeekdays.has(day))
+    : [];
+
+  const calendarDisabled =
+    unavailableWeekdays.length > 0
+      ? [{ before: startOfToday() }, { dayOfWeek: unavailableWeekdays }]
+      : { before: startOfToday() };
+
+  const doctorsForDepartment = bookingOptions.doctors.filter(
+    (doctor) => !doctor.department || doctor.department === form.requestedDepartment,
+  );
+
+  return (
   <Card>
     <CardHeader>
       <CardDescription>Appointment Request</CardDescription>
@@ -99,9 +126,7 @@ const AppointmentFormCard = ({
             <Select
               id="requestedDepartment"
               value={form.requestedDepartment}
-              onChange={(event) =>
-                updateField("requestedDepartment", event.target.value)
-              }
+              onChange={(event) => onDepartmentChange(event.target.value)}
             >
               {bookingOptions.departments.map((department) => (
                 <option key={department.value} value={department.value}>
@@ -118,7 +143,7 @@ const AppointmentFormCard = ({
               value={form.requestedDoctor}
               onChange={(event) => onDoctorChange(event.target.value)}
             >
-              {bookingOptions.doctors.map((doctor) => (
+              {doctorsForDepartment.map((doctor) => (
                 <option key={doctor.value} value={doctor.value}>
                   {doctor.label}
                 </option>
@@ -129,13 +154,11 @@ const AppointmentFormCard = ({
           <div className="grid gap-5 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="requestedDate">Date</Label>
-              <Input
+              <DatePicker
                 id="requestedDate"
-                type="date"
                 value={form.requestedDate}
-                onChange={(event) =>
-                  updateField("requestedDate", event.target.value)
-                }
+                onChange={(value) => updateField("requestedDate", value)}
+                calendarDisabled={calendarDisabled}
               />
             </div>
 
@@ -206,6 +229,7 @@ const AppointmentFormCard = ({
       </form>
     </CardContent>
   </Card>
-);
+  );
+};
 
 export default AppointmentFormCard;

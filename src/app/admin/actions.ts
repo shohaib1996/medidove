@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { writeAuditLog } from "@/lib/audit/log";
 import { createClient } from "@/lib/supabase/server";
+import { getRequestedAt } from "@/lib/appointments/requested-at";
 
 type AdminTable =
   | "appointments"
@@ -137,4 +138,56 @@ export const updateAdminRecordStatus = async (formData: FormData) => {
   revalidatePath("/admin/ai-leads");
   revalidatePath("/admin/communications");
   revalidatePath("/admin/audit");
+};
+
+export const rescheduleAppointment = async (formData: FormData) => {
+  const id = formData.get("id");
+  const date = formData.get("date");
+  const time = formData.get("time");
+
+  if (
+    typeof id !== "string" ||
+    typeof date !== "string" ||
+    typeof time !== "string"
+  ) {
+    throw new Error("Invalid reschedule request.");
+  }
+
+  const requestedAt = getRequestedAt(date, time);
+
+  if (!requestedAt) {
+    throw new Error("Choose a valid date and time.");
+  }
+
+  const { supabase, userId } = await assertAdmin();
+
+  const { error } = await supabase
+    .from("appointments")
+    .update({
+      requested_at: requestedAt,
+      status: "rescheduled",
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  await writeAuditLog(supabase, {
+    actorId: userId,
+    actorType: "admin",
+    eventType: "status_updated",
+    entityType: "appointments",
+    entityId: id,
+    summary: `Rescheduled appointment to ${requestedAt}.`,
+    metadata: {
+      table: "appointments",
+      status: "rescheduled",
+      requestedAt,
+    },
+  });
+
+  revalidatePath("/admin");
+  revalidatePath("/admin/appointments");
 };
