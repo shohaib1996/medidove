@@ -278,7 +278,7 @@ export default async function AdminFeedbackPage({
                         <p className="text-xs font-semibold uppercase text-slate-400">
                           Contact
                         </p>
-                        <p className="mt-1 break-words text-sm">
+                        <p className="mt-1 wrap-break-word text-sm">
                           {item.email || item.phone || "Not provided"}
                         </p>
                       </div>

@@ -271,7 +271,7 @@ const AdminPatientsPage = async () => {
                 <div className="grid gap-3 text-sm sm:grid-cols-2">
                   <div className="flex items-center gap-2 text-slate-600">
                     <Phone className="h-4 w-4" />
-                    <span className="break-words">
+                    <span className="wrap-break-word">
                       {summary.profile.phone || "No phone on profile"}
                     </span>
                   </div>

@@ -360,10 +360,10 @@ const AdminAppointmentsPage = async ({
                         <p className="text-xs font-semibold uppercase text-slate-400">
                           Contact
                         </p>
-                        <p className="mt-1 break-words">
+                        <p className="mt-1 wrap-break-word">
                           {appointment.patient_phone}
                         </p>
-                        <p className="break-words">
+                        <p className="wrap-break-word">
                           {appointment.patient_email || "No email"}
                         </p>
                       </div>

@@ -254,7 +254,7 @@ export default async function AdminStaffPage() {
                     <div className="grid gap-3 text-sm text-slate-600 md:grid-cols-2">
                       <span className="flex min-w-0 gap-2">
                         <Mail className="mt-0.5 size-4 shrink-0 text-slate-400" />
-                        <span className="break-words">{item.email}</span>
+                        <span className="wrap-break-word">{item.email}</span>
                       </span>
                       <span className="flex gap-2">
                         <Phone className="mt-0.5 size-4 shrink-0 text-slate-400" />

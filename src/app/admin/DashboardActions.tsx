@@ -10,7 +10,7 @@ export const DetailItem = ({
 }) => (
   <div>
     <dt className="text-xs font-semibold uppercase text-slate-400">{label}</dt>
-    <dd className="mt-1 break-words text-sm text-slate-700">
+    <dd className="mt-1 wrap-break-word text-sm text-slate-700">
       {value || "Not provided"}
     </dd>
   </div>

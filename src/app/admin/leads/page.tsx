@@ -295,7 +295,7 @@ const AdminLeadsPage = async ({
                     <div className="mt-4 grid gap-4 text-sm text-slate-600 md:grid-cols-3">
                       <div className="flex gap-2">
                         <Mail className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
-                        <span className="break-words">{lead.email}</span>
+                        <span className="wrap-break-word">{lead.email}</span>
                       </div>
                       <div className="flex gap-2">
                         <Phone className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />

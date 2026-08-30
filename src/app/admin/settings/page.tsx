@@ -89,7 +89,7 @@ export default async function AdminSettingsPage() {
             <CardHeader className="flex flex-row items-center justify-between gap-4">
               <div>
                 <CardDescription>Email</CardDescription>
-                <CardTitle className="mt-2 break-words text-xl">
+                <CardTitle className="mt-2 wrap-break-word text-xl">
                   {settings.email}
                 </CardTitle>
               </div>
