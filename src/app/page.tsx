@@ -1,8 +1,6 @@
 import HomePage from "@/components/marketing/HomePage";
 import { getPublicDoctors, getPublicServices } from "@/lib/clinic/content";
 import { getClinicSettings } from "@/lib/clinic/settings";
-import { getHealthPackages } from "@/lib/packages/content";
-import { getPublicProducts } from "@/lib/products/content";
 import { getPublicTestimonials } from "@/lib/testimonials/content";
 
 export const metadata = {
@@ -12,22 +10,17 @@ export const metadata = {
 };
 
 const HomeMain = async () => {
-  const [services, { doctors }, packages, products, testimonials, settings] =
-    await Promise.all([
-      getPublicServices(),
-      getPublicDoctors({ pageSize: 8 }),
-      getHealthPackages(),
-      getPublicProducts(),
-      getPublicTestimonials(),
-      getClinicSettings(),
-    ]);
+  const [services, { doctors }, testimonials, settings] = await Promise.all([
+    getPublicServices(),
+    getPublicDoctors({ pageSize: 8 }),
+    getPublicTestimonials(),
+    getClinicSettings(),
+  ]);
 
   return (
     <HomePage
       services={services}
       doctors={doctors}
-      packages={packages}
-      products={products}
       testimonials={testimonials}
       settings={settings}
     />

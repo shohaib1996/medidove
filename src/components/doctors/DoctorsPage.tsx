@@ -129,8 +129,8 @@ const DoctorsPage = ({
             <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
               {doctors.length > 0 ? (
                 doctors.map((doctor) => (
-                <Card key={doctor.name} className="overflow-hidden transition hover:-translate-y-1 hover:shadow-lg">
-                  <div className="relative aspect-[4/3] bg-slate-100">
+                <Card key={doctor.name} className="overflow-hidden transition hover:-translate-y-1 hover:shadow-lg py-0 pb-6">
+                  <div className="relative aspect-4/3 bg-slate-100">
                     <Image
                       src={doctor.image}
                       alt={doctor.name}

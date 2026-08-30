@@ -366,7 +366,7 @@ export default async function AdminTasksPage({
                           <p className="text-xs font-semibold uppercase text-slate-400">
                             Source
                           </p>
-                          <p className="mt-1 break-words">
+                          <p className="mt-1 wrap-break-word">
                             {task.source_type}
                             {task.source_id ? `: ${task.source_id}` : ""}
                           </p>
