@@ -1,86 +1,112 @@
 import { createAdminClient } from "@/lib/supabase/admin";
+import { phonesMatch } from "@/lib/phone";
 import type { ConsentResult, OutboxRecord } from "./types";
+
+type TimestampedRow = { created_at: string };
+type ConsentRow = TimestampedRow & { consented: boolean };
+
+const findLatestOptOut = async (
+  supabase: ReturnType<typeof createAdminClient>,
+  record: OutboxRecord,
+): Promise<TimestampedRow | null> => {
+  const { data } = await supabase
+    .from("opt_outs")
+    .select("patient_id, email, phone, created_at")
+    .eq("channel", record.channel)
+    .order("created_at", { ascending: false })
+    .limit(500);
+
+  const match = (data || []).find(
+    (row) =>
+      (record.patient_id && row.patient_id === record.patient_id) ||
+      (record.recipient_email &&
+        row.email?.toLowerCase() === record.recipient_email.toLowerCase()) ||
+      phonesMatch(row.phone, record.recipient_phone),
+  );
+
+  return match ? { created_at: match.created_at } : null;
+};
+
+const findLatestConsentLog = async (
+  supabase: ReturnType<typeof createAdminClient>,
+  record: OutboxRecord,
+): Promise<ConsentRow | null> => {
+  if (record.patient_id) {
+    const { data } = await supabase
+      .from("consent_logs")
+      .select("consented, created_at")
+      .eq("channel", record.channel)
+      .eq("patient_id", record.patient_id)
+      .order("created_at", { ascending: false })
+      .limit(1);
+
+    return data?.[0] || null;
+  }
+
+  if (record.channel === "email") {
+    if (!record.recipient_email) {
+      return null;
+    }
+
+    const { data } = await supabase
+      .from("consent_logs")
+      .select("consented, created_at")
+      .eq("channel", record.channel)
+      .eq("email", record.recipient_email)
+      .order("created_at", { ascending: false })
+      .limit(1);
+
+    return data?.[0] || null;
+  }
+
+  if (!record.recipient_phone) {
+    return null;
+  }
+
+  const { data } = await supabase
+    .from("consent_logs")
+    .select("consented, phone, created_at")
+    .eq("channel", record.channel)
+    .not("phone", "is", null)
+    .order("created_at", { ascending: false })
+    .limit(500);
+
+  const latest = (data || []).find((row) =>
+    phonesMatch(row.phone, record.recipient_phone),
+  );
+
+  return latest || null;
+};
 
 export const getLatestConsent = async (
   record: OutboxRecord,
 ): Promise<ConsentResult> => {
   const supabase = createAdminClient();
-  const hasOptOut = async (
-    column: "patient_id" | "email" | "phone",
-    value: string | null,
-  ) => {
-    if (!value) {
-      return false;
-    }
 
-    const { data } = await supabase
-      .from("opt_outs")
-      .select("id")
-      .eq("channel", record.channel)
-      .eq(column, value)
-      .order("created_at", { ascending: false })
-      .limit(1);
+  const [latestOptOut, latestConsentLog] = await Promise.all([
+    findLatestOptOut(supabase, record),
+    findLatestConsentLog(supabase, record),
+  ]);
 
-    return Boolean(data?.[0]);
-  };
+  const optOutIsNewer =
+    latestOptOut &&
+    (!latestConsentLog || latestOptOut.created_at > latestConsentLog.created_at);
 
-  if (
-    (await hasOptOut("patient_id", record.patient_id)) ||
-    (await hasOptOut("email", record.recipient_email)) ||
-    (await hasOptOut("phone", record.recipient_phone))
-  ) {
+  if (optOutIsNewer) {
     return {
       consented: false,
       reason: "Recipient has an active opt-out for this channel.",
     };
   }
 
-  const baseQuery = supabase
-    .from("consent_logs")
-    .select("consented, created_at")
-    .eq("channel", record.channel)
-    .order("created_at", { ascending: false })
-    .limit(1);
-
-  if (record.patient_id) {
-    const { data } = await baseQuery.eq("patient_id", record.patient_id);
-    const latest = data?.[0];
-
-    return {
-      consented: latest?.consented === true,
-      reason: latest
-        ? "Latest patient consent record was not active."
-        : "No patient consent record found.",
-    };
+  if (!latestConsentLog) {
+    return { consented: false, reason: "No consent record found." };
   }
-
-  if (record.channel === "email") {
-    if (!record.recipient_email) {
-      return { consented: false, reason: "Recipient email is missing." };
-    }
-
-    const { data } = await baseQuery.eq("email", record.recipient_email);
-    const latest = data?.[0];
-
-    return {
-      consented: latest?.consented === true,
-      reason: latest
-        ? "Latest email consent record was not active."
-        : "No email consent record found.",
-    };
-  }
-
-  if (!record.recipient_phone) {
-    return { consented: false, reason: "Recipient phone is missing." };
-  }
-
-  const { data } = await baseQuery.eq("phone", record.recipient_phone);
-  const latest = data?.[0];
 
   return {
-    consented: latest?.consented === true,
-    reason: latest
-      ? "Latest phone consent record was not active."
-      : "No phone consent record found.",
+    consented: latestConsentLog.consented === true,
+    reason: latestConsentLog.consented
+      ? "Latest consent record allows this channel."
+      : "Latest consent record was not active.",
   };
 };

@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getRequestedAt } from "@/lib/appointments/requested-at";
+import { normalizePhone } from "@/lib/phone";
 
 const text = (value: FormDataEntryValue | null) =>
   typeof value === "string" ? value.trim() : "";
@@ -55,7 +56,7 @@ export const createConsentLog = async (formData: FormData) => {
   const channel = text(formData.get("channel"));
   const consented = formData.get("consented") === "on";
   const reason = text(formData.get("reason"));
-  const phone = text(formData.get("phone"));
+  const phone = normalizePhone(text(formData.get("phone")));
   const email = text(formData.get("email")) || user.email || "";
 
   if (!["email", "sms", "whatsapp", "voice"].includes(channel)) {

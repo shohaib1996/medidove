@@ -22,6 +22,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { phonesMatch } from "@/lib/phone";
 import { createConsentLog } from "../actions";
 
 export const metadata = {
@@ -60,6 +62,8 @@ const channelIcons = {
   voice: Phone,
 };
 
+const LIVE_CHANNELS = new Set(["email"]);
+
 export default async function PatientConsentsPage() {
   const supabase = await createClient();
   const {
@@ -70,7 +74,9 @@ export default async function PatientConsentsPage() {
     redirect("/login");
   }
 
-  const [{ data: profile }, { data: consentsData }, { data: optOutsData }] =
+  const adminSupabase = createAdminClient();
+
+  const [{ data: profile }, { data: consentsData }, { data: ownOptOuts }, { data: contactOptOuts }] =
     await Promise.all([
     supabase
       .from("profiles")
@@ -83,23 +89,61 @@ export default async function PatientConsentsPage() {
       .eq("patient_id", user.id)
       .order("created_at", { ascending: false })
       .limit(20),
-    supabase
+    adminSupabase
       .from("opt_outs")
       .select("id, phone, email, channel, reason, created_at")
       .eq("patient_id", user.id)
       .order("created_at", { ascending: false })
       .limit(20),
+    // Public unsubscribe/webhook opt-outs are recorded by phone/email only
+    // (no patient_id), so they have to be matched back to this patient here.
+    adminSupabase
+      .from("opt_outs")
+      .select("id, phone, email, channel, reason, created_at")
+      .is("patient_id", null)
+      .order("created_at", { ascending: false })
+      .limit(500),
   ]);
 
   const consents = (consentsData || []) as ConsentLog[];
-  const optOuts = (optOutsData || []) as OptOut[];
-  const blockedChannels = new Set(optOuts.map((optOut) => optOut.channel));
-  const activeChannels = new Set(
-    consents
-      .filter(
-        (consent) => consent.consented && !blockedChannels.has(consent.channel),
-      )
-      .map((consent) => consent.channel),
+  const normalizedEmail = user.email?.toLowerCase();
+  const optOuts = [
+    ...((ownOptOuts || []) as OptOut[]),
+    ...((contactOptOuts || []) as OptOut[]).filter(
+      (optOut) =>
+        (normalizedEmail && optOut.email?.toLowerCase() === normalizedEmail) ||
+        phonesMatch(optOut.phone, profile?.phone),
+    ),
+  ]
+    .sort((a, b) => b.created_at.localeCompare(a.created_at))
+    .slice(0, 20);
+
+  // Consent status is decided by whichever event is most recent per channel,
+  // not by "an opt-out always wins" — re-opting in after an opt-out (or vice
+  // versa) should flip the status, matching the actual send-time gate in
+  // src/lib/communications/dispatch/consent.ts.
+  const channelStatus = (["email", "sms", "whatsapp", "voice"] as const).reduce(
+    (map, channel) => {
+      const latestOptOut = optOuts
+        .filter((optOut) => optOut.channel === channel)
+        .sort((a, b) => b.created_at.localeCompare(a.created_at))[0];
+      const latestConsent = consents
+        .filter((consent) => consent.channel === channel)
+        .sort((a, b) => b.created_at.localeCompare(a.created_at))[0];
+
+      const optOutIsNewer =
+        latestOptOut &&
+        (!latestConsent || latestOptOut.created_at > latestConsent.created_at);
+
+      map[channel] = optOutIsNewer
+        ? "opted_out"
+        : latestConsent?.consented
+          ? "opted_in"
+          : "none";
+
+      return map;
+    },
+    {} as Record<"email" | "sms" | "whatsapp" | "voice", "opted_out" | "opted_in" | "none">,
   );
 
   return (
@@ -124,26 +168,39 @@ export default async function PatientConsentsPage() {
           <section className="grid gap-4 md:grid-cols-4">
             {(["email", "sms", "whatsapp", "voice"] as const).map((channel) => {
               const Icon = channelIcons[channel];
-              const isActive = activeChannels.has(channel);
+              const status = channelStatus[channel];
+              const isLive = LIVE_CHANNELS.has(channel);
 
               return (
-                <Card key={channel}>
+                <Card key={channel} className={!isLive ? "opacity-60" : undefined}>
                   <CardHeader>
                     <div className="flex items-center justify-between gap-3">
                       <Icon className="size-7 text-primary" />
-                      <Badge variant={isActive ? "default" : "outline"}>
-                        {blockedChannels.has(channel)
-                          ? "Opted out"
-                          : isActive
-                            ? "Opted in"
-                            : "No active opt-in"}
+                      <Badge
+                        variant={
+                          !isLive
+                            ? "outline"
+                            : status === "opted_in"
+                              ? "default"
+                              : "outline"
+                        }
+                      >
+                        {!isLive
+                          ? "Coming soon"
+                          : status === "opted_out"
+                            ? "Opted out"
+                            : status === "opted_in"
+                              ? "Opted in"
+                              : "No active opt-in"}
                       </Badge>
                     </div>
                     <CardTitle className="capitalize">{channel}</CardTitle>
                     <CardDescription>
-                      {blockedChannels.has(channel)
+                      {!isLive
+                        ? "This channel isn't available yet."
+                        : status === "opted_out"
                         ? "A recent opt-out blocks this channel."
-                        : isActive
+                        : status === "opted_in"
                         ? "Latest consent allows this channel."
                         : "No consent has been recorded for this channel."}
                     </CardDescription>
@@ -166,12 +223,19 @@ export default async function PatientConsentsPage() {
                     <select
                       id="channel"
                       name="channel"
+                      defaultValue="email"
                       className="h-11 w-full rounded-md border border-slate-200 bg-white px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
                     >
-                      <option value="whatsapp">WhatsApp</option>
-                      <option value="voice">Voice call</option>
-                      <option value="sms">SMS</option>
                       <option value="email">Email</option>
+                      <option value="whatsapp" disabled>
+                        WhatsApp (coming soon)
+                      </option>
+                      <option value="voice" disabled>
+                        Voice call (coming soon)
+                      </option>
+                      <option value="sms" disabled>
+                        SMS (coming soon)
+                      </option>
                     </select>
                   </div>
                   <div className="grid gap-4 md:grid-cols-2">
@@ -229,7 +293,7 @@ export default async function PatientConsentsPage() {
               </CardHeader>
               <CardContent className="space-y-3">
                 {consents.length > 0 ? (
-                  consents.map((consent) => {
+                  consents.slice(0, 3).map((consent) => {
                     const Icon = channelIcons[consent.channel];
 
                     return (
@@ -281,7 +345,7 @@ export default async function PatientConsentsPage() {
               </CardHeader>
               <CardContent className="space-y-3">
                 {optOuts.length > 0 ? (
-                  optOuts.map((optOut) => {
+                  optOuts.slice(0, 3).map((optOut) => {
                     const Icon = channelIcons[optOut.channel];
 
                     return (

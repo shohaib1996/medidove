@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { normalizePhone } from "@/lib/phone";
 import type { Channel } from "@/lib/supabase/database.types";
 
 type UnsubscribeRequest = {
@@ -29,7 +30,7 @@ export async function POST(request: Request) {
   }
 
   const channel = cleanText(body.channel) as Channel;
-  const phone = cleanText(body.phone);
+  const phone = normalizePhone(cleanText(body.phone));
   const email = cleanText(body.email).toLowerCase();
   const reason = cleanText(body.reason);
 

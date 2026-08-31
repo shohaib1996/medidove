@@ -1,0 +1,139 @@
+MediDove — Moving WhatsApp from Twilio Sandbox to Production
+==============================================================
+Last reviewed: 2026-08-31
+
+WHY THIS FILE EXISTS
+---------------------
+Right now WhatsApp messages only work if the recipient's phone number has
+manually "joined" the Twilio Sandbox (sending "join <code>" to
++1 415 523 8886). That's a testing-only limitation — real patients will
+never do this. This file is the step-by-step plan to switch to a real,
+Meta-approved WhatsApp Business sender so any patient can receive messages
+with no join step, and to make it clear what changes in code (very little)
+vs. what happens outside the codebase (most of the work).
+
+
+CURRENT STATE (already built, do not rebuild)
+------------------------------------------------
+- Consent gate: src/lib/communications/dispatch/consent.ts
+  Every outbound message is checked against consent_logs / opt_outs before
+  sending. This does NOT change when moving off the sandbox — it's a
+  separate, permanent safeguard and stays exactly as-is.
+- Delivery code: src/lib/communications/dispatch/delivery.ts
+  sendTwilioMessage() already sends via Twilio's normal Messages API using
+  TWILIO_ACCOUNT_SID / TWILIO_AUTH_TOKEN / TWILIO_WHATSAPP_FROM from .env.
+  This code does not need to change at all — only the value of
+  TWILIO_WHATSAPP_FROM changes once you have a real sender.
+- Outbox queue: communication_outbox table + POST /api/outbox/dispatch
+  (src/app/api/outbox/dispatch/route.ts), guarded by OUTBOX_DISPATCH_SECRET.
+- Message templates admin UI already exists:
+  src/app/admin/templates/page.tsx + actions.ts, backed by the
+  message_templates table (columns: name, channel, category, body,
+  variables, is_active). This is where Meta-approved WhatsApp templates
+  should be entered once approved (see Step 4 below).
+
+
+STEP 1 — Create / access a Meta Business Portfolio
+-----------------------------------------------------
+- This is Meta's business-account layer (formerly "Business Manager").
+  It is NOT a public Facebook Page — nothing gets posted publicly.
+- If MediDove doesn't have one yet, it gets created automatically during
+  Twilio's WhatsApp Sender registration flow in Step 2 — no need to
+  pre-create it on facebook.com separately.
+- Free to create.
+
+
+STEP 2 — Register a WhatsApp Sender through Twilio
+------------------------------------------------------
+- In the Twilio Console: Messaging -> Senders -> WhatsApp senders ->
+  "Register a WhatsApp sender" (self sign-up flow).
+- You'll need a phone number that:
+    a) is NOT already registered on WhatsApp (can't reuse a personal
+       WhatsApp number), and
+    b) can receive an SMS or voice call for verification
+       (not required if you buy the number directly through Twilio).
+- Link it to the Meta Business Portfolio from Step 1.
+- Twilio walks you through linking/creating the Meta side — you don't need
+  a separate Meta developer account.
+
+
+STEP 3 — Business verification with Meta
+---------------------------------------------
+- Required to lift you out of low sandbox-tier sending limits.
+- Needs legal business info/documents (business name, address, proof of
+  registration).
+- Free — this is verification, not "Meta Verified" (that's an unrelated
+  paid subscription product, do not confuse the two).
+- Takes anywhere from a few days to several weeks depending on region —
+  start this early, it's the long pole.
+- Track status in Meta's Business Portfolio Security Center.
+
+
+STEP 4 — Display name + message template approval
+-------------------------------------------------------
+- Display name (e.g. "MediDove Clinic") goes through a separate Meta
+  review against WhatsApp's display name guidelines after sender
+  registration.
+- IMPORTANT WhatsApp rule (not sandbox-specific — applies to every
+  WhatsApp Business sender, forever): a business can only send a
+  free-form message within 24 hours of the patient messaging first.
+  To START a conversation (appointment reminder, confirmation,
+  follow-up the patient didn't ask for in the last 24h), you MUST use a
+  pre-approved message template.
+- Action: once verified, submit your recurring message types to Meta as
+  templates (via Twilio Console or Meta Business Manager), e.g.:
+    - "Your appointment with Dr. {{1}} is confirmed for {{2}} at {{3}}."
+    - "Reminder: you have an appointment tomorrow at {{1}}."
+    - "Your appointment has been rescheduled to {{1}}."
+  Approval per template usually takes minutes to ~1 day.
+- Once approved, add each one as a row in the existing admin UI at
+  /admin/templates (channel = "whatsapp"), using the exact approved
+  template name/wording Meta approved (you cannot freely reword an
+  approved template and expect it to still count as approved).
+
+
+STEP 5 — Swap the sender in .env
+-------------------------------------
+- Replace the sandbox value with your approved sender number:
+    TWILIO_WHATSAPP_FROM=whatsapp:+<your approved number>
+- Everything else (OUTBOUND_MESSAGING_PROVIDER=twilio, TWILIO_ACCOUNT_SID,
+  TWILIO_AUTH_TOKEN) stays the same.
+- No code changes needed anywhere in the repo for this step.
+
+
+STEP 6 — Test before rolling out to real patients
+-------------------------------------------------------
+- Re-run the same manual flow already used for testing:
+    1. Insert a row into communication_outbox with the new sender live.
+    2. POST /api/outbox/dispatch with the Bearer OUTBOX_DISPATCH_SECRET.
+    3. Check the returned result AND poll the message status via Twilio's
+       Messages API (GET .../Messages/{sid}.json) to confirm it actually
+       reads "delivered"/"read", not just "queued".
+- Send to a real patient number that has NOT joined any sandbox — if it
+  delivers without a join step, the migration worked.
+
+
+COSTS TO EXPECT (ballpark — verify exact numbers on Twilio's pricing page
+before budgeting, since rates vary by destination country)
+--------------------------------------------------------------------------
+- Business verification: free.
+- Per-message cost = Twilio's flat platform fee + Meta's per-template fee.
+  Meta's fee depends on:
+    - category (utility / authentication / marketing / free-form reply)
+    - destination country (Bangladesh rate != US rate — check the
+      Bangladesh row specifically on Twilio's WhatsApp pricing page)
+    - whether it's inside the 24h customer-service window (replies to a
+      patient within 24h of them messaging first are typically free on
+      Meta's side; clinic-initiated reminders are the ones that cost money)
+- No monthly platform/subscription fee just for having WhatsApp set up —
+  cost only accrues per message sent.
+
+
+WHAT STAYS THE SAME / WHAT NOT TO TOUCH
+-------------------------------------------
+- Consent Center (/portal/consents) and the consent gate logic: unchanged.
+- communication_outbox table and dispatch endpoint: unchanged.
+- delivery.ts / providers.ts: unchanged, other than the env var swap above.
+- Do NOT try to send business-initiated messages as free-form text once
+  live — outside the 24h window Meta will reject anything that isn't an
+  approved template, regardless of what the app code sends.

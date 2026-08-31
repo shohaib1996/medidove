@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Ban, Mail, MessageCircle, Phone, ShieldCheck } from "lucide-react";
 import PublicHeader from "@/components/marketing/PublicHeader";
@@ -26,13 +27,6 @@ type FormState = {
   reason: string;
 };
 
-const initialForm: FormState = {
-  channel: "whatsapp",
-  phone: "",
-  email: "",
-  reason: "",
-};
-
 const channels = [
   { value: "whatsapp", label: "WhatsApp", icon: MessageCircle },
   { value: "sms", label: "SMS", icon: Phone },
@@ -40,7 +34,24 @@ const channels = [
   { value: "email", label: "Email", icon: Mail },
 ] as const;
 
-const UnsubscribePage = () => {
+type UnsubscribePageProps = {
+  initialPhone?: string;
+  initialEmail?: string;
+  afterSubmitHref?: string;
+};
+
+const UnsubscribePage = ({
+  initialPhone = "",
+  initialEmail = "",
+  afterSubmitHref,
+}: UnsubscribePageProps) => {
+  const router = useRouter();
+  const initialForm: FormState = {
+    channel: "whatsapp",
+    phone: initialPhone,
+    email: initialEmail,
+    reason: "",
+  };
   const [form, setForm] = useState<FormState>(initialForm);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -73,7 +84,12 @@ const UnsubscribePage = () => {
       }
 
       toast.success("Unsubscribe request saved.");
-      setForm(initialForm);
+
+      if (afterSubmitHref) {
+        router.push(afterSubmitHref);
+      } else {
+        setForm(initialForm);
+      }
     } catch (error) {
       const message =
         error instanceof Error
