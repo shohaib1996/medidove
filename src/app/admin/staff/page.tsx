@@ -1,6 +1,13 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { BriefcaseMedical, Mail, Phone, Plus, UserCog } from "lucide-react";
+import {
+  BriefcaseMedical,
+  Mail,
+  Phone,
+  Plus,
+  Stethoscope,
+  UserCog,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,12 +21,24 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import DebouncedSearchInput from "@/components/common/DebouncedSearchInput";
+import GlobalPagination from "@/components/common/GlobalPagination";
 import type { UserRole } from "@/lib/supabase/database.types";
-import { createStaffMember, updateStaffStatus } from "./actions";
+import {
+  createDoctor,
+  createStaffMember,
+  deleteStaffMember,
+  updateStaffStatus,
+} from "./actions";
+import { DOCTOR_LOGIN_PASSWORD } from "./constants";
+import DeleteStaffButton from "./DeleteStaffButton";
 
 export const metadata = {
   title: "Staff Management | MediDove Admin",
 };
+
+const PAGE_SIZE = 8;
 
 type StaffMemberRow = {
   id: string;
@@ -73,7 +92,15 @@ const StatusButton = ({
   </form>
 );
 
-export default async function AdminStaffPage() {
+type AdminStaffPageProps = {
+  searchParams: Promise<{ q?: string; page?: string }>;
+};
+
+export default async function AdminStaffPage({
+  searchParams,
+}: AdminStaffPageProps) {
+  const { q, page: pageParam } = await searchParams;
+  const search = (q || "").trim();
   const supabase = await createClient();
   const {
     data: { user },
@@ -93,7 +120,7 @@ export default async function AdminStaffPage() {
     redirect("/admin");
   }
 
-  const [{ data }, { data: doctorsData }] = await Promise.all([
+  const [{ data }, { data: doctorsData }, { data: departmentsData }] = await Promise.all([
     supabase
       .from("staff_members")
       .select("id, full_name, email, phone, role, status, notes, created_at")
@@ -103,7 +130,13 @@ export default async function AdminStaffPage() {
       .from("doctors")
       .select("id, profile_id, full_name, specialty, is_active, created_at")
       .order("created_at", { ascending: false }),
+    supabase
+      .from("departments")
+      .select("id, name")
+      .order("name", { ascending: true }),
   ]);
+
+  const departments = (departmentsData || []) as { id: string; name: string }[];
 
   const doctors = (doctorsData || []) as DoctorRow[];
   const doctorProfileIds = doctors
@@ -122,6 +155,17 @@ export default async function AdminStaffPage() {
     (doctorProfilesData || []).map((row) => [row.id, row.phone]),
   );
 
+  let doctorEmailById = new Map<string, string | null>();
+  if (doctorProfileIds.length > 0) {
+    const adminSupabase = createAdminClient();
+    const { data: usersPage } = await adminSupabase.auth.admin.listUsers({
+      perPage: 200,
+    });
+    doctorEmailById = new Map(
+      (usersPage?.users || []).map((authUser) => [authUser.id, authUser.email || null]),
+    );
+  }
+
   const manualStaff = ((data || []) as (StaffMemberRow & { email: string })[]).map(
     (item) => ({ ...item, source: "staff_members" as const }),
   );
@@ -129,7 +173,7 @@ export default async function AdminStaffPage() {
   const doctorStaff: StaffMemberRow[] = doctors.map((doctor) => ({
     id: doctor.id,
     full_name: doctor.full_name,
-    email: null,
+    email: doctor.profile_id ? doctorEmailById.get(doctor.profile_id) || null : null,
     phone: doctor.profile_id ? doctorPhoneById.get(doctor.profile_id) || null : null,
     role: "doctor",
     status: doctor.is_active ? "active" : "inactive",
@@ -146,6 +190,24 @@ export default async function AdminStaffPage() {
   const receptionistCount = staff.filter(
     (item) => item.role === "receptionist",
   ).length;
+
+  const filteredStaff = search
+    ? staff.filter(
+        (item) =>
+          item.full_name.toLowerCase().includes(search.toLowerCase()) ||
+          item.email?.toLowerCase().includes(search.toLowerCase()),
+      )
+    : staff;
+
+  const totalPages = Math.max(1, Math.ceil(filteredStaff.length / PAGE_SIZE));
+  const page = Math.min(
+    Math.max(1, Number.parseInt(pageParam || "1", 10) || 1),
+    totalPages,
+  );
+  const visibleStaff = filteredStaff.slice(
+    (page - 1) * PAGE_SIZE,
+    page * PAGE_SIZE,
+  );
 
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-10 text-slate-900 md:px-8">
@@ -209,13 +271,101 @@ export default async function AdminStaffPage() {
         </section>
 
         <section className="grid gap-6 lg:grid-cols-[420px_1fr]">
+          <div className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardDescription>New provider</CardDescription>
+              <CardTitle>Create doctor</CardTitle>
+              <p className="text-sm text-slate-500">
+                Creates the public doctor profile and a portal login (
+                <code className="rounded bg-slate-100 px-1 py-0.5 text-xs">
+                  firstname.lastname@medidove.com
+                </code>
+                , password {DOCTOR_LOGIN_PASSWORD}) at the same time.
+              </p>
+            </CardHeader>
+            <CardContent>
+              <form action={createDoctor} className="space-y-5">
+                <div className="space-y-2">
+                  <Label htmlFor="doctor_full_name">Full name</Label>
+                  <Input
+                    id="doctor_full_name"
+                    name="full_name"
+                    placeholder="Dr. Amina Rahman"
+                    required
+                  />
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="department_id">Department</Label>
+                    <select
+                      id="department_id"
+                      name="department_id"
+                      className="h-11 w-full rounded-md border border-slate-200 bg-white px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                      required
+                    >
+                      <option value="">Choose department</option>
+                      {departments.map((department) => (
+                        <option key={department.id} value={department.id}>
+                          {department.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="specialty">Specialty</Label>
+                    <Input
+                      id="specialty"
+                      name="specialty"
+                      placeholder="Adult General Medicine"
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="consultation_fee">Consultation fee</Label>
+                    <Input
+                      id="consultation_fee"
+                      name="consultation_fee"
+                      type="number"
+                      min="0"
+                      placeholder="80"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="image_url">Image URL</Label>
+                    <Input
+                      id="image_url"
+                      name="image_url"
+                      placeholder="https://..."
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="bio">Bio</Label>
+                  <Textarea
+                    id="bio"
+                    name="bio"
+                    rows={4}
+                    placeholder="Training, focus areas, and patient approach."
+                  />
+                </div>
+                <Button type="submit">
+                  <Stethoscope />
+                  Create doctor
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+
           <Card>
             <CardHeader>
               <CardDescription>New team member</CardDescription>
               <CardTitle>Add staff member</CardTitle>
               <p className="text-sm text-slate-500">
-                Doctors from the doctor directory appear below automatically
-                and aren&apos;t added through this form.
+                For receptionists and admins only — use Create doctor above
+                for providers.
               </p>
             </CardHeader>
             <CardContent>
@@ -284,10 +434,17 @@ export default async function AdminStaffPage() {
               </form>
             </CardContent>
           </Card>
+          </div>
 
-          <div className="grid gap-4">
-            {staff.length > 0 ? (
-              staff.map((item) => (
+          <div className="flex flex-col gap-4">
+            <DebouncedSearchInput
+              basePath="/admin/staff"
+              defaultValue={search}
+              placeholder="Search staff by name or email"
+            />
+
+            {visibleStaff.length > 0 ? (
+              visibleStaff.map((item) => (
                 <Card key={item.id}>
                   <CardHeader>
                     <div className="flex flex-col justify-between gap-3 md:flex-row md:items-start">
@@ -333,6 +490,11 @@ export default async function AdminStaffPage() {
                         {item.status !== "inactive" ? (
                           <StatusButton id={item.id} status="inactive" label="Deactivate" />
                         ) : null}
+                        <DeleteStaffButton
+                          id={item.id}
+                          name={item.full_name}
+                          action={deleteStaffMember}
+                        />
                       </div>
                     ) : (
                       <p className="text-xs text-slate-400">
@@ -347,10 +509,23 @@ export default async function AdminStaffPage() {
               <Card>
                 <CardContent className="py-14 text-center text-slate-500">
                   <UserCog className="mx-auto mb-3 size-9" />
-                  No staff records yet.
+                  {search
+                    ? `No staff match "${search}".`
+                    : "No staff records yet."}
                 </CardContent>
               </Card>
             )}
+
+            <GlobalPagination
+              page={page}
+              totalPages={totalPages}
+              buildHref={(targetPage) => {
+                const params = new URLSearchParams();
+                if (search) params.set("q", search);
+                params.set("page", String(targetPage));
+                return `/admin/staff?${params.toString()}`;
+              }}
+            />
           </div>
         </section>
       </div>

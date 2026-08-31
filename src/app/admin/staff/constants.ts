@@ -1,0 +1,1 @@
+export const DOCTOR_LOGIN_PASSWORD = "123456";

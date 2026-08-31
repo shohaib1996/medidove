@@ -3,7 +3,36 @@
 import { revalidatePath } from "next/cache";
 import { writeAuditLog } from "@/lib/audit/log";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import type { UserRole } from "@/lib/supabase/database.types";
+import { DOCTOR_LOGIN_PASSWORD } from "./constants";
+
+const US_AREA_CODES = [
+  201, 212, 213, 214, 216, 305, 310, 312, 404, 415, 469, 480, 502, 503, 512,
+  602, 610, 617, 619, 646, 702, 704, 713, 718, 720, 786, 813, 858, 904, 916,
+  919, 973,
+];
+
+const randomUsPhone = () => {
+  const areaCode = US_AREA_CODES[Math.floor(Math.random() * US_AREA_CODES.length)];
+  const line = String(Math.floor(Math.random() * 100)).padStart(2, "0");
+  return `+1${areaCode}555${"01"}${line}`;
+};
+
+const kebabCase = (value: string) =>
+  value
+    .replace(/^Dr\.\s*/i, "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+const emailSlug = (fullName: string) => {
+  const cleaned = fullName.replace(/^Dr\.\s*/i, "").trim();
+  const parts = cleaned.split(/\s+/).filter(Boolean);
+  const normalize = (value: string) => value.toLowerCase().replace(/[^a-z]/g, "");
+  return `${normalize(parts[0] || "doctor")}.${normalize(parts[parts.length - 1] || "medidove")}`;
+};
 
 const staffRoles: UserRole[] = ["admin", "doctor", "receptionist"];
 const staffStatuses = ["active", "inactive", "invited"] as const;
@@ -129,4 +158,138 @@ export const updateStaffStatus = async (formData: FormData) => {
   });
 
   refreshStaff();
+};
+
+export const deleteStaffMember = async (formData: FormData) => {
+  const id = text(formData.get("id"));
+  const { supabase, userId } = await assertAdmin();
+
+  const { data: existing } = await supabase
+    .from("staff_members")
+    .select("full_name")
+    .eq("id", id)
+    .single();
+
+  const { error } = await supabase.from("staff_members").delete().eq("id", id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  await writeAuditLog(supabase, {
+    actorId: userId,
+    actorType: "admin",
+    eventType: "staff_member_deleted",
+    entityType: "staff_members",
+    entityId: id,
+    summary: `Deleted staff member ${existing?.full_name || id}.`,
+  });
+
+  refreshStaff();
+};
+
+export const createDoctor = async (formData: FormData) => {
+  const fullName = text(formData.get("full_name"));
+  const departmentId = text(formData.get("department_id"));
+  const specialty = text(formData.get("specialty"));
+  const bio = text(formData.get("bio"));
+  const consultationFeeRaw = text(formData.get("consultation_fee"));
+  const imageUrl = text(formData.get("image_url"));
+
+  if (!fullName || !departmentId || !specialty) {
+    throw new Error("Doctor name, department, and specialty are required.");
+  }
+
+  const consultationFee = consultationFeeRaw
+    ? Number.parseFloat(consultationFeeRaw)
+    : null;
+
+  const { supabase, userId } = await assertAdmin();
+  const adminSupabase = createAdminClient();
+
+  const baseSlug = kebabCase(fullName) || "doctor";
+  let slug = baseSlug;
+  let slugSuffix = 2;
+  while (true) {
+    const { data: existingSlug } = await supabase
+      .from("doctors")
+      .select("id")
+      .eq("slug", slug)
+      .maybeSingle();
+    if (!existingSlug) break;
+    slug = `${baseSlug}-${slugSuffix}`;
+    slugSuffix += 1;
+  }
+
+  const baseEmailSlug = emailSlug(fullName);
+  let email = `${baseEmailSlug}@medidove.com`;
+  let emailSuffix = 2;
+  while (true) {
+    const { data: existingUsers } = await adminSupabase.auth.admin.listUsers({
+      perPage: 200,
+    });
+    const taken = (existingUsers?.users || []).some((u) => u.email === email);
+    if (!taken) break;
+    email = `${baseEmailSlug}${emailSuffix}@medidove.com`;
+    emailSuffix += 1;
+  }
+
+  const { data: created, error: createUserError } =
+    await adminSupabase.auth.admin.createUser({
+      email,
+      password: DOCTOR_LOGIN_PASSWORD,
+      email_confirm: true,
+      user_metadata: { full_name: fullName, role: "doctor" },
+    });
+
+  if (createUserError || !created?.user) {
+    throw new Error(createUserError?.message || "Could not create doctor login.");
+  }
+
+  const profileId = created.user.id;
+
+  const { error: profileError } = await adminSupabase.from("profiles").upsert({
+    id: profileId,
+    full_name: fullName,
+    phone: randomUsPhone(),
+    role: "doctor",
+  });
+
+  if (profileError) {
+    throw new Error(profileError.message);
+  }
+
+  const { data: doctor, error: doctorError } = await supabase
+    .from("doctors")
+    .insert({
+      profile_id: profileId,
+      department_id: departmentId,
+      full_name: fullName,
+      slug,
+      specialty,
+      bio: bio || null,
+      consultation_fee: consultationFee,
+      image_url: imageUrl || null,
+      is_active: true,
+    })
+    .select("id")
+    .single();
+
+  if (doctorError) {
+    throw new Error(doctorError.message);
+  }
+
+  await writeAuditLog(supabase, {
+    actorId: userId,
+    actorType: "admin",
+    eventType: "doctor_created",
+    entityType: "doctors",
+    entityId: doctor.id,
+    summary: `Created doctor ${fullName} with login ${email}.`,
+    metadata: { email, specialty },
+  });
+
+  revalidatePath("/admin/staff");
+  revalidatePath("/admin/schedule");
+  revalidatePath("/doctor");
 };
