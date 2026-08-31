@@ -31,7 +31,7 @@ import {
   deleteStaffMember,
   updateStaffStatus,
 } from "./actions";
-import { DOCTOR_LOGIN_PASSWORD } from "./constants";
+import { DEFAULT_LOGIN_PASSWORD } from "./constants";
 import DeleteStaffButton from "./DeleteStaffButton";
 
 export const metadata = {
@@ -187,9 +187,6 @@ export default async function AdminStaffPage({
   );
   const activeCount = staff.filter((item) => item.status === "active").length;
   const doctorCount = staff.filter((item) => item.role === "doctor").length;
-  const receptionistCount = staff.filter(
-    (item) => item.role === "receptionist",
-  ).length;
 
   const filteredStaff = search
     ? staff.filter(
@@ -221,8 +218,8 @@ export default async function AdminStaffPage({
               Clinic team directory
             </h1>
             <p className="mt-3 max-w-2xl text-slate-600">
-              Track admins, doctors, receptionists, and invited team members
-              who handle appointments, calls, tasks, and patient follow-up.
+              Track admins, doctors, and invited team members who handle
+              appointments, calls, tasks, and patient follow-up.
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
@@ -235,7 +232,7 @@ export default async function AdminStaffPage({
           </div>
         </section>
 
-        <section className="grid gap-4 md:grid-cols-4">
+        <section className="grid gap-4 md:grid-cols-3">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between gap-4">
               <div>
@@ -260,14 +257,6 @@ export default async function AdminStaffPage({
               <CardTitle className="mt-2 text-3xl">{doctorCount}</CardTitle>
             </CardHeader>
           </Card>
-          <Card>
-            <CardHeader>
-              <CardDescription>Receptionists</CardDescription>
-              <CardTitle className="mt-2 text-3xl">
-                {receptionistCount}
-              </CardTitle>
-            </CardHeader>
-          </Card>
         </section>
 
         <section className="grid gap-6 lg:grid-cols-[420px_1fr]">
@@ -277,23 +266,33 @@ export default async function AdminStaffPage({
               <CardDescription>New provider</CardDescription>
               <CardTitle>Create doctor</CardTitle>
               <p className="text-sm text-slate-500">
-                Creates the public doctor profile and a portal login (
-                <code className="rounded bg-slate-100 px-1 py-0.5 text-xs">
-                  firstname.lastname@medidove.com
-                </code>
-                , password {DOCTOR_LOGIN_PASSWORD}) at the same time.
+                Creates the public doctor profile and a portal login with
+                the email below (password {DEFAULT_LOGIN_PASSWORD}) at the
+                same time.
               </p>
             </CardHeader>
             <CardContent>
               <form action={createDoctor} className="space-y-5">
-                <div className="space-y-2">
-                  <Label htmlFor="doctor_full_name">Full name</Label>
-                  <Input
-                    id="doctor_full_name"
-                    name="full_name"
-                    placeholder="Dr. Amina Rahman"
-                    required
-                  />
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="doctor_full_name">Full name</Label>
+                    <Input
+                      id="doctor_full_name"
+                      name="full_name"
+                      placeholder="Dr. Amina Rahman"
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="doctor_email">Email</Label>
+                    <Input
+                      id="doctor_email"
+                      name="email"
+                      type="email"
+                      placeholder="amina.rahman@medidove.com"
+                      required
+                    />
+                  </div>
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
@@ -362,61 +361,48 @@ export default async function AdminStaffPage({
           <Card>
             <CardHeader>
               <CardDescription>New team member</CardDescription>
-              <CardTitle>Add staff member</CardTitle>
+              <CardTitle>Add admin</CardTitle>
               <p className="text-sm text-slate-500">
-                For receptionists and admins only — use Create doctor above
-                for providers.
+                Creates an admin login with the email below (password{" "}
+                {DEFAULT_LOGIN_PASSWORD}) — use Create doctor above for
+                providers instead.
               </p>
             </CardHeader>
             <CardContent>
               <form action={createStaffMember} className="space-y-5">
-                <div className="space-y-2">
-                  <Label htmlFor="full_name">Full name</Label>
-                  <Input
-                    id="full_name"
-                    name="full_name"
-                    placeholder="Alex Morgan"
-                  />
-                </div>
+                <input type="hidden" name="role" value="admin" />
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="full_name">Full name</Label>
                     <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="alex@clinic.com"
+                      id="full_name"
+                      name="full_name"
+                      placeholder="Alex Morgan"
+                      required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="phone">Phone</Label>
-                    <Input id="phone" name="phone" placeholder="+1 555 0110" />
+                    <Label htmlFor="staff_email">Email</Label>
+                    <Input
+                      id="staff_email"
+                      name="email"
+                      type="email"
+                      placeholder="alex.morgan@medidove.com"
+                      required
+                    />
                   </div>
                 </div>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="role">Role</Label>
-                    <select
-                      id="role"
-                      name="role"
-                      className="h-11 w-full rounded-md border border-slate-200 bg-white px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-                    >
-                      <option value="receptionist">Receptionist</option>
-                      <option value="admin">Admin</option>
-                    </select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="status">Status</Label>
-                    <select
-                      id="status"
-                      name="status"
-                      className="h-11 w-full rounded-md border border-slate-200 bg-white px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-                    >
-                      <option value="active">Active</option>
-                      <option value="invited">Invited</option>
-                      <option value="inactive">Inactive</option>
-                    </select>
-                  </div>
+                <div className="space-y-2">
+                  <Label htmlFor="status">Status</Label>
+                  <select
+                    id="status"
+                    name="status"
+                    className="h-11 w-full rounded-md border border-slate-200 bg-white px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  >
+                    <option value="active">Active</option>
+                    <option value="invited">Invited</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="notes">Notes</Label>
@@ -429,7 +415,7 @@ export default async function AdminStaffPage({
                 </div>
                 <Button type="submit">
                   <Plus />
-                  Add staff
+                  Add admin
                 </Button>
               </form>
             </CardContent>

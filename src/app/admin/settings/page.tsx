@@ -14,6 +14,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { fallbackClinicSettings, getClinicSettings } from "@/lib/clinic/settings";
 import { createClient } from "@/lib/supabase/server";
+import ChangePasswordForm from "@/components/common/ChangePasswordForm";
+import { changeOwnPassword } from "@/lib/auth/actions";
 import { updateClinicSettings } from "./actions";
 
 export const metadata = {
@@ -192,6 +194,16 @@ export default async function AdminSettingsPage() {
 
               <Button type="submit">Save clinic settings</Button>
             </form>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardDescription>Account security</CardDescription>
+            <CardTitle>Change your password</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ChangePasswordForm action={changeOwnPassword} />
           </CardContent>
         </Card>
       </div>

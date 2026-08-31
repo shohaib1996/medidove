@@ -5,7 +5,7 @@ import { writeAuditLog } from "@/lib/audit/log";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { UserRole } from "@/lib/supabase/database.types";
-import { DOCTOR_LOGIN_PASSWORD } from "./constants";
+import { DEFAULT_LOGIN_PASSWORD } from "./constants";
 
 const US_AREA_CODES = [
   201, 212, 213, 214, 216, 305, 310, 312, 404, 415, 469, 480, 502, 503, 512,
@@ -27,14 +27,25 @@ const kebabCase = (value: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
-const emailSlug = (fullName: string) => {
-  const cleaned = fullName.replace(/^Dr\.\s*/i, "").trim();
-  const parts = cleaned.split(/\s+/).filter(Boolean);
-  const normalize = (value: string) => value.toLowerCase().replace(/[^a-z]/g, "");
-  return `${normalize(parts[0] || "doctor")}.${normalize(parts[parts.length - 1] || "medidove")}`;
+const isEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+const assertEmailAvailable = async (
+  adminSupabase: ReturnType<typeof createAdminClient>,
+  email: string,
+) => {
+  const { data: existingUsers } = await adminSupabase.auth.admin.listUsers({
+    perPage: 200,
+  });
+  const taken = (existingUsers?.users || []).some(
+    (existingUser) => existingUser.email?.toLowerCase() === email.toLowerCase(),
+  );
+
+  if (taken) {
+    throw new Error(`${email} is already used by another login.`);
+  }
 };
 
-const staffRoles: UserRole[] = ["admin", "doctor", "receptionist"];
+const staffRoles: UserRole[] = ["admin", "doctor"];
 const staffStatuses = ["active", "inactive", "invited"] as const;
 
 type StaffStatus = (typeof staffStatuses)[number];
@@ -43,7 +54,7 @@ const text = (value: FormDataEntryValue | null) =>
   typeof value === "string" ? value.trim() : "";
 
 const normalizeRole = (value: string): UserRole =>
-  staffRoles.includes(value as UserRole) ? (value as UserRole) : "receptionist";
+  staffRoles.includes(value as UserRole) ? (value as UserRole) : "admin";
 
 const normalizeStatus = (value: string): StaffStatus =>
   staffStatuses.includes(value as StaffStatus)
@@ -82,7 +93,6 @@ const refreshStaff = () => {
 export const createStaffMember = async (formData: FormData) => {
   const fullName = text(formData.get("full_name"));
   const email = text(formData.get("email")).toLowerCase();
-  const phone = text(formData.get("phone"));
   const role = normalizeRole(text(formData.get("role")));
   const status = normalizeStatus(text(formData.get("status")));
   const notes = text(formData.get("notes"));
@@ -91,20 +101,48 @@ export const createStaffMember = async (formData: FormData) => {
     throw new Error("Staff name and email are required.");
   }
 
+  if (!isEmail(email)) {
+    throw new Error("Enter a valid email address.");
+  }
+
   const { supabase, userId } = await assertAdmin();
-  const { data: linkedProfile } = await supabase
-    .from("profiles")
-    .select("id")
-    .eq("full_name", fullName)
-    .maybeSingle();
+  const adminSupabase = createAdminClient();
+
+  await assertEmailAvailable(adminSupabase, email);
+
+  const { data: created, error: createUserError } =
+    await adminSupabase.auth.admin.createUser({
+      email,
+      password: DEFAULT_LOGIN_PASSWORD,
+      email_confirm: true,
+      user_metadata: { full_name: fullName, role },
+    });
+
+  if (createUserError || !created?.user) {
+    throw new Error(createUserError?.message || "Could not create staff login.");
+  }
+
+  const profileId = created.user.id;
+  const phone = randomUsPhone();
+
+  const { error: profileError } = await adminSupabase.from("profiles").upsert({
+    id: profileId,
+    full_name: fullName,
+    phone,
+    role,
+  });
+
+  if (profileError) {
+    throw new Error(profileError.message);
+  }
 
   const { data, error } = await supabase
     .from("staff_members")
     .insert({
-      profile_id: linkedProfile?.id || null,
+      profile_id: profileId,
       full_name: fullName,
       email,
-      phone: phone || null,
+      phone,
       role,
       status,
       notes: notes || null,
@@ -122,10 +160,11 @@ export const createStaffMember = async (formData: FormData) => {
     eventType: "staff_member_created",
     entityType: "staff_members",
     entityId: data.id,
-    summary: `Created staff member ${fullName}.`,
+    summary: `Created staff member ${fullName} with login ${email}.`,
     metadata: {
       role,
       status,
+      email,
     },
   });
 
@@ -190,14 +229,21 @@ export const deleteStaffMember = async (formData: FormData) => {
 
 export const createDoctor = async (formData: FormData) => {
   const fullName = text(formData.get("full_name"));
+  const email = text(formData.get("email")).toLowerCase();
   const departmentId = text(formData.get("department_id"));
   const specialty = text(formData.get("specialty"));
   const bio = text(formData.get("bio"));
   const consultationFeeRaw = text(formData.get("consultation_fee"));
   const imageUrl = text(formData.get("image_url"));
 
-  if (!fullName || !departmentId || !specialty) {
-    throw new Error("Doctor name, department, and specialty are required.");
+  if (!fullName || !email || !departmentId || !specialty) {
+    throw new Error(
+      "Doctor name, email, department, and specialty are required.",
+    );
+  }
+
+  if (!isEmail(email)) {
+    throw new Error("Enter a valid email address.");
   }
 
   const consultationFee = consultationFeeRaw
@@ -221,23 +267,12 @@ export const createDoctor = async (formData: FormData) => {
     slugSuffix += 1;
   }
 
-  const baseEmailSlug = emailSlug(fullName);
-  let email = `${baseEmailSlug}@medidove.com`;
-  let emailSuffix = 2;
-  while (true) {
-    const { data: existingUsers } = await adminSupabase.auth.admin.listUsers({
-      perPage: 200,
-    });
-    const taken = (existingUsers?.users || []).some((u) => u.email === email);
-    if (!taken) break;
-    email = `${baseEmailSlug}${emailSuffix}@medidove.com`;
-    emailSuffix += 1;
-  }
+  await assertEmailAvailable(adminSupabase, email);
 
   const { data: created, error: createUserError } =
     await adminSupabase.auth.admin.createUser({
       email,
-      password: DOCTOR_LOGIN_PASSWORD,
+      password: DEFAULT_LOGIN_PASSWORD,
       email_confirm: true,
       user_metadata: { full_name: fullName, role: "doctor" },
     });

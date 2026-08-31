@@ -26,6 +26,8 @@ import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { createClient } from "@/lib/supabase/server";
 import SignOutButton from "@/app/portal/SignOutButton";
+import ChangePasswordForm from "@/components/common/ChangePasswordForm";
+import { changeOwnPassword } from "@/lib/auth/actions";
 import { createOwnAvailability, toggleOwnAvailability } from "./actions";
 
 export const metadata = {
@@ -461,6 +463,18 @@ export default async function DoctorPortalPage() {
                       No reviewed notes are visible yet.
                     </p>
                   )}
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Change your password</CardTitle>
+                  <CardDescription>
+                    Update the password used to sign in here.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ChangePasswordForm action={changeOwnPassword} />
                 </CardContent>
               </Card>
             </aside>

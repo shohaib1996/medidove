@@ -23,6 +23,8 @@ import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/server";
 import { toDateTimeInputs } from "@/lib/appointments/requested-at";
 import RescheduleDialog from "@/components/common/RescheduleDialog";
+import ChangePasswordForm from "@/components/common/ChangePasswordForm";
+import { changeOwnPassword } from "@/lib/auth/actions";
 import { rescheduleOwnAppointment, updateProfile } from "./actions";
 
 export const metadata = {
@@ -243,6 +245,16 @@ export default async function PatientPortalPage() {
                     Save profile
                   </Button>
                 </form>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardDescription>Account security</CardDescription>
+                <CardTitle className="text-base">Change your password</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ChangePasswordForm action={changeOwnPassword} />
               </CardContent>
             </Card>
 
