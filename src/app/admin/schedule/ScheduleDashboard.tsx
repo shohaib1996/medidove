@@ -19,6 +19,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import DebouncedSearchInput from "@/components/common/DebouncedSearchInput";
+import GlobalPagination from "@/components/common/GlobalPagination";
 import {
   assignAppointmentDoctor,
   createDoctorAvailability,
@@ -36,6 +38,9 @@ type ScheduleDashboardProps = {
   activeDoctors: number;
   activeBlocks: number;
   pendingAppointments: number;
+  search: string;
+  page: number;
+  totalPages: number;
 };
 
 const ScheduleDashboard = ({
@@ -46,6 +51,9 @@ const ScheduleDashboard = ({
   activeDoctors,
   activeBlocks,
   pendingAppointments,
+  search,
+  page,
+  totalPages,
 }: ScheduleDashboardProps) => (
     <main className="min-h-screen bg-slate-50 px-4 py-8 text-slate-950 sm:px-6 lg:px-8">
       <div className="mx-auto flex max-w-7xl flex-col gap-8">
@@ -311,7 +319,13 @@ const ScheduleDashboard = ({
             </Card>
           </div>
 
-          <div className="grid gap-4">
+          <div className="flex flex-col gap-4">
+            <DebouncedSearchInput
+              basePath="/admin/schedule"
+              defaultValue={search}
+              placeholder="Search schedule by doctor name"
+            />
+
             {availability.length > 0 ? (
               availability.map((block) => (
                 <Card key={block.id}>
@@ -356,10 +370,23 @@ const ScheduleDashboard = ({
               <Card>
                 <CardContent className="py-14 text-center text-slate-500">
                   <Clock className="mx-auto mb-3 h-9 w-9" />
-                  No doctor availability has been created yet.
+                  {search
+                    ? `No schedule blocks match "${search}".`
+                    : "No doctor availability has been created yet."}
                 </CardContent>
               </Card>
             )}
+
+            <GlobalPagination
+              page={page}
+              totalPages={totalPages}
+              buildHref={(targetPage) => {
+                const params = new URLSearchParams();
+                if (search) params.set("q", search);
+                params.set("page", String(targetPage));
+                return `/admin/schedule?${params.toString()}`;
+              }}
+            />
           </div>
         </section>
       </div>

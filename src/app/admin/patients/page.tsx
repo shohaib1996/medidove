@@ -122,6 +122,7 @@ const AdminPatientsPage = async () => {
     supabase
       .from("profiles")
       .select("id, full_name, phone, role, created_at")
+      .eq("role", "patient")
       .order("created_at", { ascending: false })
       .limit(40),
     supabase

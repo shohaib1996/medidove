@@ -24,11 +24,21 @@ export const metadata = {
 type StaffMemberRow = {
   id: string;
   full_name: string;
-  email: string;
+  email: string | null;
   phone: string | null;
   role: UserRole;
   status: "active" | "inactive" | "invited";
   notes: string | null;
+  created_at: string;
+  source: "staff_members" | "doctors";
+};
+
+type DoctorRow = {
+  id: string;
+  profile_id: string | null;
+  full_name: string;
+  specialty: string;
+  is_active: boolean;
   created_at: string;
 };
 
@@ -83,13 +93,54 @@ export default async function AdminStaffPage() {
     redirect("/admin");
   }
 
-  const { data } = await supabase
-    .from("staff_members")
-    .select("id, full_name, email, phone, role, status, notes, created_at")
-    .order("created_at", { ascending: false })
-    .limit(80);
+  const [{ data }, { data: doctorsData }] = await Promise.all([
+    supabase
+      .from("staff_members")
+      .select("id, full_name, email, phone, role, status, notes, created_at")
+      .order("created_at", { ascending: false })
+      .limit(80),
+    supabase
+      .from("doctors")
+      .select("id, profile_id, full_name, specialty, is_active, created_at")
+      .order("created_at", { ascending: false }),
+  ]);
 
-  const staff = (data || []) as StaffMemberRow[];
+  const doctors = (doctorsData || []) as DoctorRow[];
+  const doctorProfileIds = doctors
+    .map((doctor) => doctor.profile_id)
+    .filter((id): id is string => Boolean(id));
+
+  const { data: doctorProfilesData } =
+    doctorProfileIds.length > 0
+      ? await supabase
+          .from("profiles")
+          .select("id, phone")
+          .in("id", doctorProfileIds)
+      : { data: [] as { id: string; phone: string | null }[] };
+
+  const doctorPhoneById = new Map(
+    (doctorProfilesData || []).map((row) => [row.id, row.phone]),
+  );
+
+  const manualStaff = ((data || []) as (StaffMemberRow & { email: string })[]).map(
+    (item) => ({ ...item, source: "staff_members" as const }),
+  );
+
+  const doctorStaff: StaffMemberRow[] = doctors.map((doctor) => ({
+    id: doctor.id,
+    full_name: doctor.full_name,
+    email: null,
+    phone: doctor.profile_id ? doctorPhoneById.get(doctor.profile_id) || null : null,
+    role: "doctor",
+    status: doctor.is_active ? "active" : "inactive",
+    notes: doctor.specialty ? `Specialty: ${doctor.specialty}` : null,
+    created_at: doctor.created_at,
+    source: "doctors",
+  }));
+
+  const staff = [...manualStaff, ...doctorStaff].sort((a, b) =>
+    b.created_at.localeCompare(a.created_at),
+  );
   const activeCount = staff.filter((item) => item.status === "active").length;
   const doctorCount = staff.filter((item) => item.role === "doctor").length;
   const receptionistCount = staff.filter(
@@ -162,6 +213,10 @@ export default async function AdminStaffPage() {
             <CardHeader>
               <CardDescription>New team member</CardDescription>
               <CardTitle>Add staff member</CardTitle>
+              <p className="text-sm text-slate-500">
+                Doctors from the doctor directory appear below automatically
+                and aren&apos;t added through this form.
+              </p>
             </CardHeader>
             <CardContent>
               <form action={createStaffMember} className="space-y-5">
@@ -197,7 +252,6 @@ export default async function AdminStaffPage() {
                       className="h-11 w-full rounded-md border border-slate-200 bg-white px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
                     >
                       <option value="receptionist">Receptionist</option>
-                      <option value="doctor">Doctor</option>
                       <option value="admin">Admin</option>
                     </select>
                   </div>
@@ -254,7 +308,9 @@ export default async function AdminStaffPage() {
                     <div className="grid gap-3 text-sm text-slate-600 md:grid-cols-2">
                       <span className="flex min-w-0 gap-2">
                         <Mail className="mt-0.5 size-4 shrink-0 text-slate-400" />
-                        <span className="wrap-break-word">{item.email}</span>
+                        <span className="wrap-break-word">
+                          {item.email || "No portal login"}
+                        </span>
                       </span>
                       <span className="flex gap-2">
                         <Phone className="mt-0.5 size-4 shrink-0 text-slate-400" />
@@ -266,17 +322,24 @@ export default async function AdminStaffPage() {
                         {item.notes}
                       </p>
                     ) : null}
-                    <div className="flex flex-wrap gap-2">
-                      {item.status !== "active" ? (
-                        <StatusButton id={item.id} status="active" label="Activate" />
-                      ) : null}
-                      {item.status !== "invited" ? (
-                        <StatusButton id={item.id} status="invited" label="Mark invited" />
-                      ) : null}
-                      {item.status !== "inactive" ? (
-                        <StatusButton id={item.id} status="inactive" label="Deactivate" />
-                      ) : null}
-                    </div>
+                    {item.source === "staff_members" ? (
+                      <div className="flex flex-wrap gap-2">
+                        {item.status !== "active" ? (
+                          <StatusButton id={item.id} status="active" label="Activate" />
+                        ) : null}
+                        {item.status !== "invited" ? (
+                          <StatusButton id={item.id} status="invited" label="Mark invited" />
+                        ) : null}
+                        {item.status !== "inactive" ? (
+                          <StatusButton id={item.id} status="inactive" label="Deactivate" />
+                        ) : null}
+                      </div>
+                    ) : (
+                      <p className="text-xs text-slate-400">
+                        Manage this doctor&apos;s availability from Doctor
+                        schedule.
+                      </p>
+                    )}
                   </CardContent>
                 </Card>
               ))
