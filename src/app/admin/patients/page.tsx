@@ -18,10 +18,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import DebouncedSearchInput from "@/components/common/DebouncedSearchInput";
+import GlobalPagination from "@/components/common/GlobalPagination";
 
 export const metadata = {
   title: "Patient CRM | MediDove",
 };
+
+const PAGE_SIZE = 8;
 
 type ProfileRow = {
   id: string;
@@ -77,7 +82,13 @@ const formatDate = (value: string | null) => {
 
 const uniqueCount = (items: string[]) => new Set(items.filter(Boolean)).size;
 
-const AdminPatientsPage = async () => {
+type AdminPatientsPageProps = {
+  searchParams: Promise<{ q?: string; page?: string }>;
+};
+
+const AdminPatientsPage = async ({ searchParams }: AdminPatientsPageProps) => {
+  const { q, page: pageParam } = await searchParams;
+  const search = (q || "").trim();
   const supabase = await createClient();
   const {
     data: { user },
@@ -124,7 +135,7 @@ const AdminPatientsPage = async () => {
       .select("id, full_name, phone, role, created_at")
       .eq("role", "patient")
       .order("created_at", { ascending: false })
-      .limit(40),
+      .limit(500),
     supabase
       .from("appointments")
       .select(
@@ -151,6 +162,14 @@ const AdminPatientsPage = async () => {
   const consents = (consentsData || []) as ConsentRow[];
   const outbox = (outboxData || []) as OutboxRow[];
 
+  const adminSupabase = createAdminClient();
+  const { data: usersPage } = await adminSupabase.auth.admin.listUsers({
+    perPage: 200,
+  });
+  const emailById = new Map(
+    (usersPage?.users || []).map((authUser) => [authUser.id, authUser.email || null]),
+  );
+
   const patientSummaries = profiles.map((profile) => {
     const patientAppointments = appointments.filter(
       (appointment) => appointment.patient_id === profile.id,
@@ -164,9 +183,11 @@ const AdminPatientsPage = async () => {
     const consentedChannels = patientConsents
       .filter((consent) => consent.consented)
       .map((consent) => consent.channel);
+    const email = emailById.get(profile.id) || latestAppointment?.patient_email || null;
 
     return {
       profile,
+      email,
       appointments: patientAppointments,
       consents: patientConsents,
       outbox: patientOutbox,
@@ -182,6 +203,26 @@ const AdminPatientsPage = async () => {
   const linkedAppointmentCount = appointments.filter(
     (appointment) => appointment.patient_id,
   ).length;
+
+  const filteredSummaries = search
+    ? patientSummaries.filter((summary) => {
+        const term = search.toLowerCase();
+        return (
+          (summary.profile.full_name || "").toLowerCase().includes(term) ||
+          (summary.email || "").toLowerCase().includes(term)
+        );
+      })
+    : patientSummaries;
+
+  const totalPages = Math.max(1, Math.ceil(filteredSummaries.length / PAGE_SIZE));
+  const page = Math.min(
+    Math.max(1, Number.parseInt(pageParam || "1", 10) || 1),
+    totalPages,
+  );
+  const visibleSummaries = filteredSummaries.slice(
+    (page - 1) * PAGE_SIZE,
+    page * PAGE_SIZE,
+  );
 
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-8 text-slate-950 sm:px-6 lg:px-8">
@@ -250,8 +291,14 @@ const AdminPatientsPage = async () => {
           </Card>
         </section>
 
+        <DebouncedSearchInput
+          basePath="/admin/patients"
+          defaultValue={search}
+          placeholder="Search patients by name or email"
+        />
+
         <section className="grid gap-4 lg:grid-cols-2">
-          {patientSummaries.map((summary) => (
+          {visibleSummaries.map((summary) => (
             <Card key={summary.profile.id}>
               <CardHeader>
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -278,7 +325,9 @@ const AdminPatientsPage = async () => {
                   </div>
                   <div className="flex items-center gap-2 text-slate-600">
                     <Mail className="h-4 w-4" />
-                    <span>{summary.latestAppointment?.patient_email || "Email via booking"}</span>
+                    <span className="wrap-break-word">
+                      {summary.email || "No email on file"}
+                    </span>
                   </div>
                 </div>
 
@@ -329,6 +378,28 @@ const AdminPatientsPage = async () => {
             </Card>
           ))}
         </section>
+
+        {visibleSummaries.length === 0 ? (
+          <Card>
+            <CardContent className="py-14 text-center text-slate-500">
+              <UserRound className="mx-auto mb-3 h-9 w-9" />
+              {search
+                ? `No patients match "${search}".`
+                : "No registered patients yet."}
+            </CardContent>
+          </Card>
+        ) : null}
+
+        <GlobalPagination
+          page={page}
+          totalPages={totalPages}
+          buildHref={(targetPage) => {
+            const params = new URLSearchParams();
+            if (search) params.set("q", search);
+            params.set("page", String(targetPage));
+            return `/admin/patients?${params.toString()}`;
+          }}
+        />
 
         <Card>
           <CardHeader>

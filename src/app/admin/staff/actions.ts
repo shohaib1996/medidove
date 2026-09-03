@@ -86,7 +86,6 @@ const assertAdmin = async () => {
 
 const refreshStaff = () => {
   revalidatePath("/admin/staff");
-  revalidatePath("/admin/tasks");
   revalidatePath("/admin/audit");
 };
 

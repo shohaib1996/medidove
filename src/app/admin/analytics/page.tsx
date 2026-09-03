@@ -45,12 +45,6 @@ type OutboxRecord = StatusRecord & {
   channel: string;
 };
 
-type CareTaskRecord = StatusRecord & {
-  priority: string;
-  source_type: string;
-  due_at: string | null;
-};
-
 const formatDate = (value: string) =>
   new Intl.DateTimeFormat("en", {
     dateStyle: "medium",
@@ -96,7 +90,6 @@ export default async function AdminAnalyticsPage() {
     { data: clinicalNotesData },
     { data: automationRulesData },
     { data: outboxData },
-    { data: careTasksData },
     { data: doctorsData },
     { data: availabilityData },
   ] = await Promise.all([
@@ -146,11 +139,6 @@ export default async function AdminAnalyticsPage() {
       .order("created_at", { ascending: false })
       .limit(200),
     supabase
-      .from("care_tasks")
-      .select("status, priority, source_type, due_at, created_at")
-      .order("created_at", { ascending: false })
-      .limit(200),
-    supabase
       .from("doctors")
       .select("is_active, created_at")
       .order("created_at", { ascending: false })
@@ -174,7 +162,6 @@ export default async function AdminAnalyticsPage() {
   const clinicalNotes = (clinicalNotesData || []) as ClinicalNoteRecord[];
   const automationRules = (automationRulesData || []) as AutomationRuleRecord[];
   const outbox = (outboxData || []) as OutboxRecord[];
-  const careTasks = (careTasksData || []) as CareTaskRecord[];
   const doctors = (doctorsData || []) as (CreatedRecord & { is_active: boolean })[];
   const availability = (availabilityData || []) as (CreatedRecord & {
     is_active: boolean;
@@ -190,8 +177,7 @@ export default async function AdminAnalyticsPage() {
     whatsAppMessages.length +
     feedback.length +
     clinicalNotes.length +
-    outbox.length +
-    careTasks.length;
+    outbox.length;
   const todayRecords = [
     ...appointments,
     ...leads,
@@ -200,7 +186,6 @@ export default async function AdminAnalyticsPage() {
     ...feedback,
     ...clinicalNotes,
     ...outbox,
-    ...careTasks,
   ].filter((record) => isToday(record.created_at)).length;
   const highUrgency =
     appointments.filter((appointment) => appointment.urgency === "high").length +
@@ -217,18 +202,6 @@ export default async function AdminAnalyticsPage() {
   const reviewedNotes = clinicalNotes.filter((note) => note.status === "reviewed").length;
   const flaggedNotes = clinicalNotes.filter(
     (note) => note.risk_flags.length > 0,
-  ).length;
-  const nowMs = new Date().getTime();
-  const openCareTasks = careTasks.filter((task) => task.status === "open").length;
-  const urgentCareTasks = careTasks.filter(
-    (task) => task.priority === "urgent" || task.priority === "high",
-  ).length;
-  const overdueCareTasks = careTasks.filter(
-    (task) =>
-      task.due_at &&
-      new Date(task.due_at).getTime() < nowMs &&
-      task.status !== "done" &&
-      task.status !== "cancelled",
   ).length;
 
   const latestActivity = [
@@ -267,11 +240,6 @@ export default async function AdminAnalyticsPage() {
       created_at: record.created_at,
       status: record.status,
     })),
-    ...careTasks.map((record) => ({
-      label: "Care task",
-      created_at: record.created_at,
-      status: record.priority,
-    })),
   ]
     .sort(
       (a, b) =>
@@ -294,10 +262,6 @@ export default async function AdminAnalyticsPage() {
       activeDoctors={activeDoctors}
       activeAvailability={activeAvailability}
       blockedOutbox={blockedOutbox}
-      openCareTasks={openCareTasks}
-      urgentCareTasks={urgentCareTasks}
-      overdueCareTasks={overdueCareTasks}
-      careTasksCount={careTasks.length}
       appointmentsPending={appointments.filter((appointment) => appointment.status === "pending").length}
       newContactLeads={leads.filter((lead) => lead.status === "new").length}
       callbackRequests={callLogs.filter((callLog) => callLog.status === "requested").length}
@@ -308,8 +272,6 @@ export default async function AdminAnalyticsPage() {
       feedbackSentimentData={countBy(feedback, (item) => item.ai_sentiment)}
       outboxStatusData={countBy(outbox, (item) => item.status)}
       automationChannelData={countBy(automationRules, (rule) => rule.channel)}
-      taskPriorityData={countBy(careTasks, (task) => task.priority)}
-      taskSourceData={countBy(careTasks, (task) => task.source_type)}
       latestActivity={latestActivity}
       formatDate={formatDate}
     />

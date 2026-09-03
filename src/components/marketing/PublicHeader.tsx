@@ -1,25 +1,59 @@
 "use client";
 
-import { useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { CalendarDays, Loader2 } from "lucide-react";
+import {
+  CalendarDays,
+  LayoutDashboard,
+  Loader2,
+  Stethoscope,
+  UserRound,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ClinicAssistantWidget from "@/components/ai/ClinicAssistantWidget";
 import PublicSearchButton from "@/components/common/PublicSearchButton";
 import { getBookDestination } from "@/lib/auth/actions";
 
+const destinationMeta: Record<
+  string,
+  { label: string; icon: typeof CalendarDays }
+> = {
+  "/admin": { label: "Admin Dashboard", icon: LayoutDashboard },
+  "/doctor-portal": { label: "Doctor Portal", icon: Stethoscope },
+  "/portal": { label: "Patient Portal", icon: UserRound },
+};
+
 const PublicHeader = () => {
   const router = useRouter();
   const [isResolving, startTransition] = useTransition();
+  const [destination, setDestination] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    getBookDestination().then((result) => {
+      if (isMounted) {
+        setDestination(result);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const handleBookClick = () => {
     startTransition(async () => {
-      const destination = await getBookDestination();
-      router.push(destination);
+      const target = destination || (await getBookDestination());
+      router.push(target);
     });
   };
+
+  const meta = destination ? destinationMeta[destination] : null;
+  const label = meta?.label || "Book";
+  const Icon = meta?.icon || CalendarDays;
 
   return (
     <>
@@ -42,8 +76,8 @@ const PublicHeader = () => {
               onClick={handleBookClick}
               disabled={isResolving}
             >
-              {isResolving ? <Loader2 className="animate-spin" /> : <CalendarDays />}
-              Book
+              {isResolving ? <Loader2 className="animate-spin" /> : <Icon />}
+              {label}
             </Button>
           </div>
         </div>

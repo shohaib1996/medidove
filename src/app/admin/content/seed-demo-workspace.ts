@@ -2,7 +2,7 @@
 
 import { assertAdmin, refreshContent } from "./action-utils";
 import { demoAvailability, demoDepartments, demoDoctors, demoKnowledge, demoServices, demoTemplates } from "./demo-data";
-import { seedAiLeadIfMissing, seedBlogPosts, seedCampaignIfMissing, seedCareTaskIfMissing, seedClinicalNoteIfMissing, seedClinicSettings, seedConsentIfMissing, seedFeedbackIfMissing, seedHealthPackages, seedLeadIfMissing, seedOptOutIfMissing, seedProducts, seedStaffMembers, seedTestimonials } from "./demo-seeders";
+import { seedAiLeadIfMissing, seedBlogPosts, seedCampaignIfMissing, seedClinicalNoteIfMissing, seedClinicSettings, seedConsentIfMissing, seedFeedbackIfMissing, seedHealthPackages, seedLeadIfMissing, seedOptOutIfMissing, seedProducts, seedStaffMembers, seedTestimonials } from "./demo-seeders";
 
 export const seedDemoWorkspace = async () => {
   const supabase = await assertAdmin();
@@ -156,7 +156,6 @@ export const seedDemoWorkspace = async () => {
   await seedConsentIfMissing(supabase);
   await seedOptOutIfMissing(supabase);
   await seedFeedbackIfMissing(supabase);
-  await seedCareTaskIfMissing(supabase);
   await seedClinicalNoteIfMissing(supabase);
   await seedCampaignIfMissing(supabase);
   await seedAiLeadIfMissing(supabase);

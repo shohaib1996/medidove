@@ -118,32 +118,6 @@ export const seedFeedbackIfMissing = async (
   });
 };
 
-export const seedCareTaskIfMissing = async (
-  supabase: AdminSupabaseClient,
-) => {
-  const sourceId = "demo-seed-wait-time-feedback";
-  const { data: existing } = await supabase
-    .from("care_tasks")
-    .select("id")
-    .eq("source_id", sourceId)
-    .maybeSingle();
-
-  if (existing) {
-    return;
-  }
-
-  await supabase.from("care_tasks").insert({
-    source_type: "feedback",
-    source_id: sourceId,
-    title: "Follow up on demo wait-time feedback",
-    description:
-      "Call the demo patient, acknowledge the wait, and explain how arrival updates will be improved.",
-    priority: "medium",
-    status: "open",
-    due_at: new Date(Date.now() + 2 * 86400000).toISOString(),
-  });
-};
-
 export const seedClinicalNoteIfMissing = async (
   supabase: AdminSupabaseClient,
 ) => {

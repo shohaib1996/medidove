@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { createPortal } from "react-dom";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { AlertTriangle, Loader2, Search, Stethoscope, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -170,7 +171,7 @@ const FullscreenSearch = ({
     return null;
   }
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-9999 overflow-y-auto bg-slate-950/95 px-4 py-6 text-white backdrop-blur md:px-8">
       <div className="mx-auto flex min-h-full max-w-5xl flex-col">
         <div className="flex items-center justify-between gap-4">
@@ -305,7 +306,8 @@ const FullscreenSearch = ({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 };
 

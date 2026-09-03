@@ -223,9 +223,6 @@ export default async function AdminStaffPage({
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
-            <Button asChild variant="outline">
-              <Link href="/admin/tasks">Task board</Link>
-            </Button>
             <Button asChild variant="secondary">
               <Link href="/admin">Back to dashboard</Link>
             </Button>

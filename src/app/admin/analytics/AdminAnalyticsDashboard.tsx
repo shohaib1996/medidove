@@ -5,7 +5,6 @@ import {
   Bot,
   CalendarClock,
   ClipboardPlus,
-  ClipboardList,
   Headphones,
   Inbox,
   MessageCircle,
@@ -40,10 +39,6 @@ type AdminAnalyticsDashboardProps = {
   activeDoctors: number;
   activeAvailability: number;
   blockedOutbox: number;
-  openCareTasks: number;
-  urgentCareTasks: number;
-  overdueCareTasks: number;
-  careTasksCount: number;
   appointmentsPending: number;
   newContactLeads: number;
   callbackRequests: number;
@@ -54,8 +49,6 @@ type AdminAnalyticsDashboardProps = {
   feedbackSentimentData: Record<string, number>;
   outboxStatusData: Record<string, number>;
   automationChannelData: Record<string, number>;
-  taskPriorityData: Record<string, number>;
-  taskSourceData: Record<string, number>;
   latestActivity: LatestActivity[];
   formatDate: (value: string) => string;
 };
@@ -74,10 +67,6 @@ const AdminAnalyticsDashboard = ({
   activeDoctors,
   activeAvailability,
   blockedOutbox,
-  openCareTasks,
-  urgentCareTasks,
-  overdueCareTasks,
-  careTasksCount,
   appointmentsPending,
   newContactLeads,
   callbackRequests,
@@ -88,8 +77,6 @@ const AdminAnalyticsDashboard = ({
   feedbackSentimentData,
   outboxStatusData,
   automationChannelData,
-  taskPriorityData,
-  taskSourceData,
   latestActivity,
   formatDate,
 }: AdminAnalyticsDashboardProps) => (
@@ -184,27 +171,6 @@ const AdminAnalyticsDashboard = ({
           />
         </section>
 
-        <section className="grid gap-4 md:grid-cols-3">
-          <MetricCard
-            title="Open tasks"
-            value={openCareTasks}
-            detail={`${urgentCareTasks} high or urgent tasks`}
-            icon={ClipboardList}
-          />
-          <MetricCard
-            title="Overdue tasks"
-            value={overdueCareTasks}
-            detail="open tasks past due date"
-            icon={CalendarClock}
-          />
-          <MetricCard
-            title="Task volume"
-            value={careTasksCount}
-            detail="manual and AI-generated tasks"
-            icon={Activity}
-          />
-        </section>
-
         <section className="grid gap-6 xl:grid-cols-3">
           <Breakdown
             title="Appointment Status"
@@ -238,19 +204,6 @@ const AdminAnalyticsDashboard = ({
             title="Automation Channels"
             description="Configured care automation"
             data={automationChannelData}
-          />
-        </section>
-
-        <section className="grid gap-6 xl:grid-cols-2">
-          <Breakdown
-            title="Task Priority"
-            description="Care coordination workload"
-            data={taskPriorityData}
-          />
-          <Breakdown
-            title="Task Sources"
-            description="Where staff work originates"
-            data={taskSourceData}
           />
         </section>
 

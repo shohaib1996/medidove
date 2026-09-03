@@ -99,7 +99,6 @@ For real healthcare clients, production compliance work may be required, includi
 - `/admin/outreach`
 - `/admin/opt-outs`
 - `/admin/automations`
-- `/admin/tasks`
 - `/admin/clinical-notes`
 - `/admin/staff`
 - `/admin/content`
@@ -146,7 +145,6 @@ EMAIL_DELIVERY_WEBHOOK_URL=
 
 AUTOMATION_RUN_SECRET=
 OUTBOX_DISPATCH_SECRET=
-TASK_GENERATION_SECRET=
 ```
 
 Never commit real `.env` values.
@@ -217,7 +215,6 @@ Automation:
 
 - `/api/automations/run` runs automation rules when called with `AUTOMATION_RUN_SECRET`.
 - `/api/outbox/dispatch` dispatches queued outbox records when called with `OUTBOX_DISPATCH_SECRET`.
-- `/api/tasks/generate` creates staff task suggestions when called with `TASK_GENERATION_SECRET`.
 
 ## Demo Workflow
 

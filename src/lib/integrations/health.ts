@@ -94,13 +94,6 @@ const integrationDefinitions = [
     workflow: "Protected cron endpoint for provider delivery",
     href: "/admin/outreach",
   },
-  {
-    name: "Task Generation",
-    category: "Background jobs",
-    requiredKeys: ["TASK_GENERATION_SECRET"],
-    workflow: "Protected cron endpoint for AI-generated care tasks",
-    href: "/admin/tasks",
-  },
 ];
 
 export const getIntegrationStatuses = (): IntegrationStatus[] =>
