@@ -17,7 +17,7 @@ MediDove is not an AI diagnosis product. It is designed for:
 - WhatsApp, SMS, email, and voice outreach queueing
 - Consent-aware reminders and follow-ups
 - Patient, doctor, and admin dashboards
-- Campaign and automation workflows
+- Automation workflows
 
 For real healthcare clients, production compliance work may be required, including HIPAA review, BAA agreements, call recording notices, access policies, audit retention, and vendor compliance checks.
 
@@ -65,7 +65,6 @@ For real healthcare clients, production compliance work may be required, includi
 - Provider dispatch endpoint with consent enforcement
 - Patient feedback with sentiment triage
 - Integration health dashboard
-- AI campaign dashboard
 - Admin clinic settings
 - Privacy and terms pages
 
@@ -93,7 +92,6 @@ For real healthcare clients, production compliance work may be required, includi
 - `/admin/leads`
 - `/admin/ai-leads`
 - `/admin/communications`
-- `/admin/campaigns`
 - `/admin/outreach`
 - `/admin/opt-outs`
 - `/admin/automations`
@@ -223,9 +221,8 @@ Automation:
 6. Open `/admin/leads`, `/admin/appointments`, and `/admin/communications`.
 7. Create a message template in `/admin/templates`.
 8. Queue outreach in `/admin/outreach`.
-9. Create a campaign in `/admin/campaigns`.
-10. Check consent and provider readiness in `/admin/integrations`.
-11. Review reporting in `/admin/analytics`.
+9. Check consent and provider readiness in `/admin/integrations`.
+10. Review reporting in `/admin/analytics`.
 
 ## Safety Rules
 
@@ -245,7 +242,7 @@ Suggested title:
 
 Short description:
 
-`A full-stack meditech demo that automates appointment intake, AI receptionist callbacks, patient reminders, WhatsApp engagement, admin workflows, campaign outreach, and analytics with consent-aware delivery controls.`
+`A full-stack meditech demo that automates appointment intake, AI receptionist callbacks, patient reminders, WhatsApp engagement, admin workflows, outreach, and analytics with consent-aware delivery controls.`
 
 ## Deployment
 

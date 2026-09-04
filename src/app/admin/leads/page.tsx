@@ -22,7 +22,8 @@ import {
 import { updateAdminRecordStatus } from "@/app/admin/actions";
 import { createClient } from "@/lib/supabase/server";
 import GlobalPagination from "@/components/common/GlobalPagination";
-import ReplyToLeadForm from "./ReplyToLeadForm";
+import ReplyToLeadForm from "@/components/common/ReplyToLeadForm";
+import { replyToLead } from "./actions";
 
 export const metadata = {
   title: "Lead Pipeline | MediDove Admin",
@@ -349,6 +350,7 @@ const AdminLeadsPage = async ({
                       <ReplyToLeadForm
                         leadId={lead.id}
                         email={lead.email}
+                        action={replyToLead}
                         defaultSubject={
                           lead.subject
                             ? `Re: ${lead.subject}`

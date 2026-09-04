@@ -21,6 +21,7 @@ type AuditFilter =
   | "all"
   | "status_updated"
   | "lead_replied"
+  | "ai_lead_replied"
   | "doctor_availability_created"
   | "doctor_availability_toggled"
   | "doctor_profile_linked"
@@ -46,6 +47,7 @@ const filters: AuditFilter[] = [
   "all",
   "status_updated",
   "lead_replied",
+  "ai_lead_replied",
   "doctor_availability_created",
   "doctor_availability_toggled",
   "doctor_profile_linked",

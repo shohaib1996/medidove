@@ -46,7 +46,6 @@ const sections = [
       { href: "/admin/ai-leads", label: "AI Leads", icon: Bot },
       { href: "/admin/communications", label: "Inbox", icon: MessageCircle },
       { href: "/admin/outreach", label: "Outreach", icon: Megaphone },
-      { href: "/admin/campaigns", label: "Campaigns", icon: Activity },
       { href: "/admin/opt-outs", label: "Opt-outs", icon: Ban },
       { href: "/admin/feedback", label: "Feedback", icon: HeartPulse },
     ],

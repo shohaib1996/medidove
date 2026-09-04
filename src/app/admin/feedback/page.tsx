@@ -17,11 +17,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
+import GlobalPagination from "@/components/common/GlobalPagination";
 import { updateFeedbackStatus } from "./actions";
 
 export const metadata = {
   title: "Patient Feedback | MediDove Admin",
 };
+
+const PAGE_SIZE = 6;
 
 type FeedbackFilter = "all" | "new" | "reviewing" | "resolved" | "archived";
 
@@ -83,7 +86,7 @@ const StatusAction = ({
 export default async function AdminFeedbackPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string | string[] }>;
+  searchParams: Promise<{ status?: string | string[]; page?: string }>;
 }) {
   const supabase = await createClient();
   const {
@@ -128,6 +131,13 @@ export default async function AdminFeedbackPage({
     (item) => item.ai_sentiment === "negative",
   ).length;
   const highUrgency = feedback.filter((item) => item.ai_urgency === "high").length;
+
+  const totalPages = Math.max(1, Math.ceil(feedback.length / PAGE_SIZE));
+  const page = Math.min(
+    Math.max(1, Number.parseInt(params.page || "1", 10) || 1),
+    totalPages,
+  );
+  const pagedFeedback = feedback.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-8 text-slate-950 sm:px-6 lg:px-8">
@@ -228,7 +238,7 @@ export default async function AdminFeedbackPage({
           <CardContent>
             {feedback.length > 0 ? (
               <div className="grid gap-4">
-                {feedback.map((item) => (
+                {pagedFeedback.map((item) => (
                   <div key={item.id} className="rounded-md border p-4">
                     <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                       <div>
@@ -284,12 +294,9 @@ export default async function AdminFeedbackPage({
                       </div>
                     </div>
 
-                    <div className="mt-4 grid gap-4 lg:grid-cols-2">
+                    <div className="mt-4">
                       <p className="rounded-md bg-slate-50 p-4 text-sm leading-6 text-slate-700">
                         {item.message}
-                      </p>
-                      <p className="rounded-md border border-primary/20 bg-primary/5 p-4 text-sm leading-6 text-slate-700">
-                        {item.ai_summary}
                       </p>
                     </div>
                   </div>
@@ -302,6 +309,17 @@ export default async function AdminFeedbackPage({
             )}
           </CardContent>
         </Card>
+
+        <GlobalPagination
+          page={page}
+          totalPages={totalPages}
+          buildHref={(targetPage) => {
+            const target = new URLSearchParams();
+            if (activeFilter !== "all") target.set("status", activeFilter);
+            target.set("page", String(targetPage));
+            return `/admin/feedback?${target.toString()}`;
+          }}
+        />
       </div>
     </main>
   );

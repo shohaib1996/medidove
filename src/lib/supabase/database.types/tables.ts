@@ -1,5 +1,5 @@
 import type { AiTables } from "./tables/ai";
-import type { CampaignTables } from "./tables/campaigns";
+import type { AuditTables } from "./tables/audit";
 import type { CommunicationTables } from "./tables/communications";
 import type { ContentTables } from "./tables/content";
 import type { CoreTables } from "./tables/core";
@@ -10,10 +10,10 @@ export type PublicTables = CoreTables &
   PatientCareTables &
   AiTables &
   CommunicationTables &
-  CampaignTables;
+  AuditTables;
 
 export type { AiTables } from "./tables/ai";
-export type { CampaignTables } from "./tables/campaigns";
+export type { AuditTables } from "./tables/audit";
 export type { CommunicationTables } from "./tables/communications";
 export type { ContentTables } from "./tables/content";
 export type { CoreTables } from "./tables/core";

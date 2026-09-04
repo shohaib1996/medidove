@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Bot, Mail, Phone, UserRound } from "lucide-react";
+import { Bot, Filter, Inbox, Mail, Phone, UserRound } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,9 +12,28 @@ import {
 } from "@/components/ui/card";
 import { updateAdminRecordStatus } from "@/app/admin/actions";
 import { createClient } from "@/lib/supabase/server";
+import GlobalPagination from "@/components/common/GlobalPagination";
+import ReplyToLeadForm from "@/components/common/ReplyToLeadForm";
+import { replyToAiLead } from "./actions";
 
 export const metadata = {
   title: "AI Leads | MediDove Admin",
+};
+
+const PAGE_SIZE = 6;
+
+type LeadStatusFilter = "all" | "new" | "contacted" | "converted" | "closed";
+
+const statuses: LeadStatusFilter[] = ["all", "new", "contacted", "converted", "closed"];
+
+const normalizeStatus = (
+  value: string | string[] | undefined,
+): LeadStatusFilter => {
+  const status = Array.isArray(value) ? value[0] : value;
+
+  return statuses.includes(status as LeadStatusFilter)
+    ? (status as LeadStatusFilter)
+    : "all";
 };
 
 type AiLead = {
@@ -56,7 +75,13 @@ const StatusAction = ({
   </form>
 );
 
-export default async function AdminAiLeadsPage() {
+export default async function AdminAiLeadsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string; status?: string | string[] }>;
+}) {
+  const params = await searchParams;
+  const activeStatus = normalizeStatus(params.status);
   const supabase = await createClient();
   const {
     data: { user },
@@ -76,18 +101,35 @@ export default async function AdminAiLeadsPage() {
     redirect("/admin");
   }
 
-  const { data } = await supabase
+  const listQuery = supabase
     .from("ai_leads")
     .select(
       "id, session_id, visitor_id, name, email, phone, interest, summary, urgency, status, created_at",
     )
     .order("created_at", { ascending: false })
-    .limit(80);
+    .limit(300);
 
-  const leads = (data || []) as AiLead[];
-  const newLeads = leads.filter((lead) => lead.status === "new").length;
-  const highUrgency = leads.filter((lead) => lead.urgency === "high").length;
-  const converted = leads.filter((lead) => lead.status === "converted").length;
+  if (activeStatus !== "all") {
+    listQuery.eq("status", activeStatus);
+  }
+
+  const [{ data: leadsData }, { data: statsData }] = await Promise.all([
+    listQuery,
+    supabase.from("ai_leads").select("status, urgency").limit(1000),
+  ]);
+
+  const filteredLeads = (leadsData || []) as AiLead[];
+  const allLeads = (statsData || []) as { status: string; urgency: string }[];
+  const newLeads = allLeads.filter((lead) => lead.status === "new").length;
+  const highUrgency = allLeads.filter((lead) => lead.urgency === "high").length;
+  const converted = allLeads.filter((lead) => lead.status === "converted").length;
+
+  const totalPages = Math.max(1, Math.ceil(filteredLeads.length / PAGE_SIZE));
+  const page = Math.min(
+    Math.max(1, Number.parseInt(params.page || "1", 10) || 1),
+    totalPages,
+  );
+  const leads = filteredLeads.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-10 text-slate-900 md:px-8">
@@ -116,35 +158,67 @@ export default async function AdminAiLeadsPage() {
           </div>
         </section>
 
-        <section className="grid gap-4 md:grid-cols-3">
+        <section className="grid gap-4 md:grid-cols-4">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between gap-4">
-              <div>
-                <CardDescription>New AI leads</CardDescription>
-                <CardTitle className="mt-2 text-3xl">{newLeads}</CardTitle>
-              </div>
-              <Bot className="size-8 text-primary" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0">
+              <CardTitle className="text-sm font-medium">Visible Leads</CardTitle>
+              <Inbox className="h-4 w-4 text-slate-500" />
             </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-semibold">{filteredLeads.length}</p>
+              <p className="text-xs text-slate-500">Matching current filter</p>
+            </CardContent>
           </Card>
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between gap-4">
-              <div>
-                <CardDescription>High urgency</CardDescription>
-                <CardTitle className="mt-2 text-3xl">{highUrgency}</CardTitle>
-              </div>
-              <Phone className="size-8 text-red-600" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0">
+              <CardTitle className="text-sm font-medium">New AI leads</CardTitle>
+              <Bot className="h-4 w-4 text-slate-500" />
             </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-semibold">{newLeads}</p>
+              <p className="text-xs text-slate-500">Need first response, all leads</p>
+            </CardContent>
           </Card>
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between gap-4">
-              <div>
-                <CardDescription>Converted</CardDescription>
-                <CardTitle className="mt-2 text-3xl">{converted}</CardTitle>
-              </div>
-              <UserRound className="size-8 text-emerald-600" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0">
+              <CardTitle className="text-sm font-medium">High Urgency</CardTitle>
+              <Phone className="h-4 w-4 text-slate-500" />
             </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-semibold">{highUrgency}</p>
+              <p className="text-xs text-slate-500">Flagged by urgency keywords</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0">
+              <CardTitle className="text-sm font-medium">Converted</CardTitle>
+              <UserRound className="h-4 w-4 text-slate-500" />
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-semibold">{converted}</p>
+              <p className="text-xs text-slate-500">Turned into a booked patient</p>
+            </CardContent>
           </Card>
         </section>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="flex items-center gap-2 text-sm font-medium text-slate-500">
+            <Filter className="h-4 w-4" />
+            Status
+          </span>
+          {statuses.map((status) => (
+            <Button
+              asChild
+              key={status}
+              size="sm"
+              variant={status === activeStatus ? "default" : "outline"}
+            >
+              <Link href={`/admin/ai-leads?status=${status}`}>
+                {status.charAt(0).toUpperCase() + status.slice(1)}
+              </Link>
+            </Button>
+          ))}
+        </div>
 
         <section className="grid gap-4">
           {leads.length > 0 ? (
@@ -204,6 +278,19 @@ export default async function AdminAiLeadsPage() {
                     <StatusAction id={lead.id} status="converted" label="Convert" />
                     <StatusAction id={lead.id} status="closed" label="Close" />
                   </div>
+                  {lead.email ? (
+                    <ReplyToLeadForm
+                      leadId={lead.id}
+                      email={lead.email}
+                      action={replyToAiLead}
+                      defaultSubject="Re: your message to MediDove"
+                      defaultMessage=""
+                    />
+                  ) : (
+                    <p className="text-xs text-slate-400">
+                      No email captured for this lead — reply by phone instead.
+                    </p>
+                  )}
                 </CardContent>
               </Card>
             ))
@@ -211,11 +298,24 @@ export default async function AdminAiLeadsPage() {
             <Card>
               <CardContent className="py-14 text-center text-slate-500">
                 <Bot className="mx-auto mb-3 size-9" />
-                No AI leads captured yet.
+                {activeStatus === "all"
+                  ? "No AI leads captured yet."
+                  : "No AI leads match this filter yet."}
               </CardContent>
             </Card>
           )}
         </section>
+
+        <GlobalPagination
+          page={page}
+          totalPages={totalPages}
+          buildHref={(targetPage) => {
+            const target = new URLSearchParams();
+            if (activeStatus !== "all") target.set("status", activeStatus);
+            target.set("page", String(targetPage));
+            return `/admin/ai-leads?${target.toString()}`;
+          }}
+        />
       </div>
     </main>
   );

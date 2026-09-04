@@ -118,34 +118,6 @@ export const seedFeedbackIfMissing = async (
   });
 };
 
-export const seedCampaignIfMissing = async (
-  supabase: AdminSupabaseClient,
-) => {
-  const name = "Demo wellness reactivation";
-  const { data: existing } = await supabase
-    .from("campaigns")
-    .select("id")
-    .eq("name", name)
-    .maybeSingle();
-
-  if (existing) {
-    return;
-  }
-
-  await supabase.from("campaigns").insert({
-    name,
-    campaign_type: "wellness_check",
-    audience: "whatsapp_opt_ins",
-    channel: "whatsapp",
-    goal: "Invite opted-in patients to book a routine wellness visit.",
-    message:
-      "Hi {{patient_name}}, this is MediDove Clinic. We are checking in to see whether you would like support scheduling a routine wellness visit. Reply CONFIRM to confirm, HELP for staff support, or STOP to opt out.",
-    ai_recommendation:
-      "Use approved WhatsApp templates for business-initiated outreach and dispatch only after consent validation.",
-    status: "draft",
-  });
-};
-
 export const seedAiLeadIfMissing = async (
   supabase: AdminSupabaseClient,
 ) => {

@@ -19,15 +19,17 @@ import {
 } from "@/components/ui/card";
 import { updateAdminRecordStatus } from "@/app/admin/actions";
 import { createClient } from "@/lib/supabase/server";
+import GlobalPagination from "@/components/common/GlobalPagination";
 
 export const metadata = {
   title: "Communication Inbox | MediDove Admin",
 };
 
+const PAGE_SIZE = 6;
+
 type ChannelFilter = "all" | "voice" | "whatsapp";
 
 type CallStatus = "requested" | "contacted" | "completed" | "failed";
-type WhatsAppStatus = "requested" | "queued" | "sent" | "failed";
 
 type CallLogRow = {
   id: string;
@@ -93,29 +95,10 @@ const CallStatusAction = ({
   </form>
 );
 
-const WhatsAppStatusAction = ({
-  id,
-  status,
-  label,
-}: {
-  id: string;
-  status: WhatsAppStatus;
-  label: string;
-}) => (
-  <form action={updateAdminRecordStatus}>
-    <input type="hidden" name="table" value="whatsapp_messages" />
-    <input type="hidden" name="id" value={id} />
-    <input type="hidden" name="status" value={status} />
-    <Button type="submit" variant="outline" size="sm">
-      {label}
-    </Button>
-  </form>
-);
-
 const AdminCommunicationsPage = async ({
   searchParams,
 }: {
-  searchParams: Promise<{ channel?: string | string[] }>;
+  searchParams: Promise<{ channel?: string | string[]; page?: string }>;
 }) => {
   const supabase = await createClient();
   const {
@@ -161,7 +144,7 @@ const AdminCommunicationsPage = async ({
         "id, phone_number, direction, provider, transcript, ai_summary, status, started_at, ended_at, created_at",
       )
       .order("created_at", { ascending: false })
-      .limit(80),
+      .limit(300),
     supabase
       .from("whatsapp_messages")
       .select("id, phone_number, direction, message, status, created_at")
@@ -173,6 +156,14 @@ const AdminCommunicationsPage = async ({
   const whatsAppMessages = (whatsAppData || []) as WhatsAppMessageRow[];
   const visibleCalls = activeChannel === "whatsapp" ? [] : callLogs;
   const visibleWhatsApp = activeChannel === "voice" ? [] : whatsAppMessages;
+
+  const totalPages = Math.max(1, Math.ceil(visibleCalls.length / PAGE_SIZE));
+  const page = Math.min(
+    Math.max(1, Number.parseInt(params.page || "1", 10) || 1),
+    totalPages,
+  );
+  const pagedCalls = visibleCalls.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
   const requestedCalls = callLogs.filter((call) => call.status === "requested").length;
   const completedCalls = callLogs.filter((call) => call.status === "completed").length;
   const requestedWhatsApp = whatsAppMessages.filter(
@@ -232,7 +223,10 @@ const AdminCommunicationsPage = async ({
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0">
-              <CardTitle className="text-sm font-medium">WhatsApp Requests</CardTitle>
+              <CardTitle className="flex items-center gap-1.5 text-sm font-medium">
+                WhatsApp Requests
+                <Badge variant="secondary">Soon</Badge>
+              </CardTitle>
               <MessageCircle className="h-4 w-4 text-slate-500" />
             </CardHeader>
             <CardContent>
@@ -242,7 +236,10 @@ const AdminCommunicationsPage = async ({
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0">
-              <CardTitle className="text-sm font-medium">Queued WhatsApp</CardTitle>
+              <CardTitle className="flex items-center gap-1.5 text-sm font-medium">
+                Queued WhatsApp
+                <Badge variant="secondary">Soon</Badge>
+              </CardTitle>
               <Send className="h-4 w-4 text-slate-500" />
             </CardHeader>
             <CardContent>
@@ -266,18 +263,27 @@ const AdminCommunicationsPage = async ({
                   <Filter className="h-4 w-4" />
                   Channel
                 </span>
-                {channels.map((channel) => (
-                  <Button
-                    asChild
-                    key={channel}
-                    size="sm"
-                    variant={channel === activeChannel ? "default" : "outline"}
-                  >
-                    <Link href={`/admin/communications?channel=${channel}`}>
-                      {channel.charAt(0).toUpperCase() + channel.slice(1)}
-                    </Link>
-                  </Button>
-                ))}
+                {channels.map((channel) =>
+                  channel === "whatsapp" ? (
+                    <Button key={channel} size="sm" variant="outline" disabled>
+                      WhatsApp
+                      <Badge variant="secondary" className="ml-1.5">
+                        Soon
+                      </Badge>
+                    </Button>
+                  ) : (
+                    <Button
+                      asChild
+                      key={channel}
+                      size="sm"
+                      variant={channel === activeChannel ? "default" : "outline"}
+                    >
+                      <Link href={`/admin/communications?channel=${channel}`}>
+                        {channel.charAt(0).toUpperCase() + channel.slice(1)}
+                      </Link>
+                    </Button>
+                  ),
+                )}
               </div>
             </div>
           </CardHeader>
@@ -287,9 +293,10 @@ const AdminCommunicationsPage = async ({
                 <div className="flex items-center gap-2">
                   <Bot className="h-5 w-5 text-primary" />
                   <h2 className="text-lg font-semibold">Voice receptionist logs</h2>
+                  <Badge variant="outline">{visibleCalls.length} total</Badge>
                 </div>
                 <div className="grid gap-4 lg:grid-cols-2">
-                  {visibleCalls.map((call) => (
+                  {pagedCalls.map((call) => (
                     <div key={call.id} className="rounded-md border p-4">
                       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                         <div>
@@ -327,6 +334,17 @@ const AdminCommunicationsPage = async ({
                     </div>
                   ))}
                 </div>
+                <GlobalPagination
+                  page={page}
+                  totalPages={totalPages}
+                  buildHref={(targetPage) => {
+                    const target = new URLSearchParams();
+                    if (activeChannel !== "all") target.set("channel", activeChannel);
+                    target.set("page", String(targetPage));
+                    return `/admin/communications?${target.toString()}`;
+                  }}
+                  className="mt-2"
+                />
               </section>
             ) : null}
 
@@ -335,7 +353,13 @@ const AdminCommunicationsPage = async ({
                 <div className="flex items-center gap-2">
                   <MessageCircle className="h-5 w-5 text-primary" />
                   <h2 className="text-lg font-semibold">WhatsApp messages</h2>
+                  <Badge variant="secondary">Coming soon</Badge>
                 </div>
+                <p className="text-sm text-slate-500">
+                  WhatsApp delivery is not live yet, so these are opt-in
+                  requests waiting on staff — no automatic queue or send
+                  actions are available for this channel.
+                </p>
                 <div className="grid gap-4 lg:grid-cols-2">
                   {visibleWhatsApp.map((message) => (
                     <div key={message.id} className="rounded-md border p-4">
@@ -351,22 +375,6 @@ const AdminCommunicationsPage = async ({
                           <p className="mt-1 text-sm text-slate-500">
                             {formatDate(message.created_at)}
                           </p>
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                          {message.status !== "queued" ? (
-                            <WhatsAppStatusAction
-                              id={message.id}
-                              status="queued"
-                              label="Queue"
-                            />
-                          ) : null}
-                          {message.status !== "sent" ? (
-                            <WhatsAppStatusAction
-                              id={message.id}
-                              status="sent"
-                              label="Sent"
-                            />
-                          ) : null}
                         </div>
                       </div>
                       <div className="mt-4 rounded-md bg-slate-50 p-3 text-sm leading-6 text-slate-700">

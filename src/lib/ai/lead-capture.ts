@@ -46,18 +46,37 @@ const leadIntentSignals = [
 const cleanPhone = (value: string | null) =>
   value ? value.replace(/\s+/g, " ").trim() : null;
 
+// Voice callers often spell their name letter-by-letter ("S-H-O-H-A-I-B"),
+// which transcribes literally. Collapse those chains back into plain words.
+const collapseSpelledOutLetters = (value: string) =>
+  value.replace(/\b(?:[a-zA-Z]-){1,}[a-zA-Z]\b/g, (match) =>
+    match.replace(/-/g, "").toLowerCase(),
+  );
+
 const cleanName = (value: string | null) => {
   if (!value) {
     return null;
   }
 
-  return value
+  return collapseSpelledOutLetters(value)
     .trim()
     .split(/\s+/)
     .slice(0, 4)
     .map((part) => `${part.charAt(0).toUpperCase()}${part.slice(1)}`)
     .join(" ");
 };
+
+export type ExtractedContactDetails = {
+  name: string | null;
+  email: string | null;
+  phone: string | null;
+};
+
+export const extractContactDetails = (text: string): ExtractedContactDetails => ({
+  name: cleanName(text.match(namePattern)?.[1] || null),
+  email: text.match(emailPattern)?.[0] || null,
+  phone: cleanPhone(text.match(phonePattern)?.[0] || null),
+});
 
 export const captureLeadFromMessage = ({
   message,
@@ -69,14 +88,12 @@ export const captureLeadFromMessage = ({
   const hasLeadIntent =
     intent !== "general_help" ||
     leadIntentSignals.some((signal) => normalized.includes(signal));
-  const email = message.match(emailPattern)?.[0] || null;
-  const phone = cleanPhone(message.match(phonePattern)?.[0] || null);
+  const { name, email, phone } = extractContactDetails(message);
 
   if (!hasLeadIntent || (!email && !phone)) {
     return null;
   }
 
-  const name = cleanName(message.match(namePattern)?.[1] || null);
   const urgency = highUrgencySignals.some((signal) => normalized.includes(signal))
     ? "high"
     : normalized.includes("appointment") || normalized.includes("call")

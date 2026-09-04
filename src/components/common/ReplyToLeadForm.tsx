@@ -7,13 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { replyToLead } from "./actions";
 
 type ReplyToLeadFormProps = {
   leadId: string;
   email: string;
   defaultSubject: string;
   defaultMessage: string;
+  action: (formData: FormData) => Promise<void>;
 };
 
 const ReplyToLeadForm = ({
@@ -21,6 +21,7 @@ const ReplyToLeadForm = ({
   email,
   defaultSubject,
   defaultMessage,
+  action,
 }: ReplyToLeadFormProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [subject, setSubject] = useState(defaultSubject);
@@ -46,7 +47,7 @@ const ReplyToLeadForm = ({
     setIsSending(true);
 
     try {
-      await replyToLead(formData);
+      await action(formData);
       toast.success(`Reply emailed to ${email}.`);
       setIsOpen(false);
     } catch (error) {
