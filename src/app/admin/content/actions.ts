@@ -2,9 +2,6 @@
 
 import { revalidatePath } from "next/cache";
 import { assertAdmin, refreshContent, slugify, text } from "./action-utils";
-import { seedDemoWorkspace as runSeedDemoWorkspace } from "./seed-demo-workspace";
-
-export const seedDemoWorkspace = async () => runSeedDemoWorkspace();
 
 export const createDepartment = async (formData: FormData) => {
   const name = text(formData.get("name"));
@@ -45,34 +42,6 @@ export const createService = async (formData: FormData) => {
     slug: slugify(title),
     summary,
     description: description || null,
-  });
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  refreshContent();
-};
-
-export const createDoctor = async (formData: FormData) => {
-  const fullName = text(formData.get("full_name"));
-  const specialty = text(formData.get("specialty"));
-  const bio = text(formData.get("bio"));
-  const imageUrl = text(formData.get("image_url"));
-  const departmentId = text(formData.get("department_id"));
-
-  if (!fullName || !specialty) {
-    throw new Error("Doctor name and specialty are required.");
-  }
-
-  const supabase = await assertAdmin();
-  const { error } = await supabase.from("doctors").insert({
-    department_id: departmentId || null,
-    full_name: fullName,
-    slug: slugify(fullName),
-    specialty,
-    bio: bio || null,
-    image_url: imageUrl || null,
   });
 
   if (error) {

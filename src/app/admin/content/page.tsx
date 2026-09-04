@@ -1,11 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import {
-  ContentForms,
-  ContentHeader,
-  ContentMetrics,
-  DemoSeedCard,
-} from "./components";
+import { ContentForms, ContentHeader, ContentMetrics } from "./components";
 import { ContentLists } from "./ContentLists";
 import type { Department, Doctor, KnowledgeDocument, Service } from "./types";
 
@@ -70,7 +65,6 @@ export default async function AdminContentPage() {
     <main className="min-h-screen bg-slate-50 px-4 py-10 text-slate-900 md:px-8">
       <div className="mx-auto max-w-7xl space-y-8">
         <ContentHeader />
-        <DemoSeedCard />
         <ContentMetrics
           departments={departments}
           services={services}
@@ -81,7 +75,6 @@ export default async function AdminContentPage() {
         <ContentLists
           departments={departments}
           services={services}
-          doctors={doctors}
           knowledgeDocuments={knowledgeDocuments}
         />
       </div>

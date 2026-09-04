@@ -213,7 +213,7 @@ Automation:
 
 ## Demo Workflow
 
-1. Seed demo data from `/admin/content`.
+1. Add departments, services, and AI knowledge from `/admin/content`.
 2. Create an appointment from `/appointment`.
 3. Try the floating AI assistant on the public website.
 4. Search for terms like `tooth pain`, `child fever`, or `heart doctor`.

@@ -1,19 +1,17 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { Department, Doctor, KnowledgeDocument, Service } from "./types";
+import type { Department, KnowledgeDocument, Service } from "./types";
 
 export const ContentLists = ({
   departments,
   services,
-  doctors,
   knowledgeDocuments,
 }: {
   departments: Department[];
   services: Service[];
-  doctors: Doctor[];
   knowledgeDocuments: KnowledgeDocument[];
 }) => (
-  <section className="grid gap-6 xl:grid-cols-4">
+  <section className="grid gap-6 xl:grid-cols-3">
     <Card>
       <CardHeader>
         <CardTitle>Latest departments</CardTitle>
@@ -46,20 +44,6 @@ export const ContentLists = ({
           </div>
         ))}
         {!services.length ? <Badge variant="outline">No services</Badge> : null}
-      </CardContent>
-    </Card>
-    <Card>
-      <CardHeader>
-        <CardTitle>Latest doctors</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-3">
-        {doctors.map((doctor) => (
-          <div key={doctor.id} className="rounded-lg border p-4">
-            <p className="font-semibold">{doctor.full_name}</p>
-            <p className="mt-1 text-sm text-slate-600">{doctor.specialty}</p>
-          </div>
-        ))}
-        {!doctors.length ? <Badge variant="outline">No doctors</Badge> : null}
       </CardContent>
     </Card>
     <Card>

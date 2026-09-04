@@ -12,13 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  createDepartment,
-  createDoctor,
-  createKnowledgeDocument,
-  createService,
-  seedDemoWorkspace,
-} from "./actions";
+import { createDepartment, createKnowledgeDocument, createService } from "./actions";
 import type { Department, Doctor, KnowledgeDocument, Service } from "./types";
 
 const DepartmentSelect = ({ departments }: { departments: Department[] }) => (
@@ -53,31 +47,6 @@ export const ContentHeader = () => (
       <Link href="/admin">Back to dashboard</Link>
     </Button>
   </section>
-);
-
-export const DemoSeedCard = () => (
-  <Card className="border-primary/20 bg-primary/5">
-    <CardHeader className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-      <div>
-        <CardDescription>Demo setup</CardDescription>
-        <CardTitle>Populate buyer-ready sample data</CardTitle>
-        <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
-          Adds sample departments, services, doctors, AI knowledge, one
-          appointment, one lead, one callback request, one WhatsApp opt-in,
-          opt-out, schedules, staff records, feedback, public clinic settings,
-          AI blog posts, plus one AI chat lead so the dashboard and analytics
-          pages are ready to demo. It also seeds public health packages,
-          products, and testimonials for buyer-ready proof pages.
-        </p>
-      </div>
-      <form action={seedDemoWorkspace}>
-        <Button type="submit">
-          <Plus />
-          Seed demo workspace
-        </Button>
-      </form>
-    </CardHeader>
-  </Card>
 );
 
 export const ContentMetrics = ({
@@ -134,7 +103,7 @@ export const ContentMetrics = ({
 );
 
 export const ContentForms = ({ departments }: { departments: Department[] }) => (
-  <section className="grid gap-6 xl:grid-cols-4">
+  <section className="grid gap-6 xl:grid-cols-3">
     <Card>
       <CardHeader>
         <CardDescription>Department</CardDescription>
@@ -199,58 +168,6 @@ export const ContentForms = ({ departments }: { departments: Department[] }) => 
           <Button type="submit">
             <Plus />
             Add service
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
-
-    <Card>
-      <CardHeader>
-        <CardDescription>Doctor</CardDescription>
-        <CardTitle>Add doctor</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form action={createDoctor} className="space-y-4">
-          <div className="space-y-2">
-            <Label>Department</Label>
-            <DepartmentSelect departments={departments} />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="doctor-name">Full name</Label>
-            <Input
-              id="doctor-name"
-              name="full_name"
-              placeholder="Dr. Amina Rahman"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="doctor-specialty">Specialty</Label>
-            <Input
-              id="doctor-specialty"
-              name="specialty"
-              placeholder="Cardiology"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="doctor-image">Image URL</Label>
-            <Input
-              id="doctor-image"
-              name="image_url"
-              placeholder="/assets/img/team/member1.png"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="doctor-bio">Bio</Label>
-            <Textarea
-              id="doctor-bio"
-              name="bio"
-              rows={3}
-              placeholder="Short doctor profile."
-            />
-          </div>
-          <Button type="submit">
-            <Plus />
-            Add doctor
           </Button>
         </form>
       </CardContent>
