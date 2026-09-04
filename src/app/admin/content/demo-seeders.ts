@@ -118,36 +118,6 @@ export const seedFeedbackIfMissing = async (
   });
 };
 
-export const seedClinicalNoteIfMissing = async (
-  supabase: AdminSupabaseClient,
-) => {
-  const patientName = "Demo Appointment";
-  const { data: existing } = await supabase
-    .from("clinical_notes")
-    .select("id")
-    .eq("patient_name", patientName)
-    .maybeSingle();
-
-  if (existing) {
-    return;
-  }
-
-  await supabase.from("clinical_notes").insert({
-    patient_name: patientName,
-    visit_type: "dental consultation",
-    raw_note:
-      "Patient requested dental pain consultation. Staff should confirm duration, swelling, bleeding, and preferred appointment time.",
-    subjective: "Patient reports dental pain and requests appointment support.",
-    objective: "No exam data recorded in demo note.",
-    assessment:
-      "Administrative note for routing only; clinician review is required before care decisions.",
-    care_plan:
-      "Schedule dental consultation, confirm red-flag symptoms, and send opt-in reminder after confirmation.",
-    risk_flags: ["swelling_check"],
-    status: "reviewed",
-  });
-};
-
 export const seedCampaignIfMissing = async (
   supabase: AdminSupabaseClient,
 ) => {

@@ -4,7 +4,6 @@ import {
   BarChart3,
   Bot,
   CalendarClock,
-  ClipboardPlus,
   Headphones,
   Inbox,
   MessageCircle,
@@ -32,8 +31,6 @@ type AdminAnalyticsDashboardProps = {
   assistantMessagesCount: number;
   engagementCount: number;
   averageRating: number;
-  reviewedNotes: number;
-  flaggedNotes: number;
   activeAutomations: number;
   automationRulesCount: number;
   activeDoctors: number;
@@ -60,8 +57,6 @@ const AdminAnalyticsDashboard = ({
   assistantMessagesCount,
   engagementCount,
   averageRating,
-  reviewedNotes,
-  flaggedNotes,
   activeAutomations,
   automationRulesCount,
   activeDoctors,
@@ -144,12 +139,6 @@ const AdminAnalyticsDashboard = ({
             value={averageRating}
             detail="average patient score"
             icon={Star}
-          />
-          <MetricCard
-            title="Reviewed notes"
-            value={reviewedNotes}
-            detail={`${flaggedNotes} notes contain risk flags`}
-            icon={ClipboardPlus}
           />
           <MetricCard
             title="Automations"

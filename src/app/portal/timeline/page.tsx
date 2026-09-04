@@ -35,18 +35,6 @@ type AppointmentRow = {
   created_at: string;
 };
 
-type ClinicalNoteRow = {
-  id: string;
-  patient_name: string;
-  visit_type: string;
-  subjective: string;
-  assessment: string;
-  care_plan: string;
-  risk_flags: string[];
-  status: string;
-  created_at: string;
-};
-
 type ConsentRow = {
   id: string;
   channel: string;
@@ -67,7 +55,7 @@ type OutboxRow = {
 
 type TimelineItem = {
   id: string;
-  type: "appointment" | "note" | "consent" | "message";
+  type: "appointment" | "consent" | "message";
   title: string;
   description: string;
   date: string;
@@ -90,10 +78,6 @@ const itemIcon = (type: TimelineItem["type"]) => {
     return <CalendarClock className="h-5 w-5 text-primary" />;
   }
 
-  if (type === "note") {
-    return <FileText className="h-5 w-5 text-primary" />;
-  }
-
   if (type === "consent") {
     return <ShieldCheck className="h-5 w-5 text-primary" />;
   }
@@ -114,7 +98,6 @@ export default async function PatientTimelinePage() {
   const [
     { data: profile },
     { data: appointmentsData },
-    { data: notesData },
     { data: consentsData },
     { data: outboxData },
   ] = await Promise.all([
@@ -132,15 +115,6 @@ export default async function PatientTimelinePage() {
       .order("created_at", { ascending: false })
       .limit(20),
     supabase
-      .from("clinical_notes")
-      .select(
-        "id, patient_name, visit_type, subjective, assessment, care_plan, risk_flags, status, created_at",
-      )
-      .eq("patient_id", user.id)
-      .eq("status", "reviewed")
-      .order("created_at", { ascending: false })
-      .limit(20),
-    supabase
       .from("consent_logs")
       .select("id, channel, consented, reason, created_at")
       .eq("patient_id", user.id)
@@ -155,7 +129,6 @@ export default async function PatientTimelinePage() {
   ]);
 
   const appointments = (appointmentsData || []) as AppointmentRow[];
-  const notes = (notesData || []) as ClinicalNoteRow[];
   const consents = (consentsData || []) as ConsentRow[];
   const outbox = (outboxData || []) as OutboxRow[];
   const timeline: TimelineItem[] = [
@@ -169,14 +142,6 @@ export default async function PatientTimelinePage() {
         `Requested with ${appointment.requested_doctor || "the care team"}.`,
       date: appointment.created_at,
       status: appointment.status,
-    })),
-    ...notes.map((note) => ({
-      id: note.id,
-      type: "note" as const,
-      title: `${note.visit_type} note`,
-      description: `${note.assessment} Plan: ${note.care_plan}`,
-      date: note.created_at,
-      status: note.risk_flags.length > 0 ? "reviewed with flags" : note.status,
     })),
     ...consents.map((consent) => ({
       id: consent.id,
@@ -238,12 +203,6 @@ export default async function PatientTimelinePage() {
               <CardHeader>
                 <CardDescription>Appointments</CardDescription>
                 <CardTitle className="text-3xl">{appointments.length}</CardTitle>
-              </CardHeader>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardDescription>Reviewed Notes</CardDescription>
-                <CardTitle className="text-3xl">{notes.length}</CardTitle>
               </CardHeader>
             </Card>
             <Card>

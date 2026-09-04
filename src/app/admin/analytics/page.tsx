@@ -31,10 +31,6 @@ type FeedbackRecord = StatusRecord & {
   category: string;
 };
 
-type ClinicalNoteRecord = StatusRecord & {
-  risk_flags: string[];
-};
-
 type AutomationRuleRecord = CreatedRecord & {
   trigger_event: string;
   channel: string;
@@ -87,7 +83,6 @@ export default async function AdminAnalyticsPage() {
     { data: whatsAppData },
     { data: chatMessagesData },
     { data: feedbackData },
-    { data: clinicalNotesData },
     { data: automationRulesData },
     { data: outboxData },
     { data: doctorsData },
@@ -124,11 +119,6 @@ export default async function AdminAnalyticsPage() {
       .order("created_at", { ascending: false })
       .limit(200),
     supabase
-      .from("clinical_notes")
-      .select("status, risk_flags, created_at")
-      .order("created_at", { ascending: false })
-      .limit(200),
-    supabase
       .from("automation_rules")
       .select("trigger_event, channel, is_active, created_at")
       .order("created_at", { ascending: false })
@@ -159,7 +149,6 @@ export default async function AdminAnalyticsPage() {
   const whatsAppMessages = (whatsAppData || []) as StatusRecord[];
   const chatMessages = (chatMessagesData || []) as ChatMessageRecord[];
   const feedback = (feedbackData || []) as FeedbackRecord[];
-  const clinicalNotes = (clinicalNotesData || []) as ClinicalNoteRecord[];
   const automationRules = (automationRulesData || []) as AutomationRuleRecord[];
   const outbox = (outboxData || []) as OutboxRecord[];
   const doctors = (doctorsData || []) as (CreatedRecord & { is_active: boolean })[];
@@ -176,7 +165,6 @@ export default async function AdminAnalyticsPage() {
     callLogs.length +
     whatsAppMessages.length +
     feedback.length +
-    clinicalNotes.length +
     outbox.length;
   const todayRecords = [
     ...appointments,
@@ -184,7 +172,6 @@ export default async function AdminAnalyticsPage() {
     ...callLogs,
     ...whatsAppMessages,
     ...feedback,
-    ...clinicalNotes,
     ...outbox,
   ].filter((record) => isToday(record.created_at)).length;
   const highUrgency =
@@ -199,10 +186,6 @@ export default async function AdminAnalyticsPage() {
   const activeDoctors = doctors.filter((doctor) => doctor.is_active).length;
   const activeAvailability = availability.filter((block) => block.is_active).length;
   const blockedOutbox = outbox.filter((item) => item.status === "blocked").length;
-  const reviewedNotes = clinicalNotes.filter((note) => note.status === "reviewed").length;
-  const flaggedNotes = clinicalNotes.filter(
-    (note) => note.risk_flags.length > 0,
-  ).length;
 
   const latestActivity = [
     ...appointments.map((record) => ({
@@ -230,11 +213,6 @@ export default async function AdminAnalyticsPage() {
       created_at: record.created_at,
       status: record.ai_sentiment,
     })),
-    ...clinicalNotes.map((record) => ({
-      label: "Clinical note",
-      created_at: record.created_at,
-      status: record.status,
-    })),
     ...outbox.map((record) => ({
       label: "Outbox message",
       created_at: record.created_at,
@@ -255,8 +233,6 @@ export default async function AdminAnalyticsPage() {
       assistantMessagesCount={assistantMessages.length}
       engagementCount={callLogs.length + whatsAppMessages.length + outbox.length}
       averageRating={Number(averageRating.toFixed(1))}
-      reviewedNotes={reviewedNotes}
-      flaggedNotes={flaggedNotes}
       activeAutomations={activeAutomations}
       automationRulesCount={automationRules.length}
       activeDoctors={activeDoctors}

@@ -44,7 +44,6 @@ export const refreshContent = () => {
   revalidatePath("/admin/ai-leads");
   revalidatePath("/admin/opt-outs");
   revalidatePath("/admin/feedback");
-  revalidatePath("/admin/clinical-notes");
   revalidatePath("/admin/schedule");
   revalidatePath("/admin/settings");
   revalidatePath("/admin/staff");

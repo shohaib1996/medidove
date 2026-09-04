@@ -37,7 +37,6 @@ const sections = [
       { href: "/admin/patients", label: "Patients", icon: UsersRound },
       { href: "/admin/staff", label: "Staff", icon: UserCog },
       { href: "/admin/schedule", label: "Schedule", icon: Stethoscope },
-      { href: "/admin/clinical-notes", label: "Clinical Notes", icon: FileText },
     ],
   },
   {

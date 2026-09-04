@@ -5,7 +5,6 @@ import {
   CalendarClock,
   CheckCircle2,
   Clock,
-  FileText,
   MapPin,
   Power,
   Stethoscope,
@@ -37,7 +36,6 @@ export const metadata = {
 import type {
   AppointmentRow,
   AvailabilityRow,
-  ClinicalNoteRow,
   DoctorProfile,
 } from "./types";
 import { formatDate, toDateKey, weekdays } from "./utils";
@@ -115,7 +113,7 @@ export default async function DoctorPortalPage() {
     );
   }
 
-  const [{ data: appointmentsData }, { data: availabilityData }, { data: notesData }] =
+  const [{ data: appointmentsData }, { data: availabilityData }] =
     await Promise.all([
       supabase
         .from("appointments")
@@ -130,20 +128,11 @@ export default async function DoctorPortalPage() {
         .select("id, weekday, start_time, end_time, slot_minutes, location, is_active")
         .eq("doctor_id", doctor.id)
         .order("weekday", { ascending: true }),
-      supabase
-        .from("clinical_notes")
-        .select(
-          "id, patient_name, visit_type, subjective, assessment, care_plan, risk_flags, status, created_at",
-        )
-        .eq("status", "reviewed")
-        .order("created_at", { ascending: false })
-        .limit(20),
     ]);
 
   const appointments = (appointmentsData || []) as AppointmentRow[];
   const availability = (availabilityData || []) as AvailabilityRow[];
   const activeAvailability = availability.filter((block) => block.is_active);
-  const notes = (notesData || []) as ClinicalNoteRow[];
 
   const bookedDates = [
     ...new Set(
@@ -432,37 +421,6 @@ export default async function DoctorPortalPage() {
                       Add availability
                     </Button>
                   </form>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Reviewed notes</CardTitle>
-                  <CardDescription>
-                    Notes attached to assigned appointments.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  {notes.length > 0 ? (
-                    notes.slice(0, 5).map((note) => (
-                      <div key={note.id} className="rounded-md border p-3 text-sm">
-                        <div className="flex items-center justify-between gap-3">
-                          <span className="font-medium">{note.patient_name}</span>
-                          <FileText className="h-4 w-4 text-primary" />
-                        </div>
-                        <p className="mt-2 line-clamp-3 text-slate-600">
-                          {note.assessment}
-                        </p>
-                        <p className="mt-2 text-xs text-slate-400">
-                          {formatDate(note.created_at)}
-                        </p>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-sm text-slate-600">
-                      No reviewed notes are visible yet.
-                    </p>
-                  )}
                 </CardContent>
               </Card>
 

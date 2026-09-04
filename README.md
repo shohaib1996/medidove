@@ -63,9 +63,7 @@ For real healthcare clients, production compliance work may be required, includi
 - Admin outreach composer
 - Admin automation rules and runner endpoint
 - Provider dispatch endpoint with consent enforcement
-- AI clinical notes workspace
 - Patient feedback with sentiment triage
-- Care task board and AI task generation endpoint
 - Integration health dashboard
 - AI campaign dashboard
 - Admin clinic settings
@@ -99,7 +97,6 @@ For real healthcare clients, production compliance work may be required, includi
 - `/admin/outreach`
 - `/admin/opt-outs`
 - `/admin/automations`
-- `/admin/clinical-notes`
 - `/admin/staff`
 - `/admin/content`
 - `/admin/blog`

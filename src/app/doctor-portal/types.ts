@@ -29,14 +29,3 @@ export type AvailabilityRow = {
   is_active: boolean;
 };
 
-export type ClinicalNoteRow = {
-  id: string;
-  patient_name: string;
-  visit_type: string;
-  subjective: string;
-  assessment: string;
-  care_plan: string;
-  risk_flags: string[];
-  status: string;
-  created_at: string;
-};

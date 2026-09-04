@@ -20,8 +20,6 @@ export const metadata = {
 type AuditFilter =
   | "all"
   | "status_updated"
-  | "clinical_note_created"
-  | "clinical_note_status_updated"
   | "doctor_availability_created"
   | "doctor_availability_toggled"
   | "doctor_profile_linked"
@@ -46,8 +44,6 @@ type AuditLog = {
 const filters: AuditFilter[] = [
   "all",
   "status_updated",
-  "clinical_note_created",
-  "clinical_note_status_updated",
   "doctor_availability_created",
   "doctor_availability_toggled",
   "doctor_profile_linked",
