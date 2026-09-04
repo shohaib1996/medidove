@@ -1,4 +1,5 @@
 import { Activity } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -15,16 +16,21 @@ export const MetricCard = ({
   value,
   detail,
   icon: Icon,
+  badge,
 }: {
   title: string;
   value: number;
   detail: string;
   icon: typeof Activity;
+  badge?: string;
 }) => (
   <Card>
     <CardHeader className="flex flex-row items-center justify-between gap-4">
       <div>
-        <CardDescription>{title}</CardDescription>
+        <CardDescription className="flex items-center gap-1.5">
+          {title}
+          {badge ? <Badge variant="secondary">{badge}</Badge> : null}
+        </CardDescription>
         <CardTitle className="mt-2 text-3xl">{value}</CardTitle>
       </div>
       <Icon className="size-8 text-primary" />
@@ -37,10 +43,12 @@ export const Breakdown = ({
   title,
   description,
   data,
+  badge,
 }: {
   title: string;
   description: string;
   data: Record<string, number>;
+  badge?: string;
 }) => {
   const total = Object.values(data).reduce((sum, value) => sum + value, 0);
   const rows = Object.entries(data).sort((a, b) => b[1] - a[1]);
@@ -49,7 +57,10 @@ export const Breakdown = ({
     <Card>
       <CardHeader>
         <CardDescription>{description}</CardDescription>
-        <CardTitle>{title}</CardTitle>
+        <CardTitle className="flex items-center gap-1.5">
+          {title}
+          {badge ? <Badge variant="secondary">{badge}</Badge> : null}
+        </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {rows.length > 0 ? (

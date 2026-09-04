@@ -14,11 +14,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { createClient } from "@/lib/supabase/server";
+import GlobalPagination from "@/components/common/GlobalPagination";
 import { createTestimonial, toggleTestimonialPublish } from "./actions";
 
 export const metadata = {
   title: "Testimonials | MediDove Admin",
 };
+
+const PAGE_SIZE = 6;
 
 type TestimonialRow = {
   id: string;
@@ -32,7 +35,12 @@ type TestimonialRow = {
   created_at: string;
 };
 
-export default async function AdminTestimonialsPage() {
+export default async function AdminTestimonialsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const params = await searchParams;
   const supabase = await createClient();
   const {
     data: { user },
@@ -58,11 +66,21 @@ export default async function AdminTestimonialsPage() {
       "id, author_name, author_role, quote, rating, category, is_featured, is_published, created_at",
     )
     .order("created_at", { ascending: false })
-    .limit(40);
+    .limit(200);
 
   const testimonials = (data || []) as TestimonialRow[];
   const published = testimonials.filter((item) => item.is_published).length;
   const featured = testimonials.filter((item) => item.is_featured).length;
+
+  const totalPages = Math.max(1, Math.ceil(testimonials.length / PAGE_SIZE));
+  const page = Math.min(
+    Math.max(1, Number.parseInt(params.page || "1", 10) || 1),
+    totalPages,
+  );
+  const pagedTestimonials = testimonials.slice(
+    (page - 1) * PAGE_SIZE,
+    page * PAGE_SIZE,
+  );
 
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-10 text-slate-900 md:px-8">
@@ -202,7 +220,7 @@ export default async function AdminTestimonialsPage() {
 
           <div className="grid gap-4">
             {testimonials.length > 0 ? (
-              testimonials.map((item) => (
+              pagedTestimonials.map((item) => (
                 <Card key={item.id}>
                   <CardHeader>
                     <div className="flex flex-col justify-between gap-3 md:flex-row md:items-start">
@@ -254,6 +272,11 @@ export default async function AdminTestimonialsPage() {
                 </CardContent>
               </Card>
             )}
+            <GlobalPagination
+              page={page}
+              totalPages={totalPages}
+              buildHref={(targetPage) => `/admin/testimonials?page=${targetPage}`}
+            />
           </div>
         </section>
       </div>

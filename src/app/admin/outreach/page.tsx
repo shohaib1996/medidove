@@ -124,9 +124,6 @@ export default async function AdminOutreachPage() {
                 Dispatch queued
               </Button>
             </form>
-            <Button asChild variant="outline">
-              <Link href="/admin/templates">Templates</Link>
-            </Button>
             <Button asChild variant="secondary">
               <Link href="/admin">Back to dashboard</Link>
             </Button>

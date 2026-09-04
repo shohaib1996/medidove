@@ -49,9 +49,7 @@ export const refreshContent = () => {
   revalidatePath("/contact");
   revalidatePath("/admin/blog");
   revalidatePath("/blog");
-  revalidatePath("/admin/packages");
   revalidatePath("/packages");
-  revalidatePath("/admin/products");
   revalidatePath("/shop");
   revalidatePath("/admin/testimonials");
   revalidatePath("/testimonials");

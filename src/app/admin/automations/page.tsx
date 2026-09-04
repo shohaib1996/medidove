@@ -18,6 +18,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
+import ComingSoonOverlay from "@/components/common/ComingSoonOverlay";
 import {
   createAutomationRule,
   runAutomationsNow,
@@ -94,6 +95,10 @@ const AdminAutomationsPage = async () => {
   const templateById = new Map(templates.map((template) => [template.id, template]));
 
   return (
+    <ComingSoonOverlay
+      title="Automation rules are coming soon"
+      description="Care automation playbooks are still being finished. You can preview the planned layout below, but rule creation and dispatch are not live yet."
+    >
     <main className="min-h-screen bg-slate-50 px-4 py-8 text-slate-950 sm:px-6 lg:px-8">
       <div className="mx-auto flex max-w-7xl flex-col gap-8">
         <section className="flex flex-col justify-between gap-4 rounded-lg border bg-white p-6 shadow-sm lg:flex-row lg:items-center">
@@ -114,9 +119,6 @@ const AdminAutomationsPage = async () => {
                 Run now
               </Button>
             </form>
-            <Button asChild variant="outline">
-              <Link href="/admin/templates">Message templates</Link>
-            </Button>
             <Button asChild>
               <Link href="/admin">Back to dashboard</Link>
             </Button>
@@ -389,6 +391,7 @@ const AdminAutomationsPage = async () => {
         </section>
       </div>
     </main>
+    </ComingSoonOverlay>
   );
 };
 

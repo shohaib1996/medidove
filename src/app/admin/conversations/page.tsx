@@ -11,10 +11,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
+import GlobalPagination from "@/components/common/GlobalPagination";
 
 export const metadata = {
   title: "AI Conversations | MediDove Admin",
 };
+
+const PAGE_SIZE = 6;
 
 type ChatSession = {
   id: string;
@@ -37,7 +40,12 @@ const formatDate = (value: string) =>
     timeStyle: "short",
   }).format(new Date(value));
 
-export default async function AdminConversationsPage() {
+export default async function AdminConversationsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const params = await searchParams;
   const supabase = await createClient();
   const {
     data: { user },
@@ -62,12 +70,12 @@ export default async function AdminConversationsPage() {
       .from("ai_chat_sessions")
       .select("id, visitor_id, created_at")
       .order("created_at", { ascending: false })
-      .limit(20),
+      .limit(200),
     supabase
       .from("ai_chat_messages")
       .select("id, session_id, role, content, metadata, created_at")
       .order("created_at", { ascending: true })
-      .limit(200),
+      .limit(500),
   ]);
 
   const sessions = (sessionsData || []) as ChatSession[];
@@ -87,6 +95,13 @@ export default async function AdminConversationsPage() {
   const safetyMessageCount = messages.filter(
     (message) => message.metadata?.intent === "urgent_safety",
   ).length;
+
+  const totalPages = Math.max(1, Math.ceil(sessions.length / PAGE_SIZE));
+  const page = Math.min(
+    Math.max(1, Number.parseInt(params.page || "1", 10) || 1),
+    totalPages,
+  );
+  const pagedSessions = sessions.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-10 text-slate-900 md:px-8">
@@ -150,7 +165,7 @@ export default async function AdminConversationsPage() {
 
         <section className="grid gap-5">
           {sessions.length > 0 ? (
-            sessions.map((session) => {
+            pagedSessions.map((session) => {
               const sessionMessages = messagesBySession.get(session.id) || [];
               const latestIntent = [...sessionMessages]
                 .reverse()
@@ -234,6 +249,12 @@ export default async function AdminConversationsPage() {
             </Card>
           )}
         </section>
+
+        <GlobalPagination
+          page={page}
+          totalPages={totalPages}
+          buildHref={(targetPage) => `/admin/conversations?page=${targetPage}`}
+        />
       </div>
     </main>
   );

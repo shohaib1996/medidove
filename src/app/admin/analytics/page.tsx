@@ -41,11 +41,6 @@ type OutboxRecord = StatusRecord & {
   channel: string;
 };
 
-const formatDate = (value: string) =>
-  new Intl.DateTimeFormat("en", {
-    dateStyle: "medium",
-  }).format(new Date(value));
-
 const isToday = (value: string) =>
   new Date(value).toDateString() === new Date().toDateString();
 
@@ -187,44 +182,6 @@ export default async function AdminAnalyticsPage() {
   const activeAvailability = availability.filter((block) => block.is_active).length;
   const blockedOutbox = outbox.filter((item) => item.status === "blocked").length;
 
-  const latestActivity = [
-    ...appointments.map((record) => ({
-      label: "Appointment request",
-      created_at: record.created_at,
-      status: record.status,
-    })),
-    ...leads.map((record) => ({
-      label: "Contact lead",
-      created_at: record.created_at,
-      status: record.ai_urgency || record.status,
-    })),
-    ...callLogs.map((record) => ({
-      label: "AI callback",
-      created_at: record.created_at,
-      status: record.status,
-    })),
-    ...whatsAppMessages.map((record) => ({
-      label: "WhatsApp opt-in",
-      created_at: record.created_at,
-      status: record.status,
-    })),
-    ...feedback.map((record) => ({
-      label: "Patient feedback",
-      created_at: record.created_at,
-      status: record.ai_sentiment,
-    })),
-    ...outbox.map((record) => ({
-      label: "Outbox message",
-      created_at: record.created_at,
-      status: record.status,
-    })),
-  ]
-    .sort(
-      (a, b) =>
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
-    )
-    .slice(0, 8);
-
   return (
     <AdminAnalyticsDashboard
       totalRecords={totalRecords}
@@ -238,18 +195,12 @@ export default async function AdminAnalyticsPage() {
       activeDoctors={activeDoctors}
       activeAvailability={activeAvailability}
       blockedOutbox={blockedOutbox}
-      appointmentsPending={appointments.filter((appointment) => appointment.status === "pending").length}
-      newContactLeads={leads.filter((lead) => lead.status === "new").length}
-      callbackRequests={callLogs.filter((callLog) => callLog.status === "requested").length}
-      whatsAppOptIns={whatsAppMessages.filter((message) => message.status === "requested").length}
       appointmentStatusData={countBy(appointments, (appointment) => appointment.status)}
       leadCategoryData={countBy(leads, (lead) => lead.ai_category)}
       assistantIntentData={countBy(assistantMessages, (message) => message.metadata?.intent)}
       feedbackSentimentData={countBy(feedback, (item) => item.ai_sentiment)}
       outboxStatusData={countBy(outbox, (item) => item.status)}
       automationChannelData={countBy(automationRules, (rule) => rule.channel)}
-      latestActivity={latestActivity}
-      formatDate={formatDate}
     />
   );
 }

@@ -16,8 +16,6 @@ import {
   LayoutDashboard,
   Megaphone,
   MessageCircle,
-  Package,
-  PackageSearch,
   Search,
   Settings,
   ShieldCheck,
@@ -55,10 +53,7 @@ const sections = [
     items: [
       { href: "/admin/content", label: "Clinic Content", icon: BookOpenText },
       { href: "/admin/blog", label: "Blog CMS", icon: FileText },
-      { href: "/admin/packages", label: "Packages", icon: PackageSearch },
-      { href: "/admin/products", label: "Products", icon: Package },
       { href: "/admin/testimonials", label: "Proof", icon: ShieldCheck },
-      { href: "/admin/templates", label: "Templates", icon: MessageCircle },
     ],
   },
   {

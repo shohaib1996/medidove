@@ -3,9 +3,6 @@ import {
   Activity,
   BarChart3,
   Bot,
-  CalendarClock,
-  Headphones,
-  Inbox,
   MessageCircle,
   ShieldCheck,
   Star,
@@ -13,16 +10,8 @@ import {
   TrendingUp,
   Workflow,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Breakdown, MetricCard } from "./AnalyticsCards";
-
-type LatestActivity = {
-  label: string;
-  created_at: string;
-  status: string | null;
-};
 
 type AdminAnalyticsDashboardProps = {
   totalRecords: number;
@@ -36,18 +25,12 @@ type AdminAnalyticsDashboardProps = {
   activeDoctors: number;
   activeAvailability: number;
   blockedOutbox: number;
-  appointmentsPending: number;
-  newContactLeads: number;
-  callbackRequests: number;
-  whatsAppOptIns: number;
   appointmentStatusData: Record<string, number>;
   leadCategoryData: Record<string, number>;
   assistantIntentData: Record<string, number>;
   feedbackSentimentData: Record<string, number>;
   outboxStatusData: Record<string, number>;
   automationChannelData: Record<string, number>;
-  latestActivity: LatestActivity[];
-  formatDate: (value: string) => string;
 };
 
 const AdminAnalyticsDashboard = ({
@@ -62,18 +45,12 @@ const AdminAnalyticsDashboard = ({
   activeDoctors,
   activeAvailability,
   blockedOutbox,
-  appointmentsPending,
-  newContactLeads,
-  callbackRequests,
-  whatsAppOptIns,
   appointmentStatusData,
   leadCategoryData,
   assistantIntentData,
   feedbackSentimentData,
   outboxStatusData,
   automationChannelData,
-  latestActivity,
-  formatDate,
 }: AdminAnalyticsDashboardProps) => (
     <main className="min-h-screen bg-slate-50 px-4 py-10 text-slate-900 md:px-8">
       <div className="mx-auto max-w-7xl space-y-8">
@@ -145,6 +122,7 @@ const AdminAnalyticsDashboard = ({
             value={activeAutomations}
             detail={`${automationRulesCount} configured rules`}
             icon={Workflow}
+            badge="Coming soon"
           />
           <MetricCard
             title="Doctor coverage"
@@ -193,84 +171,8 @@ const AdminAnalyticsDashboard = ({
             title="Automation Channels"
             description="Configured care automation"
             data={automationChannelData}
+            badge="Coming soon"
           />
-        </section>
-
-        <section className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
-          <Card>
-            <CardHeader>
-              <CardDescription>Channel queue</CardDescription>
-              <CardTitle>Open engagement work</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {[
-                {
-                  label: "Appointments pending",
-                  value: appointmentsPending,
-                  icon: CalendarClock,
-                },
-                {
-                  label: "New contact leads",
-                  value: newContactLeads,
-                  icon: Inbox,
-                },
-                {
-                  label: "Callback requests",
-                  value: callbackRequests,
-                  icon: Headphones,
-                },
-                {
-                  label: "WhatsApp opt-ins",
-                  value: whatsAppOptIns,
-                  icon: MessageCircle,
-                },
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  className="flex items-center justify-between gap-4 rounded-lg border border-slate-200 p-4"
-                >
-                  <div className="flex items-center gap-3">
-                    <item.icon className="size-5 text-primary" />
-                    <span className="font-medium text-slate-700">
-                      {item.label}
-                    </span>
-                  </div>
-                  <Badge variant="secondary">{item.value}</Badge>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardDescription>Recent funnel events</CardDescription>
-              <CardTitle>Latest activity</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {latestActivity.length > 0 ? (
-                latestActivity.map((item) => (
-                  <div
-                    key={`${item.label}-${item.created_at}`}
-                    className="flex flex-col justify-between gap-2 rounded-lg border border-slate-200 p-4 sm:flex-row sm:items-center"
-                  >
-                    <div>
-                      <p className="font-semibold text-slate-900">{item.label}</p>
-                      <p className="mt-1 text-sm text-slate-500">
-                        {formatDate(item.created_at)}
-                      </p>
-                    </div>
-                    <Badge className="capitalize" variant="outline">
-                      {item.status || "new"}
-                    </Badge>
-                  </div>
-                ))
-              ) : (
-                <p className="rounded-lg border border-dashed border-slate-300 p-8 text-center text-sm text-slate-500">
-                  No activity yet.
-                </p>
-              )}
-            </CardContent>
-          </Card>
         </section>
       </div>
     </main>

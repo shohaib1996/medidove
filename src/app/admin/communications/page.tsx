@@ -225,7 +225,7 @@ const AdminCommunicationsPage = async ({
             <CardHeader className="flex flex-row items-center justify-between space-y-0">
               <CardTitle className="flex items-center gap-1.5 text-sm font-medium">
                 WhatsApp Requests
-                <Badge variant="secondary">Soon</Badge>
+                <Badge variant="secondary">Coming soon</Badge>
               </CardTitle>
               <MessageCircle className="h-4 w-4 text-slate-500" />
             </CardHeader>
@@ -238,7 +238,7 @@ const AdminCommunicationsPage = async ({
             <CardHeader className="flex flex-row items-center justify-between space-y-0">
               <CardTitle className="flex items-center gap-1.5 text-sm font-medium">
                 Queued WhatsApp
-                <Badge variant="secondary">Soon</Badge>
+                <Badge variant="secondary">Coming soon</Badge>
               </CardTitle>
               <Send className="h-4 w-4 text-slate-500" />
             </CardHeader>
@@ -268,7 +268,7 @@ const AdminCommunicationsPage = async ({
                     <Button key={channel} size="sm" variant="outline" disabled>
                       WhatsApp
                       <Badge variant="secondary" className="ml-1.5">
-                        Soon
+                        Coming soon
                       </Badge>
                     </Button>
                   ) : (

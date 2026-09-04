@@ -59,7 +59,6 @@ For real healthcare clients, production compliance work may be required, includi
 - Admin lead pipeline
 - Admin AI lead capture from chat
 - Admin communication inbox
-- Admin message templates
 - Admin outreach composer
 - Admin automation rules and runner endpoint
 - Provider dispatch endpoint with consent enforcement
@@ -98,7 +97,6 @@ For real healthcare clients, production compliance work may be required, includi
 - `/admin/staff`
 - `/admin/content`
 - `/admin/blog`
-- `/admin/products`
 - `/admin/testimonials`
 - `/admin/analytics`
 - `/admin/audit`
@@ -159,7 +157,7 @@ set role = 'admin'
 where id = 'your-user-id';
 ```
 
-7. Visit `/admin/content` and use the seed action to create demo services, doctors, knowledge, templates, and workflow records.
+7. Visit `/admin/content` to add departments, services, and AI knowledge records.
 
 When schema changes are added in future phases, rerun the relevant SQL before testing the new admin page.
 
@@ -219,10 +217,9 @@ Automation:
 4. Search for terms like `tooth pain`, `child fever`, or `heart doctor`.
 5. Review new records in `/admin`.
 6. Open `/admin/leads`, `/admin/appointments`, and `/admin/communications`.
-7. Create a message template in `/admin/templates`.
-8. Queue outreach in `/admin/outreach`.
-9. Check consent and provider readiness in `/admin/integrations`.
-10. Review reporting in `/admin/analytics`.
+7. Queue outreach in `/admin/outreach`.
+8. Check consent and provider readiness in `/admin/integrations`.
+9. Review reporting in `/admin/analytics`.
 
 ## Safety Rules
 
