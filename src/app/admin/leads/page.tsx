@@ -21,12 +21,16 @@ import {
 } from "@/components/ui/card";
 import { updateAdminRecordStatus } from "@/app/admin/actions";
 import { createClient } from "@/lib/supabase/server";
+import GlobalPagination from "@/components/common/GlobalPagination";
+import ReplyToLeadForm from "./ReplyToLeadForm";
 
 export const metadata = {
   title: "Lead Pipeline | MediDove Admin",
 };
 
-type LeadStatus = "all" | "new" | "contacted" | "converted" | "closed" | "spam";
+const PAGE_SIZE = 6;
+
+type LeadStatus = "all" | "new" | "contacted" | "converted" | "closed";
 
 type LeadRow = {
   id: string;
@@ -49,7 +53,6 @@ const statuses: LeadStatus[] = [
   "contacted",
   "converted",
   "closed",
-  "spam",
 ];
 
 const formatDate = (value: string) =>
@@ -86,7 +89,7 @@ const StatusAction = ({
 const AdminLeadsPage = async ({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string | string[] }>;
+  searchParams: Promise<{ status?: string | string[]; page?: string }>;
 }) => {
   const supabase = await createClient();
   const {
@@ -125,24 +128,36 @@ const AdminLeadsPage = async ({
 
   const params = await searchParams;
   const activeStatus = normalizeStatus(params.status);
-  const query = supabase
+  const listQuery = supabase
     .from("contact_leads")
     .select(
       "id, name, email, phone, subject, message, ai_category, ai_summary, ai_urgency, ai_suggested_reply, status, created_at",
     )
     .order("created_at", { ascending: false })
-    .limit(80);
+    .limit(300);
 
   if (activeStatus !== "all") {
-    query.eq("status", activeStatus);
+    listQuery.eq("status", activeStatus);
   }
 
-  const { data: leadsData } = await query;
-  const leads = (leadsData || []) as LeadRow[];
-  const newLeads = leads.filter((lead) => lead.status === "new").length;
-  const contacted = leads.filter((lead) => lead.status === "contacted").length;
-  const converted = leads.filter((lead) => lead.status === "converted").length;
-  const highUrgency = leads.filter((lead) => lead.ai_urgency === "high").length;
+  const [{ data: leadsData }, { data: statsData }] = await Promise.all([
+    listQuery,
+    supabase.from("contact_leads").select("status, ai_urgency").limit(1000),
+  ]);
+
+  const filteredLeads = (leadsData || []) as LeadRow[];
+  const allLeads = (statsData || []) as { status: string; ai_urgency: string | null }[];
+  const newLeads = allLeads.filter((lead) => lead.status === "new").length;
+  const contacted = allLeads.filter((lead) => lead.status === "contacted").length;
+  const converted = allLeads.filter((lead) => lead.status === "converted").length;
+  const highUrgency = allLeads.filter((lead) => lead.ai_urgency === "high").length;
+
+  const totalPages = Math.max(1, Math.ceil(filteredLeads.length / PAGE_SIZE));
+  const page = Math.min(
+    Math.max(1, Number.parseInt(params.page || "1", 10) || 1),
+    totalPages,
+  );
+  const leads = filteredLeads.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-8 text-slate-950 sm:px-6 lg:px-8">
@@ -175,7 +190,7 @@ const AdminLeadsPage = async ({
               <Inbox className="h-4 w-4 text-slate-500" />
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-semibold">{leads.length}</p>
+              <p className="text-3xl font-semibold">{filteredLeads.length}</p>
               <p className="text-xs text-slate-500">Matching current filter</p>
             </CardContent>
           </Card>
@@ -186,7 +201,7 @@ const AdminLeadsPage = async ({
             </CardHeader>
             <CardContent>
               <p className="text-3xl font-semibold">{newLeads}</p>
-              <p className="text-xs text-slate-500">Need first response</p>
+              <p className="text-xs text-slate-500">Need first response, all leads</p>
             </CardContent>
           </Card>
           <Card>
@@ -196,7 +211,7 @@ const AdminLeadsPage = async ({
             </CardHeader>
             <CardContent>
               <p className="text-3xl font-semibold">{contacted}</p>
-              <p className="text-xs text-slate-500">Follow-up in progress</p>
+              <p className="text-xs text-slate-500">Follow-up in progress, all leads</p>
             </CardContent>
           </Card>
           <Card>
@@ -207,7 +222,7 @@ const AdminLeadsPage = async ({
             <CardContent>
               <p className="text-3xl font-semibold">{converted}</p>
               <p className="text-xs text-slate-500">
-                {highUrgency} high urgency leads visible
+                {highUrgency} high urgency leads overall
               </p>
             </CardContent>
           </Card>
@@ -329,6 +344,22 @@ const AdminLeadsPage = async ({
                         </div>
                       </div>
                     </div>
+
+                    <div className="mt-4">
+                      <ReplyToLeadForm
+                        leadId={lead.id}
+                        email={lead.email}
+                        defaultSubject={
+                          lead.subject
+                            ? `Re: ${lead.subject}`
+                            : "Re: your message to MediDove"
+                        }
+                        defaultMessage={
+                          lead.ai_suggested_reply ||
+                          `Hi ${lead.name}, thanks for contacting MediDove. A clinic coordinator will follow up shortly.`
+                        }
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
@@ -339,6 +370,17 @@ const AdminLeadsPage = async ({
             )}
           </CardContent>
         </Card>
+
+        <GlobalPagination
+          page={page}
+          totalPages={totalPages}
+          buildHref={(targetPage) => {
+            const target = new URLSearchParams();
+            if (activeStatus !== "all") target.set("status", activeStatus);
+            target.set("page", String(targetPage));
+            return `/admin/leads?${target.toString()}`;
+          }}
+        />
       </div>
     </main>
   );
