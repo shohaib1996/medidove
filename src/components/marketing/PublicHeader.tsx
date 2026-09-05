@@ -53,9 +53,13 @@ const PublicHeader = () => {
     });
   };
 
-  const meta = destination ? destinationMeta[destination] : null;
-  const label = meta?.label || "Book";
-  const Icon = meta?.icon || CalendarDays;
+  // Default to the "Login" state while the real destination is still
+  // resolving, since most public visitors are logged out — this avoids
+  // briefly flashing "Book" before switching to the correct label.
+  const meta = (destination ? destinationMeta[destination] : null) ||
+    destinationMeta["/login"];
+  const label = meta.label;
+  const Icon = meta.icon;
 
   return (
     <>
