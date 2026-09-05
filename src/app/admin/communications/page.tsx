@@ -30,6 +30,7 @@ const PAGE_SIZE = 6;
 type ChannelFilter = "all" | "voice" | "whatsapp";
 
 type CallStatus = "requested" | "contacted" | "completed" | "failed";
+type CallStatusFilter = "all" | CallStatus;
 
 type CallLogRow = {
   id: string;
@@ -54,6 +55,13 @@ type WhatsAppMessageRow = {
 };
 
 const channels: ChannelFilter[] = ["all", "voice", "whatsapp"];
+const callStatuses: CallStatusFilter[] = [
+  "all",
+  "requested",
+  "contacted",
+  "completed",
+  "failed",
+];
 
 const formatDate = (value: string | null) => {
   if (!value) {
@@ -73,6 +81,16 @@ const normalizeChannel = (
 
   return channels.includes(channel as ChannelFilter)
     ? (channel as ChannelFilter)
+    : "all";
+};
+
+const normalizeCallStatus = (
+  value: string | string[] | undefined,
+): CallStatusFilter => {
+  const status = Array.isArray(value) ? value[0] : value;
+
+  return callStatuses.includes(status as CallStatusFilter)
+    ? (status as CallStatusFilter)
     : "all";
 };
 
@@ -98,7 +116,11 @@ const CallStatusAction = ({
 const AdminCommunicationsPage = async ({
   searchParams,
 }: {
-  searchParams: Promise<{ channel?: string | string[]; page?: string }>;
+  searchParams: Promise<{
+    channel?: string | string[];
+    status?: string | string[];
+    page?: string;
+  }>;
 }) => {
   const supabase = await createClient();
   const {
@@ -137,6 +159,7 @@ const AdminCommunicationsPage = async ({
 
   const params = await searchParams;
   const activeChannel = normalizeChannel(params.channel);
+  const activeCallStatus = normalizeCallStatus(params.status);
   const [{ data: callLogsData }, { data: whatsAppData }] = await Promise.all([
     supabase
       .from("call_logs")
@@ -154,7 +177,11 @@ const AdminCommunicationsPage = async ({
 
   const callLogs = (callLogsData || []) as CallLogRow[];
   const whatsAppMessages = (whatsAppData || []) as WhatsAppMessageRow[];
-  const visibleCalls = activeChannel === "whatsapp" ? [] : callLogs;
+  const channelFilteredCalls = activeChannel === "whatsapp" ? [] : callLogs;
+  const visibleCalls =
+    activeCallStatus === "all"
+      ? channelFilteredCalls
+      : channelFilteredCalls.filter((call) => call.status === activeCallStatus);
   const visibleWhatsApp = activeChannel === "voice" ? [] : whatsAppMessages;
 
   const totalPages = Math.max(1, Math.ceil(visibleCalls.length / PAGE_SIZE));
@@ -278,13 +305,44 @@ const AdminCommunicationsPage = async ({
                       size="sm"
                       variant={channel === activeChannel ? "default" : "outline"}
                     >
-                      <Link href={`/admin/communications?channel=${channel}`}>
+                      <Link
+                        href={`/admin/communications?${new URLSearchParams({
+                          channel,
+                          ...(activeCallStatus !== "all"
+                            ? { status: activeCallStatus }
+                            : {}),
+                        }).toString()}`}
+                      >
                         {channel.charAt(0).toUpperCase() + channel.slice(1)}
                       </Link>
                     </Button>
                   ),
                 )}
               </div>
+            </div>
+
+            <div className="mt-4 flex flex-wrap items-center gap-2">
+              <span className="flex items-center gap-2 text-sm font-medium text-slate-500">
+                <Filter className="h-4 w-4" />
+                Status
+              </span>
+              {callStatuses.map((status) => (
+                <Button
+                  asChild
+                  key={status}
+                  size="sm"
+                  variant={status === activeCallStatus ? "default" : "outline"}
+                >
+                  <Link
+                    href={`/admin/communications?${new URLSearchParams({
+                      ...(activeChannel !== "all" ? { channel: activeChannel } : {}),
+                      status,
+                    }).toString()}`}
+                  >
+                    {status.charAt(0).toUpperCase() + status.slice(1)}
+                  </Link>
+                </Button>
+              ))}
             </div>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -340,6 +398,7 @@ const AdminCommunicationsPage = async ({
                   buildHref={(targetPage) => {
                     const target = new URLSearchParams();
                     if (activeChannel !== "all") target.set("channel", activeChannel);
+                    if (activeCallStatus !== "all") target.set("status", activeCallStatus);
                     target.set("page", String(targetPage));
                     return `/admin/communications?${target.toString()}`;
                   }}
