@@ -63,16 +63,23 @@ export const LatestPendingAppointment = ({
   </Card>
 );
 
-export const CallbackList = ({ callLogs }: { callLogs: CallLogRow[] }) => (
-  <Card>
-    <CardHeader>
-      <CardDescription>Voice</CardDescription>
-      <CardTitle>AI receptionist callbacks</CardTitle>
-    </CardHeader>
-    <CardContent className="space-y-4">
-      {callLogs.length > 0 ? (
-        callLogs.map((callLog) => (
-          <article key={callLog.id} className="rounded-lg border border-slate-200 p-4">
+export const CallbackList = ({ callLogs }: { callLogs: CallLogRow[] }) => {
+  const callLog = callLogs[0] || null;
+
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between gap-4">
+        <div>
+          <CardDescription>Voice</CardDescription>
+          <CardTitle>AI receptionist callbacks</CardTitle>
+        </div>
+        <Button asChild variant="outline" size="sm">
+          <Link href="/admin/communications">View all</Link>
+        </Button>
+      </CardHeader>
+      <CardContent>
+        {callLog ? (
+          <article className="rounded-lg border border-slate-200 p-4">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h2 className="font-semibold text-slate-900">{callLog.phone_number}</h2>
@@ -96,31 +103,38 @@ export const CallbackList = ({ callLogs }: { callLogs: CallLogRow[] }) => (
               <StatusAction table="call_logs" id={callLog.id} status="failed" label="Failed" />
             </div>
           </article>
-        ))
-      ) : (
-        <div className="rounded-lg border border-dashed border-slate-300 p-8 text-center text-slate-500">
-          <Headphones className="mx-auto mb-3 size-8" />
-          No AI callback requests yet.
-        </div>
-      )}
-    </CardContent>
-  </Card>
-);
+        ) : (
+          <div className="rounded-lg border border-dashed border-slate-300 p-8 text-center text-slate-500">
+            <Headphones className="mx-auto mb-3 size-8" />
+            No AI callback requests yet.
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+};
 
 export const WhatsAppList = ({
   messages,
 }: {
   messages: WhatsAppMessageRow[];
-}) => (
-  <Card>
-    <CardHeader>
-      <CardDescription>WhatsApp</CardDescription>
-      <CardTitle>Patient engagement opt-ins</CardTitle>
-    </CardHeader>
-    <CardContent className="space-y-4">
-      {messages.length > 0 ? (
-        messages.map((message) => (
-          <article key={message.id} className="rounded-lg border border-slate-200 p-4">
+}) => {
+  const message = messages[0] || null;
+
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between gap-4">
+        <div>
+          <CardDescription>WhatsApp</CardDescription>
+          <CardTitle>Patient engagement opt-ins</CardTitle>
+        </div>
+        <Button asChild variant="outline" size="sm">
+          <Link href="/admin/communications">View all</Link>
+        </Button>
+      </CardHeader>
+      <CardContent>
+        {message ? (
+          <article className="rounded-lg border border-slate-200 p-4">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h2 className="font-semibold text-slate-900">{message.phone_number}</h2>
@@ -143,27 +157,34 @@ export const WhatsAppList = ({
               <StatusAction table="whatsapp_messages" id={message.id} status="failed" label="Failed" />
             </div>
           </article>
-        ))
-      ) : (
-        <div className="rounded-lg border border-dashed border-slate-300 p-8 text-center text-slate-500">
-          <MessageCircle className="mx-auto mb-3 size-8" />
-          No WhatsApp opt-ins yet.
-        </div>
-      )}
-    </CardContent>
-  </Card>
-);
+        ) : (
+          <div className="rounded-lg border border-dashed border-slate-300 p-8 text-center text-slate-500">
+            <MessageCircle className="mx-auto mb-3 size-8" />
+            No WhatsApp opt-ins yet.
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+};
 
-export const LeadList = ({ leads }: { leads: LeadRow[] }) => (
-  <Card>
-    <CardHeader>
-      <CardDescription>Leads</CardDescription>
-      <CardTitle>Latest contact messages</CardTitle>
-    </CardHeader>
-    <CardContent className="space-y-4">
-      {leads.length > 0 ? (
-        leads.map((lead) => (
-          <article key={lead.id} className="rounded-lg border border-slate-200 p-4">
+export const LeadList = ({ leads }: { leads: LeadRow[] }) => {
+  const lead = leads[0] || null;
+
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between gap-4">
+        <div>
+          <CardDescription>Leads</CardDescription>
+          <CardTitle>Latest contact messages</CardTitle>
+        </div>
+        <Button asChild variant="outline" size="sm">
+          <Link href="/admin/leads">View all</Link>
+        </Button>
+      </CardHeader>
+      <CardContent>
+        {lead ? (
+          <article className="rounded-lg border border-slate-200 p-4">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h2 className="font-semibold text-slate-900">{lead.name}</h2>
@@ -207,16 +228,16 @@ export const LeadList = ({ leads }: { leads: LeadRow[] }) => (
               <StatusAction table="contact_leads" id={lead.id} status="closed" label="Close" />
             </div>
           </article>
-        ))
-      ) : (
-        <div className="rounded-lg border border-dashed border-slate-300 p-8 text-center text-slate-500">
-          <Inbox className="mx-auto mb-3 size-8" />
-          No contact leads yet.
-        </div>
-      )}
-    </CardContent>
-  </Card>
-);
+        ) : (
+          <div className="rounded-lg border border-dashed border-slate-300 p-8 text-center text-slate-500">
+            <Inbox className="mx-auto mb-3 size-8" />
+            No contact leads yet.
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+};
 
 const AdminRecordLists = ({
   latestPendingAppointment,
