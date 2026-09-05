@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from "next";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://medidove.ai";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.medidove.health";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

@@ -41,7 +41,8 @@ const EngagementPage = () => {
     setIsSubmitting(true);
     setStatus("");
 
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
 
     try {
       const response = await fetch("/api/engagement/whatsapp", {
@@ -61,7 +62,7 @@ const EngagementPage = () => {
         throw new Error(data.error || "Could not save WhatsApp opt-in.");
       }
 
-      event.currentTarget.reset();
+      form.reset();
       setStatus(data.message || "WhatsApp opt-in saved.");
     } catch (error) {
       setStatus(

@@ -89,7 +89,8 @@ const ReceptionistPage = () => {
     setIsSubmitting(true);
     setCallbackStatus("");
 
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
 
     try {
       const response = await fetch("/api/voice/call-requests", {
@@ -108,7 +109,7 @@ const ReceptionistPage = () => {
         throw new Error(data.error || "Could not save callback request.");
       }
 
-      event.currentTarget.reset();
+      form.reset();
       setCallbackStatus(data.message || "Callback request saved.");
     } catch (error) {
       setCallbackStatus(

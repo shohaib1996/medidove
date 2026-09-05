@@ -34,7 +34,8 @@ export default function FeedbackPage() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
 
     setIsSubmitting(true);
 
@@ -58,7 +59,7 @@ export default function FeedbackPage() {
         throw new Error(result.error || "Unable to submit feedback.");
       }
 
-      event.currentTarget.reset();
+      form.reset();
       setRating(5);
       toast.success("Feedback submitted successfully.");
     } catch (error) {

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getPublicBlogPosts } from "@/lib/blog/content";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://medidove.ai";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.medidove.health";
 
 const publicRoutes = [
   "",
