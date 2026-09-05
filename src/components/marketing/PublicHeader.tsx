@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import {
   CalendarDays,
   LayoutDashboard,
+  LogIn,
   Loader2,
   Stethoscope,
   UserRound,
@@ -23,6 +24,7 @@ const destinationMeta: Record<
   "/admin": { label: "Admin Dashboard", icon: LayoutDashboard },
   "/doctor-portal": { label: "Doctor Portal", icon: Stethoscope },
   "/portal": { label: "Patient Portal", icon: UserRound },
+  "/login": { label: "Login", icon: LogIn },
 };
 
 const PublicHeader = () => {
