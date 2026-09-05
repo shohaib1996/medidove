@@ -60,7 +60,6 @@ const callStatuses: CallStatusFilter[] = [
   "requested",
   "contacted",
   "completed",
-  "failed",
 ];
 
 const formatDate = (value: string | null) => {
