@@ -2,14 +2,13 @@
 
 import Script from "next/script";
 import Link from "next/link";
-import { FormEvent, useMemo, useRef, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import {
   Activity,
   Bot,
   CalendarClock,
   CheckCircle2,
   Headphones,
-  Mic,
   PhoneCall,
   ShieldCheck,
 } from "lucide-react";
@@ -27,11 +26,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
-type ConvaiElement = HTMLElement & {
-  startConversation?: () => void;
-  endConversation?: () => void;
-};
-
 const receptionistJobs = [
   "Answer clinic service questions in a natural voice",
   "Collect patient name, phone, reason, and preferred time",
@@ -40,9 +34,8 @@ const receptionistJobs = [
 ];
 
 const ReceptionistPage = () => {
-  const widgetRef = useRef<ConvaiElement | null>(null);
-  const [voiceStatus, setVoiceStatus] = useState("Ready to start");
-  const [isStarting, setIsStarting] = useState(false);
+  const [voiceStatus, setVoiceStatus] = useState("Preparing voice session...");
+  const [signedUrl, setSignedUrl] = useState<string | undefined>(undefined);
   const [callbackStatus, setCallbackStatus] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -52,37 +45,37 @@ const ReceptionistPage = () => {
     [agentId],
   );
 
-  const startReceptionist = async () => {
-    setIsStarting(true);
-    setVoiceStatus("Starting secure voice session...");
-
-    try {
-      const response = await fetch("/api/voice/signed-url", {
-        method: "GET",
-        cache: "no-store",
-      });
-      const data = (await response.json()) as {
-        signedUrl?: string;
-        error?: string;
-      };
-
-      if (!response.ok || !data.signedUrl) {
-        throw new Error(data.error || "Voice receptionist is unavailable.");
-      }
-
-      widgetRef.current?.setAttribute("signed-url", data.signedUrl);
-      widgetRef.current?.startConversation?.();
-      setVoiceStatus("Voice receptionist session started.");
-    } catch (error) {
-      setVoiceStatus(
-        error instanceof Error
-          ? error.message
-          : "Voice receptionist is unavailable.",
-      );
-    } finally {
-      setIsStarting(false);
+  useEffect(() => {
+    if (!hasAgentId) {
+      setVoiceStatus("Voice receptionist is unavailable.");
+      return;
     }
-  };
+
+    let isMounted = true;
+
+    fetch("/api/voice/signed-url", { method: "GET", cache: "no-store" })
+      .then((response) => response.json())
+      .then((data: { signedUrl?: string; error?: string }) => {
+        if (!isMounted) return;
+
+        if (!data.signedUrl) {
+          setVoiceStatus(data.error || "Voice receptionist is unavailable.");
+          return;
+        }
+
+        setSignedUrl(data.signedUrl);
+        setVoiceStatus("Use the call button in the corner to start.");
+      })
+      .catch(() => {
+        if (isMounted) {
+          setVoiceStatus("Voice receptionist is unavailable.");
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [hasAgentId]);
 
   const submitCallbackRequest = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -145,14 +138,6 @@ const ReceptionistPage = () => {
                 for staff review.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Button
-                  size="lg"
-                  onClick={startReceptionist}
-                  disabled={isStarting || !hasAgentId}
-                >
-                  <Mic />
-                  {isStarting ? "Starting..." : "Start voice receptionist"}
-                </Button>
                 <Button
                   asChild
                   size="lg"
@@ -276,8 +261,8 @@ const ReceptionistPage = () => {
       </main>
 
       <elevenlabs-convai
-        ref={widgetRef}
         agent-id={hasAgentId ? agentId : undefined}
+        signed-url={signedUrl}
       />
     </div>
   );
