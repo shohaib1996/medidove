@@ -56,6 +56,118 @@
   --radius-lg: var(--radius);
 }
 
+@layer utilities {
+  .text-gradient-brand {
+    background-image: linear-gradient(
+      100deg,
+      oklch(0.72 0.19 30),
+      oklch(0.64 0.24 12),
+      oklch(0.62 0.2 330)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .text-gradient-cool {
+    background-image: linear-gradient(
+      100deg,
+      oklch(0.85 0.13 195),
+      oklch(0.78 0.15 230)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Soft colour clouds used behind sections to lift them off flat white. */
+  .aurora {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(72px);
+    opacity: 0.55;
+    pointer-events: none;
+    animation: aurora-drift 22s ease-in-out infinite;
+  }
+
+  .glass-panel {
+    background: color-mix(in oklch, white 8%, transparent);
+    backdrop-filter: blur(14px);
+    border: 1px solid color-mix(in oklch, white 16%, transparent);
+  }
+
+  /* Gradient hairline border via double background + mask-free padding trick. */
+  .gradient-ring {
+    position: relative;
+  }
+
+  .gradient-ring::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      140deg,
+      oklch(0.72 0.19 30 / 0.85),
+      oklch(0.62 0.2 330 / 0.35),
+      oklch(0.8 0.13 195 / 0.7)
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+  }
+
+  .gradient-ring:hover::before {
+    opacity: 1;
+  }
+
+  .glow-brand {
+    box-shadow:
+      0 18px 40px -18px oklch(0.64 0.24 12 / 0.55),
+      0 0 0 1px oklch(0.64 0.24 12 / 0.12);
+  }
+
+  .animate-float-slow {
+    animation: float-slow 9s ease-in-out infinite;
+  }
+}
+
+@keyframes aurora-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(4%, -6%, 0) scale(1.12);
+  }
+  66% {
+    transform: translate3d(-5%, 4%, 0) scale(0.94);
+  }
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora,
+  .animate-float-slow {
+    animation: none;
+  }
+}
+
 @layer base {
   * {
     @apply border-border;

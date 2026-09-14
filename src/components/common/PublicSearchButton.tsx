@@ -4,8 +4,9 @@ import { useState } from "react";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FullscreenSearch from "@/components/common/FullscreenSearch";
+import { cn } from "@/lib/utils";
 
-const PublicSearchButton = () => {
+const PublicSearchButton = ({ className }: { className?: string }) => {
   const [openSearch, setOpenSearch] = useState(false);
 
   return (
@@ -14,7 +15,7 @@ const PublicSearchButton = () => {
         type="button"
         variant="ghost"
         size="sm"
-        className="hidden sm:inline-flex"
+        className={cn("hidden sm:inline-flex", className)}
         onClick={() => setOpenSearch(true)}
       >
         <Search />

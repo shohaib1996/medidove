@@ -14,10 +14,10 @@ import {
   MessageCircle,
   Phone,
   PhoneCall,
+  Quote,
   Search,
   Sparkles,
   Star,
-  Stethoscope,
   Users,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -29,10 +29,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import AnimatedCounter from "@/components/animation/AnimatedCounter";
+import Parallax from "@/components/animation/Parallax";
+import Reveal from "@/components/animation/Reveal";
+import ScrollProgress from "@/components/animation/ScrollProgress";
 import type { ClinicSettings } from "@/lib/clinic/settings";
 import type { PublicDoctor, PublicService } from "@/lib/clinic/content";
 import type { PublicTestimonial } from "@/lib/testimonials/content";
+import HeroScene from "./HeroScene";
 import PublicHeader from "./PublicHeader";
+import WorkflowSteps from "./WorkflowSteps";
 
 const platformStats = [
   { label: "Ways to reach care", value: "4" },
@@ -47,6 +53,8 @@ const features = [
     description:
       "Helps patients understand available services, choose the right department, and start an appointment request.",
     href: "/service",
+    accent: "from-rose-500 to-pink-600",
+    glow: "group-hover:shadow-rose-500/25",
   },
   {
     icon: Headphones,
@@ -54,6 +62,8 @@ const features = [
     description:
       "Answers common clinic questions, captures callback requests, and prepares appointment details for staff review.",
     href: "/receptionist",
+    accent: "from-cyan-500 to-blue-600",
+    glow: "group-hover:shadow-cyan-500/25",
   },
   {
     icon: MessageCircle,
@@ -61,6 +71,8 @@ const features = [
     description:
       "Patients can receive confirmations, visit reminders, follow-up messages, and support updates through preferred channels.",
     href: "/engagement",
+    accent: "from-violet-500 to-purple-600",
+    glow: "group-hover:shadow-violet-500/25",
   },
   {
     icon: Search,
@@ -68,7 +80,34 @@ const features = [
     description:
       "Patients describe what they need and receive safe guidance toward the most relevant service or doctor type.",
     href: "/doctor",
+    accent: "from-amber-500 to-orange-600",
+    glow: "group-hover:shadow-amber-500/25",
   },
+];
+
+// Asymmetric bento rhythm: wide, narrow, narrow, wide.
+const bentoSpan = [
+  "xl:col-span-2",
+  "xl:col-span-1",
+  "xl:col-span-1",
+  "xl:col-span-2",
+];
+
+const serviceAccents = [
+  "from-rose-500 to-pink-600",
+  "from-cyan-500 to-blue-600",
+  "from-violet-500 to-purple-600",
+  "from-amber-500 to-orange-600",
+  "from-emerald-500 to-teal-600",
+  "from-fuchsia-500 to-rose-600",
+];
+
+const sectionLinks = [
+  { label: "Services", href: "#services" },
+  { label: "Doctors", href: "#doctors" },
+  { label: "Testimonials", href: "#testimonials" },
+  { label: "Reception", href: "#reception" },
+  { label: "Contact", href: "#contact" },
 ];
 
 const workflow = [
@@ -91,6 +130,20 @@ const StarRating = ({ rating }: { rating: number }) => (
   </div>
 );
 
+const CurveDivider = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 1440 120"
+    preserveAspectRatio="none"
+    aria-hidden="true"
+    className={className}
+  >
+    <path
+      d="M0,64 C240,120 480,8 720,40 C960,72 1200,128 1440,88 L1440,120 L0,120 Z"
+      fill="currentColor"
+    />
+  </svg>
+);
+
 type HomePageProps = {
   services: PublicService[];
   doctors: PublicDoctor[];
@@ -111,365 +164,529 @@ const HomePage = ({
   );
 
   return (
-    <div className="min-h-screen bg-white text-slate-900">
-      <PublicHeader />
+    <div className="min-h-screen overflow-x-hidden bg-white text-slate-900">
+      <ScrollProgress />
+      <PublicHeader overlay links={sectionLinks} />
 
       <main>
+        {/* ---------------------------------------------------------------- */}
+        {/* Hero                                                             */}
+        {/* ---------------------------------------------------------------- */}
         <section className="relative overflow-hidden bg-slate-950 text-white">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_15%_0%,oklch(0.35_0.15_12),transparent_60%),radial-gradient(ellipse_70%_60%_at_90%_20%,oklch(0.32_0.13_255),transparent_55%),linear-gradient(180deg,oklch(0.16_0.03_270),oklch(0.13_0.02_280))]" />
+
+          <div className="aurora left-[-10%] top-[-15%] size-144 bg-rose-500/40" />
+          <div
+            className="aurora right-[-12%] top-[10%] size-128 bg-cyan-400/30"
+            style={{ animationDelay: "-7s" }}
+          />
+          <div
+            className="aurora bottom-[-20%] left-[35%] size-120 bg-violet-500/30"
+            style={{ animationDelay: "-14s" }}
+          />
+
           <Image
             src="/assets/img/slider/slider-bg-1.jpg"
             alt="Modern medical team"
             fill
             priority
             sizes="100vw"
-            className="object-cover opacity-35"
+            className="object-cover opacity-[0.12] mix-blend-luminosity"
           />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,23,42,0.96),rgba(15,23,42,0.74),rgba(15,23,42,0.32))]" />
+          <HeroScene />
 
-          <div className="relative mx-auto grid min-h-180 max-w-7xl items-center gap-12 px-4 py-20 md:px-8 lg:grid-cols-[1.08fr_0.92fr]">
+          <div className="relative mx-auto grid min-h-136 max-w-7xl items-center gap-12 px-4 pb-28 pt-28 md:min-h-168 md:gap-14 md:px-8 md:pb-32 lg:grid-cols-[1.15fr_0.85fr]">
             <div>
-              <Badge className="mb-6 bg-white/10 text-white hover:bg-white/15">
-                <Sparkles className="size-3.5" />
-                Modern patient care platform
-              </Badge>
-              <h1 className="max-w-4xl text-4xl font-bold leading-tight tracking-normal md:text-6xl">
-                MediDove Online Clinic Reception And Patient Support
-              </h1>
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-200">
-                Book appointments, reach the reception team, get service
-                guidance, receive visit reminders, and stay connected with your
-                clinic before and after care.
-              </p>
+              <Reveal immediate direction="none">
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-white/90 backdrop-blur">
+                  <Sparkles className="size-3.5 text-rose-400" />
+                  Modern patient care platform
+                </span>
+              </Reveal>
 
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Button asChild size="lg">
-                  <Link href="/appointment">
-                    <CalendarCheck />
-                    Book appointment
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="border-white/30 bg-white/10 text-white hover:bg-white hover:text-slate-950"
-                >
-                  <Link href="/receptionist">
-                    <Headphones />
-                    Talk to reception
-                  </Link>
-                </Button>
-              </div>
+              <Reveal immediate delay={0.1}>
+                <h1 className="mt-7 text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl md:text-7xl">
+                  MediDove Online{" "}
+                  <span className="text-gradient-brand">Clinic Reception</span>{" "}
+                  And{" "}
+                  <span className="text-gradient-cool">Patient Support</span>
+                </h1>
+              </Reveal>
 
-              <div className="mt-12 grid max-w-2xl gap-4 sm:grid-cols-3">
-                {platformStats.map((stat) => (
-                  <div
-                    key={stat.label}
-                    className="border border-white/15 bg-white/10 p-5 backdrop-blur"
+              <Reveal immediate delay={0.22}>
+                <p className="mt-7 max-w-xl text-lg leading-8 text-slate-300">
+                  Book appointments, reach the reception team, get service
+                  guidance, receive visit reminders, and stay connected with your
+                  clinic before and after care.
+                </p>
+              </Reveal>
+
+              <Reveal immediate delay={0.34}>
+                <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+                  <Button
+                    asChild
+                    size="lg"
+                    className="glow-brand h-13 rounded-full px-7 text-base transition hover:scale-[1.03]"
                   >
-                    <strong className="block text-3xl">{stat.value}</strong>
-                    <span className="mt-2 block text-sm text-slate-300">
-                      {stat.label}
-                    </span>
-                  </div>
+                    <Link href="/appointment">
+                      <CalendarCheck />
+                      Book appointment
+                    </Link>
+                  </Button>
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="lg"
+                    className="h-13 rounded-full border-white/25 bg-white/5 px-7 text-base text-white backdrop-blur transition hover:scale-[1.03] hover:bg-white hover:text-slate-950"
+                  >
+                    <Link href="/receptionist">
+                      <Headphones />
+                      Talk to reception
+                    </Link>
+                  </Button>
+                </div>
+              </Reveal>
+
+              <div className="mt-14 flex flex-wrap gap-3">
+                {platformStats.map((stat, index) => (
+                  <Reveal key={stat.label} immediate delay={0.46 + index * 0.1}>
+                    <div className="glass-panel flex items-center gap-3 rounded-2xl px-5 py-4 transition hover:scale-[1.04] hover:border-rose-400/40">
+                      <AnimatedCounter
+                        value={stat.value}
+                        className="text-gradient-brand text-3xl font-bold"
+                      />
+                      <span className="max-w-28 text-xs leading-4 text-slate-300">
+                        {stat.label}
+                      </span>
+                    </div>
+                  </Reveal>
                 ))}
               </div>
             </div>
 
-            <Card className="border-white/10 bg-white/95 text-slate-900 shadow-2xl">
-              <CardHeader>
-                <CardDescription>Patient services</CardDescription>
-                <CardTitle className="text-2xl">
-                  Care support from first question to follow-up
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {[
-                  "Book appointments with the right department",
-                  "Ask reception questions any time",
-                  "Get reminders before your visit",
-                  "Receive follow-up support after care",
-                ].map((item) => (
-                  <div key={item} className="flex gap-3">
-                    <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-teal-600" />
-                    <p className="text-sm leading-6 text-slate-600">{item}</p>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
+            <Reveal immediate direction="left" delay={0.28}>
+              <div className="animate-float-slow">
+                <Card className="gradient-ring rotate-1 rounded-3xl border-white/10 bg-white/95 text-slate-900 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.7)] transition hover:rotate-0">
+                  <CardHeader>
+                    <span className="inline-flex w-fit items-center gap-2 rounded-full bg-linear-to-r from-rose-500 to-pink-600 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">
+                      Patient services
+                    </span>
+                    <CardTitle className="mt-3 text-2xl leading-8">
+                      Care support from first question to follow-up
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    {[
+                      "Book appointments with the right department",
+                      "Ask reception questions any time",
+                      "Get reminders before your visit",
+                      "Receive follow-up support after care",
+                    ].map((item) => (
+                      <div
+                        key={item}
+                        className="flex gap-3 rounded-xl bg-slate-50 p-3 transition hover:bg-rose-50"
+                      >
+                        <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-rose-500" />
+                        <p className="text-sm leading-6 text-slate-600">
+                          {item}
+                        </p>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+              </div>
+            </Reveal>
           </div>
+
+          <CurveDivider className="absolute inset-x-0 -bottom-px h-20 w-full text-white md:h-28" />
         </section>
 
-        <section className="bg-slate-50 px-4 py-20 md:px-8">
-          <div className="mx-auto max-w-7xl">
-            <div className="max-w-3xl">
-              <p className="text-sm font-bold uppercase text-primary">
+        {/* ---------------------------------------------------------------- */}
+        {/* Features — bento grid                                            */}
+        {/* ---------------------------------------------------------------- */}
+        <section className="relative overflow-hidden px-4 py-16 md:px-8 md:py-24">
+          <div className="aurora left-[-8%] top-[10%] size-96 bg-rose-300/30" />
+          <div
+            className="aurora right-[-6%] top-[40%] size-80 bg-cyan-300/30"
+            style={{ animationDelay: "-9s" }}
+          />
+
+          <div className="relative mx-auto max-w-7xl">
+            <Reveal className="mx-auto max-w-3xl text-center">
+              <p className="text-sm font-bold uppercase tracking-widest text-rose-500">
                 Patient services
               </p>
-              <h2 className="mt-3 text-3xl font-bold tracking-normal md:text-4xl">
-                Simple digital support for everyday clinic care
+              <h2 className="mt-4 text-3xl font-bold leading-tight tracking-tight sm:text-4xl md:text-5xl">
+                Simple digital support for{" "}
+                <span className="text-gradient-brand">everyday clinic care</span>
               </h2>
-              <p className="mt-4 text-slate-600">
+              <p className="mt-5 text-lg leading-8 text-slate-600">
                 MediDove helps patients find services, request appointments,
                 talk with reception, and receive timely communication without
                 replacing professional medical advice.
               </p>
-            </div>
+            </Reveal>
 
-            <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-              {features.map((feature) => (
-                <Card key={feature.title}>
-                  <CardHeader>
-                    <feature.icon className="mb-3 size-9 text-primary" />
-                    <CardTitle>{feature.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <CardDescription className="leading-6">
-                      {feature.description}
-                    </CardDescription>
-                    <Link
-                      href={feature.href}
-                      className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
-                    >
-                      Learn more
-                      <ArrowRight className="size-3.5" />
-                    </Link>
-                  </CardContent>
-                </Card>
+            <div className="mt-14 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {features.map((feature, index) => (
+                <Reveal
+                  key={feature.title}
+                  delay={index * 0.09}
+                  className={bentoSpan[index]}
+                >
+                  <Card
+                    className={`group gradient-ring relative h-full overflow-hidden rounded-3xl border-slate-200/80 bg-white p-2 shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-2xl ${feature.glow}`}
+                  >
+                    <div
+                      className={`absolute inset-x-0 top-0 h-1 bg-linear-to-r ${feature.accent} opacity-0 transition group-hover:opacity-100`}
+                    />
+                    <CardHeader>
+                      <div
+                        className={`mb-4 flex size-14 items-center justify-center rounded-2xl bg-linear-to-br ${feature.accent} text-white shadow-lg transition duration-300 group-hover:scale-110 group-hover:rotate-3`}
+                      >
+                        <feature.icon className="size-6" />
+                      </div>
+                      <CardTitle className="text-xl">{feature.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-5">
+                      <CardDescription className="text-base leading-7">
+                        {feature.description}
+                      </CardDescription>
+                      <Link
+                        href={feature.href}
+                        className="inline-flex items-center gap-1.5 text-sm font-semibold text-rose-600 transition hover:gap-3"
+                      >
+                        Learn more
+                        <ArrowRight className="size-4" />
+                      </Link>
+                    </CardContent>
+                  </Card>
+                </Reveal>
               ))}
             </div>
           </div>
         </section>
 
-        <section id="services" className="px-4 py-20 md:px-8">
-          <div className="mx-auto max-w-7xl">
-            <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-              <div className="relative aspect-4/3 overflow-hidden rounded-lg bg-slate-100">
-                <Image
-                  src="/assets/img/about/about-img.jpg"
-                  alt="Doctor consulting patient"
-                  fill
-                  sizes="(min-width: 1024px) 45vw, 100vw"
-                  className="object-cover"
-                />
-              </div>
+        {/* ---------------------------------------------------------------- */}
+        {/* Services                                                         */}
+        {/* ---------------------------------------------------------------- */}
+        <section
+          id="services"
+          className="relative overflow-hidden bg-linear-to-b from-slate-50 via-white to-slate-50 px-4 py-16 md:px-8 md:py-24"
+        >
+          <div className="relative mx-auto max-w-7xl">
+            <div className="grid gap-14 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+              <Parallax
+                className="relative aspect-4/3 overflow-hidden rounded-4xl bg-slate-100 shadow-2xl"
+                distance={40}
+              >
+                <div className="relative h-[125%] w-full translate-y-[-10%]">
+                  <Image
+                    src="/assets/img/about/about-img.jpg"
+                    alt="Doctor consulting patient"
+                    fill
+                    sizes="(min-width: 1024px) 45vw, 100vw"
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-linear-to-tr from-rose-600/35 via-transparent to-cyan-500/25" />
+                </div>
+              </Parallax>
 
-              <div>
-                <Badge variant="secondary" className="mb-4">
+              <Reveal direction="left">
+                <Badge
+                  variant="secondary"
+                  className="mb-5 rounded-full bg-rose-50 px-4 py-1.5 text-rose-600"
+                >
                   <HeartPulse className="size-3.5" />
                   Care guidance
                 </Badge>
-                <h2 className="text-3xl font-bold tracking-normal md:text-4xl">
-                  Find the right service before booking your visit
+                <h2 className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl md:text-5xl">
+                  Find the right service{" "}
+                  <span className="text-gradient-brand">
+                    before booking your visit
+                  </span>
                 </h2>
-                <p className="mt-5 leading-8 text-slate-600">
+                <p className="mt-6 text-lg leading-8 text-slate-600">
                   Patients can describe their concern in plain language and get
                   directed toward the right department, doctor type, or next
                   appointment step. Urgent symptoms are handled with clear
                   safety guidance.
                 </p>
-                <div className="mt-8 flex flex-wrap gap-3">
-                  <Button asChild>
+                <div className="mt-9 flex flex-wrap gap-3">
+                  <Button
+                    asChild
+                    size="lg"
+                    className="glow-brand h-12 rounded-full px-6"
+                  >
                     <Link href="/service">
                       View all services
                       <ArrowRight className="size-4" />
                     </Link>
                   </Button>
-                  <Button asChild variant="outline">
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="lg"
+                    className="h-12 rounded-full px-6"
+                  >
                     <Link href="/appointment">
                       <CalendarCheck />
                       Book appointment
                     </Link>
                   </Button>
                 </div>
-              </div>
+              </Reveal>
             </div>
 
-            <div className="mt-14 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-              {services.slice(0, 6).map((service) => (
-                <Card
+            {/* Staggered offset grid rather than a flat row of equal cards. */}
+            <div className="mt-20 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {services.slice(0, 6).map((service, index) => (
+                <Reveal
                   key={service.title}
-                  className="transition hover:-translate-y-1 hover:shadow-lg"
+                  delay={(index % 3) * 0.09}
+                  className={index % 2 === 1 ? "xl:translate-y-8" : undefined}
                 >
-                  <CardHeader>
-                    <div className="mb-3 flex size-11 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                      <service.icon className="size-5" />
-                    </div>
-                    <CardTitle className="text-lg">{service.title}</CardTitle>
-                    <CardDescription className="leading-6">
-                      {service.description}
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
+                  <Card className="group gradient-ring h-full rounded-3xl border-slate-200/80 bg-white/80 backdrop-blur transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
+                    <CardHeader>
+                      <div
+                        className={`mb-4 flex size-12 items-center justify-center rounded-2xl bg-linear-to-br ${serviceAccents[index % serviceAccents.length]} text-white shadow-lg transition duration-300 group-hover:scale-110`}
+                      >
+                        <service.icon className="size-5" />
+                      </div>
+                      <CardTitle className="text-lg">{service.title}</CardTitle>
+                      <CardDescription className="leading-7">
+                        {service.description}
+                      </CardDescription>
+                    </CardHeader>
+                  </Card>
+                </Reveal>
               ))}
             </div>
           </div>
         </section>
 
-        <section id="doctors" className="bg-slate-50 px-4 py-20 md:px-8">
-          <div className="mx-auto max-w-7xl">
-            <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+        {/* ---------------------------------------------------------------- */}
+        {/* Doctors                                                          */}
+        {/* ---------------------------------------------------------------- */}
+        <section id="doctors" className="relative overflow-hidden px-4 py-16 md:px-8 md:py-24">
+          <div
+            className="aurora left-[45%] top-[5%] size-96 bg-violet-300/25"
+            style={{ animationDelay: "-5s" }}
+          />
+
+          <div className="relative mx-auto max-w-7xl">
+            <Reveal className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
               <div className="max-w-2xl">
-                <p className="text-sm font-bold uppercase text-primary">
+                <p className="text-sm font-bold uppercase tracking-widest text-rose-500">
                   Doctors
                 </p>
-                <h2 className="mt-3 text-3xl font-bold tracking-normal md:text-4xl">
-                  Meet doctors matched to your care needs
+                <h2 className="mt-4 text-3xl font-bold leading-tight tracking-tight sm:text-4xl md:text-5xl">
+                  Meet doctors matched to{" "}
+                  <span className="text-gradient-brand">your care needs</span>
                 </h2>
-                <p className="mt-4 text-slate-600">
+                <p className="mt-5 text-lg text-slate-600">
                   Review specialties, departments, and availability before
                   requesting an appointment.
                 </p>
               </div>
-              <Button asChild variant="outline" className="w-fit">
+              <Button
+                asChild
+                variant="outline"
+                className="h-12 w-fit rounded-full px-6"
+              >
                 <Link href="/doctor">
                   View all doctors
                   <ArrowRight className="size-4" />
                 </Link>
               </Button>
-            </div>
+            </Reveal>
 
-            <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-              {doctors.slice(0, 4).map((doctor) => (
-                <Card
-                  key={doctor.name}
-                  className="overflow-hidden transition hover:-translate-y-1 hover:shadow-lg"
-                >
-                  <div className="relative aspect-4/3 bg-white">
-                    <Image
-                      src={doctor.image}
-                      alt={doctor.name}
-                      fill
-                      sizes="(min-width: 1280px) 25vw, (min-width: 768px) 50vw, 100vw"
-                      className="object-contain object-bottom"
-                    />
-                  </div>
-                  <CardHeader>
-                    <Badge variant="secondary" className="w-fit">
-                      {doctor.department}
-                    </Badge>
-                    <CardTitle className="text-lg">{doctor.name}</CardTitle>
-                    <CardDescription>{doctor.specialty}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div className="flex items-center gap-2 text-sm text-slate-600">
-                      <Clock3 className="size-4 text-primary" />
-                      {doctor.availability}
+            <div className="mt-14 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+              {doctors.slice(0, 4).map((doctor, index) => (
+                <Reveal key={doctor.name} delay={index * 0.09}>
+                  <Card className="group h-full overflow-hidden rounded-3xl border-slate-200/80 pt-0 transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
+                    <div className="relative aspect-4/3 overflow-hidden bg-linear-to-br from-slate-100 to-slate-200">
+                      <Image
+                        src={doctor.image}
+                        alt={doctor.name}
+                        fill
+                        sizes="(min-width: 1280px) 25vw, (min-width: 768px) 50vw, 100vw"
+                        className="object-contain object-bottom transition duration-500 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-linear-to-t from-rose-600/25 via-transparent to-transparent opacity-0 transition duration-300 group-hover:opacity-100" />
+                      <Badge className="absolute left-4 top-4 rounded-full bg-white/90 text-slate-900 shadow-sm backdrop-blur hover:bg-white">
+                        {doctor.department}
+                      </Badge>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-slate-600">
-                      <Languages className="size-4 text-primary" />
-                      {doctor.languages}
-                    </div>
-                  </CardContent>
-                </Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg">{doctor.name}</CardTitle>
+                      <CardDescription>{doctor.specialty}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="flex items-center gap-2 text-sm text-slate-600">
+                        <Clock3 className="size-4 text-rose-500" />
+                        {doctor.availability}
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-slate-600">
+                        <Languages className="size-4 text-cyan-600" />
+                        {doctor.languages}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Reveal>
               ))}
             </div>
           </div>
         </section>
 
+        {/* ---------------------------------------------------------------- */}
+        {/* Testimonials                                                     */}
+        {/* ---------------------------------------------------------------- */}
         {featuredTestimonial ? (
-          <section id="testimonials" className="px-4 py-20 md:px-8">
-            <div className="mx-auto max-w-7xl">
-              <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <section
+            id="testimonials"
+            className="relative overflow-hidden bg-linear-to-br from-slate-50 via-rose-50/40 to-cyan-50/40 px-4 py-16 md:px-8 md:py-24"
+          >
+            <div className="relative mx-auto max-w-7xl">
+              <Reveal className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
                 <div className="max-w-2xl">
-                  <p className="text-sm font-bold uppercase text-primary">
+                  <p className="text-sm font-bold uppercase tracking-widest text-rose-500">
                     Proof
                   </p>
-                  <h2 className="mt-3 text-3xl font-bold tracking-normal md:text-4xl">
-                    What clinic staff and patients say
+                  <h2 className="mt-4 text-3xl font-bold leading-tight tracking-tight sm:text-4xl md:text-5xl">
+                    What clinic staff and{" "}
+                    <span className="text-gradient-brand">patients say</span>
                   </h2>
                 </div>
-                <Button asChild variant="outline" className="w-fit">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="h-12 w-fit rounded-full bg-white/60 px-6 backdrop-blur"
+                >
                   <Link href="/testimonials">
                     Read all testimonials
                     <ArrowRight className="size-4" />
                   </Link>
                 </Button>
-              </div>
+              </Reveal>
 
-              <div className="mt-10 grid gap-5 lg:grid-cols-3">
-                <Card className="border-primary/40 shadow-lg lg:col-span-1">
-                  <CardHeader>
-                    <div className="flex items-center justify-between gap-3">
-                      <Badge>{featuredTestimonial.category}</Badge>
-                      <StarRating rating={featuredTestimonial.rating} />
-                    </div>
-                    <CardTitle className="text-xl leading-8">
-                      {featuredTestimonial.quote}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex items-center gap-4">
-                    <Image
-                      src={featuredTestimonial.imageUrl}
-                      alt={featuredTestimonial.authorName}
-                      width={52}
-                      height={52}
-                      className="size-13 rounded-full object-cover"
-                      unoptimized={featuredTestimonial.imageUrl.startsWith(
-                        "http",
-                      )}
-                    />
-                    <div>
-                      <p className="font-semibold">
-                        {featuredTestimonial.authorName}
-                      </p>
-                      <CardDescription>
-                        {featuredTestimonial.authorRole}
-                      </CardDescription>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {otherTestimonials.slice(0, 2).map((item) => (
-                  <Card key={item.id}>
-                    <CardHeader>
+              <div className="mt-14 grid gap-5 lg:grid-cols-3">
+                <Reveal direction="right" className="lg:col-span-2">
+                  <Card className="relative h-full overflow-hidden rounded-3xl border-0 bg-slate-950 text-white shadow-2xl">
+                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_80%_at_10%_0%,oklch(0.38_0.16_12),transparent_60%),radial-gradient(ellipse_60%_70%_at_100%_100%,oklch(0.34_0.14_255),transparent_55%)]" />
+                    <Quote className="absolute right-8 top-6 size-28 text-white/[0.07]" />
+                    <CardHeader className="relative">
                       <div className="flex items-center justify-between gap-3">
-                        <Badge variant="secondary">{item.category}</Badge>
-                        <StarRating rating={item.rating} />
+                        <Badge className="rounded-full bg-white/10 text-white hover:bg-white/15">
+                          {featuredTestimonial.category}
+                        </Badge>
+                        <StarRating rating={featuredTestimonial.rating} />
                       </div>
-                      <CardTitle className="text-lg leading-8">
-                        {item.quote}
+                      <CardTitle className="mt-5 text-2xl font-medium leading-10 md:text-3xl">
+                        {featuredTestimonial.quote}
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="flex items-center gap-4">
+                    <CardContent className="relative flex items-center gap-4">
                       <Image
-                        src={item.imageUrl}
-                        alt={item.authorName}
-                        width={52}
-                        height={52}
-                        className="size-13 rounded-full object-cover"
-                        unoptimized={item.imageUrl.startsWith("http")}
+                        src={featuredTestimonial.imageUrl}
+                        alt={featuredTestimonial.authorName}
+                        width={56}
+                        height={56}
+                        className="size-14 rounded-full object-cover ring-2 ring-rose-400/60"
+                        unoptimized={featuredTestimonial.imageUrl.startsWith(
+                          "http",
+                        )}
                       />
                       <div>
-                        <p className="font-semibold">{item.authorName}</p>
-                        <CardDescription>{item.authorRole}</CardDescription>
+                        <p className="font-semibold">
+                          {featuredTestimonial.authorName}
+                        </p>
+                        <p className="text-sm text-slate-400">
+                          {featuredTestimonial.authorRole}
+                        </p>
                       </div>
                     </CardContent>
                   </Card>
-                ))}
+                </Reveal>
+
+                <div className="grid gap-5">
+                  {otherTestimonials.slice(0, 2).map((item, index) => (
+                    <Reveal key={item.id} delay={0.12 + index * 0.1}>
+                      <Card className="group gradient-ring h-full rounded-3xl border-slate-200/80 bg-white/80 backdrop-blur transition duration-300 hover:-translate-y-1.5 hover:shadow-xl">
+                        <CardHeader>
+                          <div className="flex items-center justify-between gap-3">
+                            <Badge
+                              variant="secondary"
+                              className="rounded-full bg-rose-50 text-rose-600"
+                            >
+                              {item.category}
+                            </Badge>
+                            <StarRating rating={item.rating} />
+                          </div>
+                          <CardTitle className="mt-3 text-base font-medium leading-7">
+                            {item.quote}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="flex items-center gap-3">
+                          <Image
+                            src={item.imageUrl}
+                            alt={item.authorName}
+                            width={44}
+                            height={44}
+                            className="size-11 rounded-full object-cover"
+                            unoptimized={item.imageUrl.startsWith("http")}
+                          />
+                          <div>
+                            <p className="text-sm font-semibold">
+                              {item.authorName}
+                            </p>
+                            <CardDescription className="text-xs">
+                              {item.authorRole}
+                            </CardDescription>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </Reveal>
+                  ))}
+                </div>
               </div>
             </div>
           </section>
         ) : null}
 
-        <section id="reception" className="bg-slate-950 px-4 py-20 text-white md:px-8">
-          <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2 lg:items-center">
-            <div>
-              <p className="text-sm font-bold uppercase text-primary">
+        {/* ---------------------------------------------------------------- */}
+        {/* Reception                                                        */}
+        {/* ---------------------------------------------------------------- */}
+        <section
+          id="reception"
+          className="relative overflow-hidden bg-slate-950 px-4 py-24 text-white md:px-8"
+        >
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_70%_at_5%_10%,oklch(0.34_0.15_12),transparent_55%),radial-gradient(ellipse_60%_70%_at_95%_90%,oklch(0.32_0.14_255),transparent_55%)]" />
+          <div className="aurora right-[10%] top-[15%] size-80 bg-violet-500/25" />
+
+          <div className="relative mx-auto grid max-w-7xl gap-12 lg:grid-cols-2 lg:items-center">
+            <Reveal>
+              <p className="text-sm font-bold uppercase tracking-widest text-rose-400">
                 Reception and reminders
               </p>
-              <h2 className="mt-3 text-3xl font-bold tracking-normal md:text-4xl">
-                A clinic reception experience that is available beyond office
-                hours
+              <h2 className="mt-4 text-3xl font-bold leading-tight tracking-tight sm:text-4xl md:text-5xl">
+                A clinic reception experience that is{" "}
+                <span className="text-gradient-cool">
+                  available beyond office hours
+                </span>
               </h2>
-              <p className="mt-5 leading-8 text-slate-300">
+              <p className="mt-6 text-lg leading-8 text-slate-300">
                 Patients can request appointments, ask common questions, leave
                 callback details, and receive reminder messages. Staff review
                 every request before appointments or follow-up actions are
                 confirmed.
               </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Button asChild size="lg">
+              <div className="mt-9 flex flex-wrap gap-3">
+                <Button
+                  asChild
+                  size="lg"
+                  className="glow-brand h-13 rounded-full px-7"
+                >
                   <Link href="/receptionist">
                     <PhoneCall />
                     Talk to reception
@@ -479,7 +696,7 @@ const HomePage = ({
                   asChild
                   variant="outline"
                   size="lg"
-                  className="border-white/30 bg-white/10 text-white hover:bg-white hover:text-slate-950"
+                  className="h-13 rounded-full border-white/25 bg-white/5 px-7 text-white backdrop-blur hover:bg-white hover:text-slate-950"
                 >
                   <Link href="/engagement">
                     <MessageCircle />
@@ -487,58 +704,80 @@ const HomePage = ({
                   </Link>
                 </Button>
               </div>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Badge className="bg-white/10 text-white">Phone support</Badge>
-                <Badge className="bg-white/10 text-white">Online booking</Badge>
-                <Badge className="bg-white/10 text-white">Visit reminders</Badge>
-                <Badge className="bg-white/10 text-white">Follow-up care</Badge>
-              </div>
-            </div>
-
-            <Card className="border-white/10 bg-white/10 text-white">
-              <CardHeader>
-                <CardDescription className="text-slate-300">
-                  How it works
-                </CardDescription>
-                <CardTitle>From patient request to confirmed care</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {workflow.map((step, index) => (
-                  <div key={step} className="flex gap-4">
-                    <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-primary text-sm font-bold text-white">
-                      {index + 1}
-                    </div>
-                    <p className="pt-1 text-sm leading-6 text-slate-200">{step}</p>
-                  </div>
+              <div className="mt-9 flex flex-wrap gap-2.5">
+                {[
+                  "Phone support",
+                  "Online booking",
+                  "Visit reminders",
+                  "Follow-up care",
+                ].map((tag) => (
+                  <span
+                    key={tag}
+                    className="glass-panel rounded-full px-4 py-2 text-sm text-slate-200 transition hover:border-rose-400/40 hover:text-white"
+                  >
+                    {tag}
+                  </span>
                 ))}
-              </CardContent>
-            </Card>
+              </div>
+            </Reveal>
+
+            <Reveal direction="left">
+              <Card className="glass-panel rounded-3xl text-white">
+                <CardHeader>
+                  <CardDescription className="text-slate-300">
+                    How it works
+                  </CardDescription>
+                  <CardTitle className="text-2xl">
+                    From patient request to confirmed care
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <WorkflowSteps steps={workflow} />
+                </CardContent>
+              </Card>
+            </Reveal>
           </div>
         </section>
 
-        <section id="contact" className="px-4 py-20 md:px-8">
-          <div className="mx-auto max-w-7xl rounded-lg border border-slate-200 bg-slate-50 p-8">
-            <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
+        {/* ---------------------------------------------------------------- */}
+        {/* Contact                                                          */}
+        {/* ---------------------------------------------------------------- */}
+        <section id="contact" className="px-4 py-16 md:px-8 md:py-24">
+          <Reveal className="relative mx-auto max-w-7xl overflow-hidden rounded-3xl bg-linear-to-br from-rose-600 via-pink-600 to-violet-700 p-6 text-white shadow-2xl sm:rounded-[2.5rem] sm:p-10 md:p-14">
+            <div className="aurora right-[-5%] top-[-30%] size-96 bg-white/20" />
+            <div
+              className="aurora bottom-[-40%] left-[10%] size-80 bg-cyan-300/25"
+              style={{ animationDelay: "-11s" }}
+            />
+
+            <div className="relative flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
               <div>
-                <p className="text-sm font-bold uppercase text-primary">
+                <p className="text-sm font-bold uppercase tracking-widest text-white/80">
                   Contact
                 </p>
-                <h2 className="mt-2 text-3xl font-bold tracking-normal">
+                <h2 className="mt-3 text-3xl font-bold leading-tight tracking-tight sm:text-4xl md:text-5xl">
                   Request care online or contact reception
                 </h2>
-                <p className="mt-3 max-w-2xl text-slate-600">
+                <p className="mt-4 max-w-2xl text-lg leading-8 text-white/85">
                   Share your reason for visit, choose a service, and let the
                   clinic team review the best appointment option for you.
                 </p>
               </div>
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <Button asChild variant="outline">
+              <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="h-12 rounded-full border-white/40 bg-white/10 px-6 text-white backdrop-blur hover:bg-white hover:text-rose-700"
+                >
                   <Link href="/receptionist">
                     <PhoneCall />
                     Contact reception
                   </Link>
                 </Button>
-                <Button asChild>
+                <Button
+                  asChild
+                  className="h-12 rounded-full bg-white px-6 text-rose-700 hover:bg-white/90"
+                >
                   <Link href="/appointment">
                     <Users />
                     Start intake
@@ -547,67 +786,65 @@ const HomePage = ({
               </div>
             </div>
 
-            <div className="mt-8 grid gap-4 border-t border-slate-200 pt-8 sm:grid-cols-3">
+            <div className="relative mt-10 grid gap-4 border-t border-white/20 pt-10 sm:grid-cols-3">
               <a
                 href={`tel:${settings.phone}`}
-                className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-4 transition hover:border-primary"
+                className="glass-panel flex items-center gap-3 rounded-2xl p-4 transition hover:scale-[1.03] hover:bg-white/15"
               >
-                <Phone className="size-5 text-primary" />
+                <Phone className="size-5 shrink-0" />
                 <div>
-                  <p className="text-xs font-semibold uppercase text-slate-500">
+                  <p className="text-xs font-semibold uppercase text-white/70">
                     Phone
                   </p>
-                  <p className="font-medium text-slate-800">{settings.phone}</p>
+                  <p className="font-medium">{settings.phone}</p>
                 </div>
               </a>
               <a
                 href={`mailto:${settings.email}`}
-                className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-4 transition hover:border-primary"
+                className="glass-panel flex items-center gap-3 rounded-2xl p-4 transition hover:scale-[1.03] hover:bg-white/15"
               >
-                <Mail className="size-5 text-primary" />
+                <Mail className="size-5 shrink-0" />
                 <div>
-                  <p className="text-xs font-semibold uppercase text-slate-500">
+                  <p className="text-xs font-semibold uppercase text-white/70">
                     Email
                   </p>
-                  <p className="font-medium text-slate-800">{settings.email}</p>
+                  <p className="font-medium">{settings.email}</p>
                 </div>
               </a>
-              <div className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-4">
-                <MapPin className="size-5 text-primary" />
+              <div className="glass-panel flex items-center gap-3 rounded-2xl p-4">
+                <MapPin className="size-5 shrink-0" />
                 <div>
-                  <p className="text-xs font-semibold uppercase text-slate-500">
+                  <p className="text-xs font-semibold uppercase text-white/70">
                     Hours
                   </p>
-                  <p className="font-medium text-slate-800">
-                    {settings.businessHours}
-                  </p>
+                  <p className="font-medium">{settings.businessHours}</p>
                 </div>
               </div>
             </div>
 
-            <div className="mt-4 text-center">
+            <div className="relative mt-8 text-center">
               <Link
                 href="/contact"
-                className="text-sm font-semibold text-primary hover:underline"
+                className="text-sm font-semibold text-white underline-offset-4 hover:underline"
               >
                 Send a message to the clinic team
               </Link>
             </div>
-          </div>
+          </Reveal>
         </section>
       </main>
 
-      <footer className="border-t border-slate-200 px-4 py-8 md:px-8">
+      <footer className="border-t border-slate-200 px-4 py-10 md:px-8">
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 text-sm text-slate-500 md:flex-row">
-          <p>MediDove Online Clinic</p>
+          <p className="font-semibold text-slate-700">MediDove Online Clinic</p>
           <div className="flex flex-wrap gap-4">
-            <Link href="/privacy" className="hover:text-primary">
+            <Link href="/privacy" className="hover:text-rose-600">
               Privacy
             </Link>
-            <Link href="/terms" className="hover:text-primary">
+            <Link href="/terms" className="hover:text-rose-600">
               Terms
             </Link>
-            <Link href="/unsubscribe" className="hover:text-primary">
+            <Link href="/unsubscribe" className="hover:text-rose-600">
               Unsubscribe
             </Link>
             <span>Appointments, reminders, reception, and patient support</span>
